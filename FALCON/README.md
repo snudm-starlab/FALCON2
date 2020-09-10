@@ -72,6 +72,7 @@ FALCON
 * Python 3.6
 * torch
 * torchvision
+* DALI (NVIDIA Data Loading Library)\[link\](https://docs.nvidia.com/deeplearning/dali/user-guide/docs/index.html)
 #### Dependence Install
     pip install torch torchvision
 

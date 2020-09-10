@@ -23,6 +23,12 @@ FALCON
   │    │    ├── train.py: training process
   │    │    ├── test.py: testing process
   │    │    └── validation.py: validation process
+  │    ├── imagenetutils
+  │    │    ├── dataloaders.py: dataloader for ImageNet 
+  │    │    ├── eval.py: evaluate function for ImageNet 
+  │    │    ├── logger.py: logger functions 
+  │    │    ├── misc.py: helper function
+  │    │    └── visualize.py: visualization functions
   │    │     
   │    └── utils
   │         ├── compression_cal.py: calculate the number of parameters
@@ -70,7 +76,8 @@ FALCON
     pip install torch torchvision
 
 ## How to use 
-### Training & Testing
+### CIFAR100/SVHN
+#### Training & Testing
 * To train the model on CIFAR-100/SVHN datasets, run script:
     ```    
     cd src/train_test
@@ -92,7 +99,7 @@ FALCON
         * FALCON model:
             conv=FALCON,model=VGG19,data=cifar100,rank=1,alpha=1,init,opt=SGD,lr=0.1.pkl
 
-### DEMO
+#### DEMO
 * There are two demo scripts: `script/train.sh` and `script/inference.sh`.
 * You can change arguments in `.sh` files to train/test different model.
     * `train.sh`: Execute training process of the model
@@ -102,6 +109,48 @@ FALCON
         * Accuracy/ inference time/ number of parameters/ number of FLOPs will be printed on the screen.
         * You can run this file only when the trained model exist.
         * Sample trained model is provided in `src/train_test/trained_model/`.
+        
+### ImageNet
+#### Training & Testing
+* To train the model on ImageNet dataset, run script:
+    ```    
+    python imagenet.py \
+    -a <architecture> \
+    -conv <convolution> \
+    -b <batch-size> \
+    -init \
+    -c <checkpoint directory> \
+    --pretrained \
+    --epochs <number of epochs> \
+    --lr-decay <decay strategey> \
+    --lr <learning rate> \
+    data directory
+    ```
+    The trained model will be saved in `src/checkpoint directory/`
+* To test the modelon ImageNet dataset, run script:
+    ```    
+    python imagenet.py \
+    -a <architecture> \
+    -e \
+    -conv <convolution> \
+    -b <batch-size> \
+    -init \
+    --resume <model location> \
+    data directory
+    ```
+    The testing accuracy, inference time, number of parameters and number of FLOPs will be printed on the screen.
+* Pre-trained model is saved in `src/checkpoint directory/` for ImageNet dataset
+    * For example:
+        * FALCON model:
+            checkpoints/model_best.pth.tar
+
+#### DEMO
+* There are four demo scripts: `script/train.sh`, `script/inference.sh`, `script/imagenet_vgg_train.sh`, and `script/imagenet_vgg_test.sh`.
+* You can change arguments in `.sh` files to train/test different model.
+    * `imagenet_vgg_train.sh`: Execute training process of vgg model for ImageNet
+    * `imagenet_vgg_test.sh`: Execute inference process of vgg model for ImageNet
+        * Sample trained model is provided in `src/checkpoints/`.
+
 
 ## Result
 FALCON with VGG19 achieves the following performance when we run the demo script:

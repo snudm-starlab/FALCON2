@@ -1,28 +1,20 @@
 """
-Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-"License"); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at
+FALCON: FAst and Lightweight CONvolution
 
-  http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License.
-
-FALCON: Lightweight and Accurate Convolution
+Authors:
+ - Chun Quan (quanchun@snu.ac.kr)
+ - U Kang (ukang@snu.ac.kr)
+ - Data Mining Lab. at Seoul National University.
 
 File: train_test/imagenet.py
  - receive arguments and train_test/test the model on imagenet.
  - Code is modified from https://github.com/pytorch/examples/tree/master/imagenet
 
 Version: 1.0
+
+This software may be used only for research evaluation purposes.
+For other purposes (e.g., commercial), please contact the authors.
+
 """
 
 import argparse
@@ -50,7 +42,11 @@ import torchvision.models as models
 
 from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, VGGModel_imagenet_inf, ResNetModel_imagenet_inf
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
-from utils.timer import Timer
+from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
+from imagenetutils.dataloaders import *
+from tensorboardX import SummaryWriter
+#from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
+#from utils.timer import Timer
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
@@ -75,11 +71,23 @@ parser.add_argument('-b', '--batch-size', default=256, type=int,
                     help='mini-batch size (default: 256), this is the total '
                          'batch size of all GPUs on the current node when '
                          'using Data Parallel or Distributed Data Parallel')
-parser.add_argument('--lr', '--learning-rate', default=0.1, type=float,
+parser.add_argument('--lr', '--learning_rate', default=0.1, type=float,
                     metavar='LR', help='initial learning rate', dest='lr')
+parser.add_argument('--lr-decay', type=str, default='cos',
+                    help='mode for learning rate decay')
+parser.add_argument('--opt', '--optimizer',
+                    choices=["SGD", "Adagrad", "Adam", "RMSprop"],
+                    type=str,
+                    default="SGD")
+parser.add_argument('--warmup', action='store_true',
+                    help='set lower initial learning rate to warm up the training')
+parser.add_argument('--world-size', default=-1, type=int,
+                    help='number of nodes for distributed training')
+parser.add_argument('-c', '--checkpoint', default='checkpoints', type=str, metavar='PATH',
+                    help='path to save checkpoint (default: checkpoints)')
 parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                     help='momentum')
-parser.add_argument('--wd', '--weight-decay', default=1e-4, type=float,
+parser.add_argument('--wd', '--weight-decay', default=0, type=float,
                     metavar='W', help='weight decay (default: 1e-4)',
                     dest='weight_decay')
 parser.add_argument('-p', '--print-freq', default=1000, type=int,
@@ -90,8 +98,6 @@ parser.add_argument('-e', '--evaluate', dest='evaluate', action='store_true',
                     help='evaluate model on validation set')
 parser.add_argument('--pretrained', dest='pretrained', action='store_true',
                     help='use pre-trained model')
-parser.add_argument('--world-size', default=-1, type=int,
-                    help='number of nodes for distributed training')
 parser.add_argument('--rank', default=-1, type=int,
                     help='node rank for distributed training')
 parser.add_argument('--dist-url', default='tcp://224.66.41.62:23456', type=str,
@@ -108,12 +114,14 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                          'fastest way to use PyTorch for either single node or '
                          'multi node data parallel training')
 parser.add_argument('-conv', '--convolution', default='StandardConv', type=str,
-                    choices=['StandardConv', 'FALCON', 'StConvBranch', 'FALCONBranch'],
+                    choices=['StandardConv', 'FALCON', 'DepSepConv', 'MobileConvV2', 'ShuffleUnit', 'ShuffleUnitV2', 'StConvBranch', 'FALCONBranch'],
                     help='convolution type')
 parser.add_argument('-init', '--init', action='store_true',
-                    help='initialize model with GEP decomposed tensors')
+                    help='initialize model with EHP decomposed tensors')
 parser.add_argument("-k", "--falconrank", type=int, default=1, choices=[1, 2, 3],
                     help="expansion ration in MobileConvV2")
+parser.add_argument('-tucker', '--tucker', action='store_true',
+                    help='initialize model with tucekr decomposed tensors')
 parser.add_argument("-exp", "--expansion", type=float, default=6.0,
                     help="expansion ration in MobileConvV2")
 parser.add_argument("-g", "--groups", type=int, default=2,
@@ -130,6 +138,7 @@ parser.add_argument('--stconv_branch_model', default='', type=str, metavar='PATH
                     help='path to latest checkpoint (default: none)')
 
 
+
 best_acc1 = 0
 
 
@@ -139,7 +148,6 @@ def main():
     """
     args = parser.parse_args()
     print('############################## %d * %d * %d ##############################' % (args.input_num, args.input_size, args.input_size))
-    print(name(args))
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -215,7 +223,6 @@ def main_worker(gpu, ngpus_per_node, args):
         print('ONLY VGG like or ResNet like model is accepted!')
         sys.exit(0)
     # print('*********** my model ***********')
-    # print(list(model.children()))
 
     # count the number of parameters and flops
     print_model_parm_nums(model)
@@ -224,11 +231,21 @@ def main_worker(gpu, ngpus_per_node, args):
     # compress
     if args.convolution == 'FALCON':
         model.falcon(rank=args.falconrank, init=args.init)
+    elif args.convolution == 'DepSepConv':
+        model.dsc()
+    elif args.convolution == 'MobileConvV2':
+        model.mobileconvv2(expansion=args.expansion)
+    elif args.convolution == 'ShuffleUnit':
+        model.shuffleunit(groups=args.groups, alpha=args.alpha)
+    elif args.convolution == 'ShuffleUnitV2':
+        model.shuffleunitv2(alpha=args.alpha)
     elif args.convolution == 'StConvBranch':
         model.stconv_branch(alpha=args.alpha)
     elif args.convolution == 'FALCONBranch':
         model.stconv_branch(alpha=args.alpha)
         # model.falcon_branch(init=args.init)
+    elif args.convolution == 'StandardConv' and args.tucker:
+        model.compress_tucker()
     else:
         pass
 
@@ -295,12 +312,20 @@ def main_worker(gpu, ngpus_per_node, args):
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
-    optimizer = torch.optim.SGD(model.parameters(), args.lr,
+    if args.opt == 'SGD':
+        optimizer = torch.optim.SGD(model.parameters(), args.lr,
                                 momentum=args.momentum,
                                 weight_decay=args.weight_decay)
+    if args.opt == 'Adam':
+        optimizer = torch.optim.Adam(model.parameters(), args.lr,
+                                    weight_decay=args.weight_decay)
+
+    title = 'ImageNet-' + args.arch
+    if not os.path.isdir(args.checkpoint):
+        mkdir_p(args.checkpoint)
 
     # optionally resume from a checkpoint
-    if args.resume:
+    if args.resume and args.convolution != 'FALCONBranch':
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))
             checkpoint = torch.load(args.resume)
@@ -313,8 +338,13 @@ def main_worker(gpu, ngpus_per_node, args):
             optimizer.load_state_dict(checkpoint['optimizer'])
             print("=> loaded checkpoint '{}' (epoch {})"
                   .format(args.resume, checkpoint['epoch']))
+            logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title, resume=True)
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
+    else:
+        logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
+        logger.set_names(['Learning Rate', 'Train Loss', 'Valid Loss', 'Train Acc.', 'Valid Acc.'])
+        print('hi')
 
     # print('*********** compressed model ***********')
     # print(list(model.children()))
@@ -345,9 +375,32 @@ def main_worker(gpu, ngpus_per_node, args):
         # define loss function (criterion) and optimizer
         criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
-        optimizer = torch.optim.SGD(model.parameters(), args.lr,
-                                    momentum=args.momentum,
-                                    weight_decay=args.weight_decay)
+        if args.opt == 'SGD':
+            optimizer = torch.optim.SGD(model.parameters(), args.lr,
+                                        momentum=args.momentum,
+                                        weight_decay=args.weight_decay)
+        if args.opt == 'Adam':
+            optimizer = torch.optim.Adam(model.parameters(), args.lr,
+                                         weight_decay=args.weight_decay)
+        if args.resume:
+            if os.path.isfile(args.resume):
+                print("=> loading checkpoint '{}'".format(args.resume))
+                checkpoint = torch.load(args.resume)
+                args.start_epoch = checkpoint['epoch']
+                best_acc1 = checkpoint['best_acc1']
+                if args.gpu is not None:
+                    # best_acc1 may be from a checkpoint from a different GPU
+                    best_acc1 = best_acc1.to(args.gpu)
+                model.load_state_dict(checkpoint['state_dict'])
+                optimizer.load_state_dict(checkpoint['optimizer'])
+                print("=> loaded checkpoint '{}' (epoch {})"
+                      .format(args.resume, checkpoint['epoch']))
+                logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title, resume=True)
+            else:
+                print("=> no checkpoint found at '{}'".format(args.resume))
+        else:
+            logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
+            logger.set_names(['Learning Rate', 'Train Loss', 'Valid Loss', 'Train Acc.', 'Valid Acc.'])
 
     cudnn.benchmark = True
 
@@ -357,107 +410,90 @@ def main_worker(gpu, ngpus_per_node, args):
     normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
                                      std=[0.229, 0.224, 0.225])
 
-    train_dataset = datasets.ImageFolder(
-        traindir,
-        transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            normalize,
-        ]))
 
-    if args.distributed:
-        train_sampler = torch.utils.data.distributed.DistributedSampler(train_dataset)
-    else:
-        train_sampler = None
-
-    train_loader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=args.batch_size, shuffle=(train_sampler is None),
-        num_workers=args.workers, pin_memory=True, sampler=train_sampler)
-
-    val_loader = torch.utils.data.DataLoader(
-        datasets.ImageFolder(valdir, transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            normalize,
-        ])),
-        batch_size=args.batch_size, shuffle=False,
-        num_workers=args.workers, pin_memory=True)
+    get_train_loader = get_dali_train_loader(dali_cpu=False)
+    get_val_loader = get_dali_val_loader()
+    train_loader, train_loader_len = get_train_loader(args.data, args.batch_size, workers=args.workers)
+    val_loader, val_loader_len = get_val_loader(args.data, args.batch_size, workers=args.workers)
 
     if args.evaluate:
         inf_times = 0
         for i in range(1):
-            top1, inf_time = validate(val_loader, model, criterion, args)
+            top1, inf_time = validate(val_loader, val_loader_len, model, criterion)
             inf_times += inf_time
         print("\nAverage Inference Time: %f" % (float(inf_times) / 1.0))
         return
 
+    writer = SummaryWriter(os.path.join(args.checkpoint, 'logs'))
+
     for epoch in range(args.start_epoch, args.epochs):
-        if args.distributed:
-            train_sampler.set_epoch(epoch)
-        adjust_learning_rate(optimizer, epoch, args)
 
         # train for one epoch
-        train(train_loader, model, criterion, optimizer, epoch, args)
+        train_loss, train_acc = train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args)
+#        train(train_loader, model, criterion, optimizer, epoch, args)
 
         # evaluate on validation set
-        acc1, inf_time = validate(val_loader, model, criterion, args)
+        val_loss, prec1 = validate(val_loader, val_loader_len, model, criterion)
+#        acc1, inf_time = validate(val_loader, model, criterion, args)
 
-        # remember best acc@1 and save checkpoint
-        is_best = acc1 > best_acc1
-        best_acc1 = max(acc1, best_acc1)
+        lr = optimizer.param_groups[0]['lr']
 
-        if not args.multiprocessing_distributed or (args.multiprocessing_distributed
-                and args.rank % ngpus_per_node == 0):
-            save_checkpoint({
-                'epoch': epoch + 1,
-                'arch': args.arch,
-                'state_dict': model.state_dict(),
-                'best_acc1': best_acc1,
-                'optimizer': optimizer.state_dict(),
-            }, is_best, args)
+        # append logger file
+        logger.append([lr, train_loss, val_loss, train_acc, prec1])
 
+        # tensorboardX
+        writer.add_scalar('learning rate', lr, epoch + 1)
+        writer.add_scalars('loss', {'train loss': train_loss, 'validation loss': val_loss}, epoch + 1)
+        writer.add_scalars('accuracy', {'train accuracy': train_acc, 'validation accuracy': prec1}, epoch + 1)
 
-def train(train_loader, model, criterion, optimizer, epoch, args):
-    """
-    Discription: training process (one epoch)
-    :param train_loader: training data loader
-    :param model: model to be trained
-    :param criterion: loss
-    :param optimizer: optimizer
-    :param epoch: currnet epoch
-    :param args: arguments from input
-    """
-    batch_time = AverageMeter('Time', ':6.3f')
-    data_time = AverageMeter('Data', ':6.3f')
-    losses = AverageMeter('Loss', ':.4e')
-    top1 = AverageMeter('Acc@1', ':6.2f')
-    top5 = AverageMeter('Acc@5', ':6.2f')
-    progress = ProgressMeter(len(train_loader), batch_time, data_time, losses, top1,
-                             top5, prefix="Epoch: [{}]".format(epoch))
+        is_best = prec1 > best_acc1
+        best_acc1 = max(prec1, best_acc1)
+        save_checkpoint({
+            'epoch': epoch + 1,
+            'arch': args.arch,
+            'state_dict': model.state_dict(),
+            'best_acc1': best_acc1,
+            'optimizer' : optimizer.state_dict(),
+        }, is_best, checkpoint=args.checkpoint)
+
+    logger.close()
+    logger.plot()
+    savefig(os.path.join(args.checkpoint, 'log.eps'))
+    writer.close()
+
+    print('Best accuracy:')
+    print(best_acc1)
+
+def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args):
+    bar = Bar('Processing', max=train_loader_len)
+
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
+    losses = AverageMeter()
+    top1 = AverageMeter()
+    top5 = AverageMeter()
 
     # switch to train mode
     model.train()
 
     end = time.time()
     for i, (input, target) in enumerate(train_loader):
+        adjust_learning_rate(optimizer, epoch, i, train_loader_len, args)
+
         # measure data loading time
         data_time.update(time.time() - end)
 
-        if args.gpu is not None:
-            input = input.cuda(args.gpu, non_blocking=True)
-        target = target.cuda(args.gpu, non_blocking=True)
+        target = target.cuda(non_blocking=True)
 
         # compute output
         output, out_conv = model(input)
         loss = criterion(output, target)
 
         # measure accuracy and record loss
-        acc1, acc5 = accuracy(output, target, topk=(1, 5))
+        prec1, prec5 = accuracy(output, target, topk=(1, 5))
         losses.update(loss.item(), input.size(0))
-        top1.update(acc1[0], input.size(0))
-        top5.update(acc5[0], input.size(0))
+        top1.update(prec1.item(), input.size(0))
+        top5.update(prec5.item(), input.size(0))
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -468,140 +504,79 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        if i % args.print_freq == 0:
-            progress.print(i)
+        # plot progress
+        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | top1: {top1: .4f} | top5: {top5: .4f}'.format(
+                    batch=i + 1,
+                    size=train_loader_len,
+                    data=data_time.avg,
+                    bt=batch_time.avg,
+                    total=bar.elapsed_td,
+                    eta=bar.eta_td,
+                    loss=losses.avg,
+                    top1=top1.avg,
+                    top5=top5.avg,
+                    )
+        bar.next()
+    bar.finish()
+    return (losses.avg, top1.avg)
 
 
-def validate(val_loader, model, criterion, args):
-    """
-    Discription: validation process (one epoch)
-    :param val_loader: validation data loader
-    :param model: model to be trained
-    :param criterion: loss
-    :param args: arguments from input
-    """
-    batch_time = AverageMeter('Time', ':6.3f')
-    losses = AverageMeter('Loss', ':.4e')
-    top1 = AverageMeter('Acc@1', ':6.2f')
-    top5 = AverageMeter('Acc@5', ':6.2f')
-    progress = ProgressMeter(len(val_loader), batch_time, losses, top1, top5,
-                             prefix='Test: ')
+def validate(val_loader, val_loader_len, model, criterion):
+    bar = Bar('Processing', max=val_loader_len)
+
+    batch_time = AverageMeter()
+    data_time = AverageMeter()
+    losses = AverageMeter()
+    top1 = AverageMeter()
+    top5 = AverageMeter()
 
     # switch to evaluate mode
     model.eval()
 
-    inference_start = time.time()
-    with torch.no_grad():
-        end = time.time()
-        for i, (input, target) in enumerate(val_loader):
-            if args.gpu is not None:
-                input = input.cuda(args.gpu, non_blocking=True)
-            target = target.cuda(args.gpu, non_blocking=True)
+    end = time.time()
+    for i, (input, target) in enumerate(val_loader):
+        # measure data loading time
+        data_time.update(time.time() - end)
 
+        target = target.cuda(non_blocking=True)
+
+        with torch.no_grad():
             # compute output
             output, out_conv = model(input)
             loss = criterion(output, target)
 
-            # measure accuracy and record loss
-            acc1, acc5 = accuracy(output, target, topk=(1, 5))
-            losses.update(loss.item(), input.size(0))
-            top1.update(acc1[0], input.size(0))
-            top5.update(acc5[0], input.size(0))
+        # measure accuracy and record loss
+        prec1, prec5 = accuracy(output, target, topk=(1, 5))
+        losses.update(loss.item(), input.size(0))
+        top1.update(prec1.item(), input.size(0))
+        top5.update(prec5.item(), input.size(0))
 
-            # measure elapsed time
-            batch_time.update(time.time() - end)
-            end = time.time()
+        # measure elapsed time
+        batch_time.update(time.time() - end)
+        end = time.time()
 
-            if i % args.print_freq == 0:
-                progress.print(i)
-
-        inference_time = time.time() - inference_start
-        print('Inference time: %fs' % inference_time)
-        # TODO: this should also be done with the ProgressMeter
-        print(' * Acc@1 {top1.avg:.3f} Acc@5 {top5.avg:.3f}'
-              .format(top1=top1, top5=top5))
-
-    return top1.avg, inference_time
-
-
-def name(args):
-    """
-    The name of trained model
-    :param args: arguments from cmd
-    """
-    name = 'conv=' + str(args.convolution) + ',model=' + str(args.arch) + ',data=imagenet'
-    if args.init:
-        name += ',init.'
-    if args.convolution == 'StConvBranch':
-        name += ',al='
-        name += str(args.alpha)
-        name += '.'
-    if args.convolution == 'FALCONBranch':
-        name += ',al='
-        name += str(args.alpha)
-        name += '.'
-    if args.falconrank != 1:
-        name += ',k='
-        name += str(args.falconrank)
-        name += '.'
-    return name
+        # plot progress
+        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | top1: {top1: .4f} | top5: {top5: .4f}'.format(
+                    batch=i + 1,
+                    size=val_loader_len,
+                    data=data_time.avg,
+                    bt=batch_time.avg,
+                    total=bar.elapsed_td,
+                    eta=bar.eta_td,
+                    loss=losses.avg,
+                    top1=top1.avg,
+                    top5=top5.avg,
+                    )
+        bar.next()
+    bar.finish()
+    return (losses.avg, top1.avg)
 
 
-def save_checkpoint(state, is_best, args, filename='checkpoint.pth.tar', path='./checkpoint/'):
-    """
-    Save the checkpoint
-    :param state: model state
-    :param is_best: whether is the best accuracy
-    :param args: arguments from cmd
-    :param filename: name of checkpoint
-    :param path: path of checkpoint
-    """
-    filename = name(args) + filename
-    torch.save(state, (path + filename))
+def save_checkpoint(state, is_best, checkpoint='checkpoint', filename='checkpoint.pth.tar'):
+    filepath = os.path.join(checkpoint, filename)
+    torch.save(state, filepath)
     if is_best:
-        shutil.copyfile((path + filename), (path + filename + '.model_best.pth.tar'))
-
-
-class AverageMeter(object):
-    """Computes and stores the average and current value"""
-    def __init__(self, name, fmt=':f'):
-        self.name = name
-        self.fmt = fmt
-        self.reset()
-
-    def reset(self):
-        self.val = 0
-        self.avg = 0
-        self.sum = 0
-        self.count = 0
-
-    def update(self, val, n=1):
-        self.val = val
-        self.sum += val * n
-        self.count += n
-        self.avg = self.sum / self.count
-
-    def __str__(self):
-        fmtstr = '{name} {val' + self.fmt + '} ({avg' + self.fmt + '})'
-        return fmtstr.format(**self.__dict__)
-
-
-class ProgressMeter(object):
-    """Print training/validation status on the screen"""
-    def __init__(self, num_batches, *meters, prefix=""):
-        self.batch_fmtstr = self._get_batch_fmtstr(num_batches)
-        self.meters = meters
-        self.prefix = prefix
-
-    def print(self, batch):
-        entries = [self.prefix + self.batch_fmtstr.format(batch)]
-        entries += [str(meter) for meter in self.meters]
-        print('\t'.join(entries))
-
-    def _get_batch_fmtstr(self, num_batches):
-        num_digits = len(str(num_batches // 1))
-        fmt = '{:' + str(num_digits) + 'd}'
-        return '[' + fmt + '/' + fmt.format(num_batches) + ']'
+        shutil.copyfile(filepath, os.path.join(checkpoint, 'model_best.pth.tar'))
 
 
 def adjust_learning_rate(optimizer, epoch, args):
@@ -611,22 +586,34 @@ def adjust_learning_rate(optimizer, epoch, args):
         param_group['lr'] = lr
 
 
-def accuracy(output, target, topk=(1,)):
-    """Computes the accuracy over the k top predictions for the specified values of k"""
-    with torch.no_grad():
-        maxk = max(topk)
-        batch_size = target.size(0)
+from math import cos, pi
+def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
+    lr = optimizer.param_groups[0]['lr']
 
-        _, pred = output.topk(maxk, 1, True, True)
-        pred = pred.t()
-        correct = pred.eq(target.view(1, -1).expand_as(pred))
+#    warmup_epoch = 5 if args.warmup else 0
+    warmup_epoch = 0
+    warmup_iter = warmup_epoch * num_iter
+    current_iter = iteration + epoch * num_iter
+    max_iter = args.epochs * num_iter
 
-        res = []
-        for k in topk:
-            correct_k = correct[:k].view(-1).float().sum(0, keepdim=True)
-            res.append(correct_k.mul_(100.0 / batch_size))
-        return res
+    if args.lr_decay == 'step':
+        lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
+    elif args.lr_decay == 'cos':
+        lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
+    elif args.lr_decay == 'linear':
+        lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
+    elif args.lr_decay == 'schedule':
+        count = sum([1 for s in args.schedule if s <= epoch])
+        lr = args.lr * pow(args.gamma, count)
+    else:
+        raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
 
+    if epoch < warmup_epoch:
+        lr = args.lr * current_iter / warmup_iter
+
+
+    for param_group in optimizer.param_groups:
+        param_group['lr'] = lr
 
 if __name__ == '__main__':
     main()

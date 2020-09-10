@@ -80,6 +80,12 @@ def get_default_param():
                         type=float,
                         default=1)
 
+    parser.add_argument("-ln", "--layer-num",
+                        help="number of layer for resnet",
+                        # choices=[1, 0.75, 0.5, 0.33, 0.25],
+                        type=str,
+                        default="32")
+
     parser.add_argument("-m", "--model",
                         help="model type - VGG16/VGG19/ResNet",
                         choices=['VGG16', 'VGG19', 'ResNet'],

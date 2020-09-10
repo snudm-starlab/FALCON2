@@ -34,6 +34,7 @@ basic_channels = (64, 128, 256, 512)
 
 cfgs = {
     '18': (2, 2, 2, 2),
+    '32': (3, 4, 6, 2),
     '34': (3, 4, 6, 3),
     '50': (3, 4, 6, 3),
     '101': (3, 4, 23, 3),
@@ -119,7 +120,7 @@ class ResidualLayer(nn.Module):
         """
         super(ResidualLayer, self).__init__()
 
-        if layer_num == "18" or layer_num == "34":
+        if layer_num == "18" or layer_num =="32" or layer_num == "34":
             self.stacked = BasicBlock(in_channels, out_channels, stride)
         else:  # layer_num == "50" or layer_num == "101" or layer_num == "152":
             self.stacked = BottleNeckBlock(in_channels, out_channels, stride)
@@ -163,7 +164,7 @@ class ResNet(nn.Module):
         self.avgpool_4 = nn.AvgPool2d(kernel_size=4)
         self.avgpool_2 = nn.AvgPool2d(kernel_size=2)
 
-        if layer_num == "18" or layer_num == "34":
+        if layer_num == "18" or layer_num == "32" or layer_num == "34":
             last_channels = basic_channels[-1]
         else:
             last_channels = bottle_neck_channels[-1]
@@ -180,7 +181,7 @@ class ResNet(nn.Module):
 
         for i in range(4):
             for j in range(cfg[i]):
-                if layer_num == "18" or layer_num == "34":
+                if layer_num == "18" or layer_num == "32" or layer_num == "34":
                     if j == 0:
                         if i != 0:
                             layers.append(ResidualLayer(basic_channels[i] // 2, basic_channels[i], layer_num=layer_num, stride=2))
@@ -211,7 +212,7 @@ class ResNet(nn.Module):
         out = self.fc(out)
         return out, out_conv
 
-    def falcon(self, rank, init=True, bn=False, relu=False, groups=1):
+    def falcon(self, rank, init=False, bn=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
         :param rank: rank of GEP

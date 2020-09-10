@@ -103,10 +103,10 @@ FALCON
         * You can run this file only when the trained model exist.
         * Sample trained model is provided in `src/train_test/trained_model/`.
 
-### Result
+## Result
 FALCON with VGG19 achieves the following performance when we run the demo script:
 
-####  Image Classification on CIFAR-100
+###  Image Classification on CIFAR-100
 
 | Convolution  | Accuracy | Number of Parameters | Number of FLOPs |
 | :----------: | :------: | :------------------: | :-------------: |

@@ -151,16 +151,5 @@ FALCON
     * `imagenet_vgg_test.sh`: Execute inference process of vgg model for ImageNet
         * Sample trained model is provided in `src/checkpoints/`.
 
-
-## Result
-FALCON with VGG19 achieves the following performance when we run the demo script:
-
-###  Image Classification on CIFAR-100
-
-| Convolution  | Accuracy | Number of Parameters | Number of FLOPs |
-| :----------: | :------: | :------------------: | :-------------: |
-| StandardConv |  72.58%  |        20.35M        |     398.75M     |
-|    FALCON    |  72.37%  |        2.61M         |     47.28M      |
-
 ## License
 Licensed under the Apache License, Version 2.0

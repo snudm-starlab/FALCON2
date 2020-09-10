@@ -147,13 +147,6 @@ FALCON
 #### DEMO
 * There are four demo scripts: `script/train.sh`, `script/inference.sh`, `script/imagenet_vgg_train.sh`, and `script/imagenet_vgg_test.sh`.
 * You can change arguments in `.sh` files to train/test different model.
-    * `train.sh`: Execute training process of the model
-        * Accuracy/ loss/ training time for 100 iteration will be printed on the screen during training.
-        * Accuracy/ inference time/ number of parameters/ number of FLOPs will be printed on the screen after training.
-    * `inference.sh`: Execute inference process of the model
-        * Accuracy/ inference time/ number of parameters/ number of FLOPs will be printed on the screen.
-        * You can run this file only when the trained model exist.
-        * Sample trained model is provided in `src/train_test/trained_model/`.
     * `imagenet_vgg_train.sh`: Execute training process of vgg model for ImageNet
     * `imagenet_vgg_test.sh`: Execute inference process of vgg model for ImageNet
         * Sample trained model is provided in `src/checkpoints/`.

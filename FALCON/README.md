@@ -31,8 +31,7 @@ FALCON
   │    │    └── visualize.py: visualization functions
   │    │     
   │    └── utils
-  │         ├── compression_cal.py: calculate the number of parameters
-  │					│												and FLOPs
+  │         ├── compression_cal.py: calculate the number of parameters and FLOPs
   │         ├── default_param.py: default cfgs 
   │         ├── load_data.py: load datasets
   │         ├── lr_decay.py: control learning rate

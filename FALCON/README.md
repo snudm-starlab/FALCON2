@@ -67,7 +67,7 @@ FALCON
 ## Install
 #### Environment 
 * Unbuntu
-* CUDA 9.0
+* CUDA 10.1
 * Python 3.6
 * torch
 * torchvision

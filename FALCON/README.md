@@ -31,8 +31,7 @@ FALCON
   │    │    └── visualize.py: visualization functions
   │    │     
   │    └── utils
-  │         ├── compression_cal.py: calculate the number of parameters
-  │					│												and FLOPs
+  │         ├── compression_cal.py: calculate the number of parameters and FLOPs
   │         ├── default_param.py: default cfgs 
   │         ├── load_data.py: load datasets
   │         ├── lr_decay.py: control learning rate
@@ -72,6 +71,7 @@ FALCON
 * Python 3.6
 * torch
 * torchvision
+* [DALI (NVIDIA Data Loading Library)](https://docs.nvidia.com/deeplearning/dali/user-guide/docs/index.html)
 #### Dependence Install
     pip install torch torchvision
 
@@ -150,17 +150,6 @@ FALCON
     * `imagenet_vgg_train.sh`: Execute training process of vgg model for ImageNet
     * `imagenet_vgg_test.sh`: Execute inference process of vgg model for ImageNet
         * Sample trained model is provided in `src/checkpoints/`.
-
-
-## Result
-FALCON with VGG19 achieves the following performance when we run the demo script:
-
-###  Image Classification on CIFAR-100
-
-| Convolution  | Accuracy | Number of Parameters | Number of FLOPs |
-| :----------: | :------: | :------------------: | :-------------: |
-| StandardConv |  72.58%  |        20.35M        |     398.75M     |
-|    FALCON    |  72.37%  |        2.61M         |     47.28M      |
 
 ## License
 Licensed under the Apache License, Version 2.0

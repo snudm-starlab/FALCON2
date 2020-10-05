@@ -38,7 +38,7 @@ from models.resnet import ResNet
 from models.stconv_branch import VGG_StConv_branch, ResNet_StConv_branch
 
 from utils.default_param import get_default_param
-from utils.save_restore import load_model, save_model, save_specific_model, load_specific_model
+from utils.save_restore import load_model, save_model, save_specific_model, load_specific_model, init_with_alpha
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from utils.timer import Timer
 
@@ -57,11 +57,30 @@ def main(args):
     if "ResNet" in args.model:
         if args.convolution == "FALCON":
             net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
-            if args.init:
-                load_specific_model(net, args, convolution='StandardConv', input_path=args.stconv_path)
-                net.falcon(rank=args.rank, init=args.init, bn=args.bn, relu=args.relu, groups=args.groups)
+            if args.is_train:
+                if args.alpha == 1:
+                    if args.init:
+                        load_specific_model(net, args, convolution='StandardConv', input_path=args.stconv_path)
+                        net.falcon(rank=args.rank, init=args.init, bn=args.bn, relu=args.relu, groups=args.groups)
+                    else:
+                        net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu, groups=args.groups)
+                else:
+                    if args.init:
+                        net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
+                        net2 = ResNet(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
+                        load_specific_model(net, args, convolution='StandardConv', input_path=args.stconv_path)
+                        init_net = init_with_alpha(net, net2, args.alpha)
+                        init_net.falcon(rank=args.rank, init=args.init, bn=args.bn, relu=args.relu, groups=args.groups)
+                    else:
+                        net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu, groups=args.groups)
             else:
-                net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu, groups=args.groups)
+                if args.alpha == 1:
+                    net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
+                    net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu, groups=args.groups)
+                else:
+                    net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
+                    net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu, groups=args.groups)
+                
         elif args.convolution == "StConvBranch":
             net = ResNet_StConv_branch(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
         elif args.convolution == 'FALCONBranch':

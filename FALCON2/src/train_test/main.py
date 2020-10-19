@@ -38,7 +38,7 @@ from models.resnet import ResNet
 from models.stconv_branch import VGG_StConv_branch, ResNet_StConv_branch
 
 from utils.default_param import get_default_param
-from utils.save_restore import load_model, save_model, save_specific_model, load_specific_model, init_with_alpha
+from utils.save_restore import load_model, save_model, save_specific_model, load_specific_model, init_with_alpha_resnet
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from utils.timer import Timer
 
@@ -69,7 +69,7 @@ def main(args):
                         net2 = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
                         net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
                         load_specific_model(net2, args, convolution='StandardConv', input_path=args.stconv_path)
-                        net = init_with_alpha(net2, net, args.alpha)
+                        net = init_with_alpha_resnet(net2, net, args.alpha)
                         net.falcon(rank=args.rank, init=args.init, bn=args.bn, relu=args.relu, groups=args.groups)
                     else:
                         net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes, alpha=args.alpha)
@@ -108,7 +108,7 @@ def main(args):
                         net2 = VGG(num_classes=num_classes, which=args.model)
                         net = VGG(num_classes=num_classes, which=args.model, alpha= args.alpha)
                         load_specific_model(net2, args, convolution='StandardConv', input_path=args.stconv_path)
-                        net = init_with_alpha(net2, net, args.alpha)
+                        net = init_with_alpha_vgg(net2, net, args.alpha)
                         net.falcon(rank=args.rank, init=args.init, bn=args.bn, relu=args.relu, groups=args.groups)
                     else:
                         net = VGG(num_classes=num_classes, which=args.model, alpha= args.alpha)

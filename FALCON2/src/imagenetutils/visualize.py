@@ -1,3 +1,6 @@
+'''
+The following codes are from https://github.com/d-li14/mobilenetv2.pytorch
+'''
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn

@@ -51,7 +51,7 @@ class VGG(nn.Module):
                   (256, 512), (512, 512), (512, 512), (512, 512), (512, 512), (512, 512, 2),
                   (512, 512), (512, 512), (512, 512), (512, 512), (512, 512), (512, 512, 2)]
 
-    def __init__(self, num_classes=10, which='VGG16'):
+    def __init__(self, num_classes=10, which='VGG16', alpha = 1.0):
         """
         Initialize VGG Model as argument configurations.
         :param num_classes: number of classification labels

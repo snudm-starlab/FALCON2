@@ -1,5 +1,5 @@
 """Useful utils
-This codes are from https://github.com/d-li14/mobilenetv2.pytorch
+The following codes are from https://github.com/d-li14/mobilenetv2.pytorch
 """
 from .misc import *
 from .logger import *

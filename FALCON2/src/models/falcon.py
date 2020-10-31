@@ -39,6 +39,7 @@ class GEPdecompose(nn.Module):
         :param conv_layer: standard convolution layer
         :param rank: rank of GEP
         :param init: whether initialize FALCON with decomposed tensors
+        :param relu: whether use relu function
         :param groups: number of groups in 1*1 conv
         """
 
@@ -106,12 +107,6 @@ class GEPdecompose(nn.Module):
                     self.decompose_rank(conv_layer.weight)
 
         self.stride = conv_layer.stride
-        # self.shortcut = nn.Sequential()
-        # if conv_layer.stride == 1 and in_channels != out_channels:
-        #     self.shortcut = nn.Sequential(
-        #         nn.Conv2d(in_channels, out_channels, kernel_size=1, stride=1, padding=0, bias=False),
-        #         nn.BatchNorm2d(out_channels),
-        #     )
 
         if groups != 1:
             self.group1x1(groups)
@@ -119,6 +114,7 @@ class GEPdecompose(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        :param x: input feature maps
         """
         if self.rank == 1:
             out = self.dw(self.pw(x))
@@ -134,10 +130,9 @@ class GEPdecompose(nn.Module):
             out = self.bn(out)
         if self.relu_:
             out = F.relu(out, True)
-        # out = out + self.shortcut(x) if self.stride == 1 else out
         return out
 
-    def decompose(self, conv, pw, dw, lr=0.005, steps=500):
+    def decompose(self, conv, pw, dw, lr=0.001, steps=600):
         """
         GEP decompose standard convolution kernel
         :param conv: standard convolution kernel
@@ -224,7 +219,6 @@ class GEPdecompose(nn.Module):
                 out_length = int(self.out_channels / group_num)
                 for i in range(group_num):
                     self.pw.weight.data[(i*out_length):((i+1)*out_length), 0:(in_length), :, :] = pw[(i*out_length):((i+1)*out_length), (i*in_length):((i+1)*in_length), :, :]
-                    # print('[%d:%d, %d:%d, %d, %d] = [%d:%d, %d:%d, %d, %d]' % ((i*out_length), ((i+1)*out_length), 0, (in_length), 0, 0, (i*out_length), ((i+1)*out_length), (i*in_length), ((i+1)*in_length), 0, 0))
         else:
             for i in range(self.rank):
                 pw = getattr(self, 'pw' + str(i)).weight.data
@@ -241,4 +235,3 @@ class GEPdecompose(nn.Module):
                     out_length = int(self.out_channels / group_num)
                     for j in range(group_num):
                         getattr(self, 'pw'+str(i)).weight.data[(j*out_length):((j+1)*out_length), 0:(in_length), :, :] = pw[(j*out_length):((j+1)*out_length), (j*in_length):((j+1)*in_length), :, :]
-                        # print('[%d:%d, %d:%d, %d, %d] = [%d:%d, %d:%d, %d, %d]' % ((j*out_length), ((j+1)*out_length), 0, (in_length), 0, 0, (j*out_length), ((j+1)*out_length), (j*in_length), ((j+1)*in_length), 0, 0))

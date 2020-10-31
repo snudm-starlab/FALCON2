@@ -47,7 +47,10 @@ class VGGModel_imagenet(nn.Module):
         self.classifier = model.classifier
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)
         x2 = self.classifier(x1)
@@ -131,7 +134,10 @@ class BasicBlock_StConvBranch(nn.Module):
         self.relu = nn.ReLU(inplace=True)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         out = self.conv1(x)
         out = self.conv2(out)
         if self.downsample is not None:
@@ -172,7 +178,10 @@ class ResNetModel_imagenet(nn.Module):
         self.classifier = model.fc
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)
         x2 = self.classifier(x1)
@@ -277,6 +286,10 @@ class VGGModel_imagenet_inf(nn.Module):
         self.features = model.features
 
     def forward(self, x):
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         return self.features(x)
 
 
@@ -297,5 +310,8 @@ class ResNetModel_imagenet_inf(nn.Module):
         self.features = nn.Sequential(*list(model.features.children())[:-1])
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         return self.features(x)

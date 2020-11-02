@@ -73,9 +73,6 @@ def load_model(net, args):
            ',data=' + str(args.datasets) + \
            ',rank=' + str(args.rank) + \
            ',alpha=' + str(args.alpha)
-    # if args.convolution == "MobileConvV2":
-        # if args.expansion == 6:
-        #     name += ",exp=6.0"
 
     path = 'trained_model/'
     file = path + name + '.pkl'

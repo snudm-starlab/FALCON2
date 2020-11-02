@@ -139,9 +139,6 @@ def print_model_parm_flops(net, imagenet=False):
         childrens = list(net.children())
         if not childrens:
             if isinstance(net, torch.nn.Conv2d):
-                # net.register_forward_hook(save_hook(net.__class__.__name__))
-                # net.register_forward_hook(simple_hook)
-                # net.register_forward_hook(simple_hook2)
                 net.register_forward_hook(conv_hook)
             if isinstance(net, torch.nn.Linear):
                 net.register_forward_hook(linear_hook)

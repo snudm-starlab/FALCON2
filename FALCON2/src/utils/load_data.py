@@ -56,24 +56,6 @@ def load_cifar100(is_train=True, batch_size=128):
                                                  train=True,
                                                  download=True,
                                                  transform=transform_train)
-        # valset = torchvision.datasets.CIFAR100(root='./data',
-        #                                        train=True,
-        #                                        download=True,
-        #                                        transform=transform_train)
-        #
-        # # split validation set from training set
-        # num_train = len(trainset)
-        # valid_size = 0.2
-        # indices = list(range(num_train))
-        # split = int(np.floor(valid_size * num_train))
-        #
-        # random_seed = 5
-        # np.random.seed(random_seed)
-        # np.random.shuffle(indices)
-        #
-        # train_idx, valid_idx = indices[split:], indices[:split]
-        # train_sampler = SubsetRandomSampler(train_idx)
-        # valid_sampler = SubsetRandomSampler(valid_idx)
 
         # dataloader
         trainloader = torch.utils.data.DataLoader(trainset,

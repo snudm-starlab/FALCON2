@@ -52,16 +52,6 @@ def print_model_parm_flops(net, imagenet=False):
     :param imagenet: which dataset is used
     """
 
-    # list_1 = []
-
-    # def simple_hook(self, input, output):
-    #     list_1.append(np.prod(input[0].shape))
-    #
-    # list_2 = {}
-    #
-    # def simple_hook2(self, input, output):
-    #     list_2['names'] = np.prod(input[0].shape)
-
     multiply_adds = False
     list_conv = []
 

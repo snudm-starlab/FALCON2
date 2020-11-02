@@ -177,9 +177,6 @@ def save_specific_model(best, args, convolution=''):
             ',alpha=' + str(args.alpha)
     if args.init:
         name += ',init'
-    # if args.tucker:
-    #     name += ',tucker'
-    #     name += ',mul=' + str(args.mul)
     if args.convolution != 'StandardConv' and args.beta != 0:
         name += ',beta='
         name += str(args.beta)

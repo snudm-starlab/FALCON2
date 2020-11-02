@@ -111,9 +111,7 @@ def train(net,
             loss = criterion(outputs, labels_V)
             if net_st != None:
                 outputs_st, outputs_st_conv = net_st(inputs_V)
-                # loss += beta * transfer_loss(outputs_conv, outputs_st_conv)
                 for i in range(len(outputs_st_conv)):
-                    # print("!!!!! %d" % i)
                     if i != (len(outputs_st_conv)-1):
                         loss += beta / 50 * criterion_mse(outputs_conv[i], outputs_st_conv[i].detach())
                     else:
@@ -157,6 +155,7 @@ def train(net,
             net.train()
             if val_acc > best_acc:
                 best_acc = val_acc
+                # Store the current parameters in the parameters of the best model
                 best_param = copy.deepcopy(net.state_dict())
 
     print('Finished Training. It took %ds in total' % (time.time() - start_time))

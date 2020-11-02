@@ -97,7 +97,10 @@ class VGG(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)
         if out_conv.size(2) != 1:

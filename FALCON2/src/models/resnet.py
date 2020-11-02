@@ -139,7 +139,10 @@ class ResidualLayer(nn.Module):
         self.relu = nn.ReLU(True)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         stacked_out = self.stacked(x)
         shortcut_out = self.shortcut(x)
         return self.relu(stacked_out + shortcut_out)
@@ -220,7 +223,10 @@ class ResNet(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)
         if out_conv.size(3) == 2:

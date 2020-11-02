@@ -346,8 +346,6 @@ def main_worker(gpu, ngpus_per_node, args):
         logger.set_names(['Learning Rate', 'Train Loss', 'Valid Loss', 'Train Acc.', 'Valid Acc.'])
         print('hi')
 
-    # print('*********** compressed model ***********')
-    # print(list(model.children()))
 
     if args.convolution == 'FALCONBranch':
         if args.stconv_branch_model:
@@ -430,11 +428,9 @@ def main_worker(gpu, ngpus_per_node, args):
 
         # train for one epoch
         train_loss, train_acc = train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args)
-#        train(train_loader, model, criterion, optimizer, epoch, args)
 
         # evaluate on validation set
         val_loss, prec1 = validate(val_loader, val_loader_len, model, criterion)
-#        acc1, inf_time = validate(val_loader, model, criterion, args)
 
         lr = optimizer.param_groups[0]['lr']
 
@@ -590,7 +586,6 @@ from math import cos, pi
 def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
     lr = optimizer.param_groups[0]['lr']
 
-#    warmup_epoch = 5 if args.warmup else 0
     warmup_epoch = 0
     warmup_iter = warmup_epoch * num_iter
     current_iter = iteration + epoch * num_iter

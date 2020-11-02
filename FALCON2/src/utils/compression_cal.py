@@ -48,7 +48,7 @@ def print_model_parm_nums(net):
 def print_model_parm_flops(net, imagenet=False):
     """
     Counting number of parameters in the model
-    :param net: the model
+    :param net: the model to be calculated for parameters and flops
     :param imagenet: which dataset is used
     """
 

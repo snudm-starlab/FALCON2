@@ -52,27 +52,6 @@ def print_model_parm_flops(net, imagenet=False):
     :param imagenet: which dataset is used
     """
 
-
-    # def save_hook(name):
-    #     """
-    #     Save the hook.
-    #     :param name: name space
-    #     """
-    #     def hook_per(self, input, output):
-    #         """
-    #         Hook per input.
-    #         :param input: input layer
-    #         """
-    #         # print 'flops:{}'.format(self.__class__.__name__)
-    #         # print 'input:{}'.format(input)
-    #         # print '_dim:{}'.format(input[0].dim())
-    #         # print 'input_shape:{}'.format(np.prod(input[0].shape))
-    #         # prods.append(np.prod(input[0].shape))
-    #         prods[name] = np.prod(input[0].shape)
-    #         # prods.append(np.prod(input[0].shape))
-    #
-    #     return hook_per
-
     # list_1 = []
 
     # def simple_hook(self, input, output):

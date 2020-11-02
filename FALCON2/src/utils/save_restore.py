@@ -199,7 +199,15 @@ def save_specific_model(best, args, convolution=''):
     print("model saved in %s" % (path + name + '.pkl'))
 
 def init_with_alpha_resnet(source_net, dest_net, alpha):
-
+    """
+    initialize with width multiplier for resnet.
+    :param source_net: a base model
+    :param dest_net: a model to be compressed
+    :param alpha: width multiplier. 
+                  if alpha is less than 1, 
+                  a part of standard convolution kernel
+                  is used for initializing kernels of FALCON.
+    """
     for i in range(len(source_net.first)):
         if isinstance(source_net.first[i], torch.nn.Conv2d):
             shape = source_net.first[i].weight.shape

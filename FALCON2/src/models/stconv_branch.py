@@ -96,7 +96,10 @@ class StConv_branch(nn.Module):
         return torch.cat((x, out), 1)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         if 1 == self.benchmodel:
             x1 = x[:, :(x.shape[1] // 2), :, :]
             x2 = x[:, (x.shape[1] // 2):, :, :]
@@ -110,6 +113,15 @@ class StConv_branch(nn.Module):
         return channel_shuffle(out, 2)
 
     def falcon(self, rank=1, init=True, alpha=1.0, bn=False, relu=False, groups=1):
+        """
+        Replace standard convolution by FALCON
+        :param rank: rank of GEP
+        :param init: whether initialize FALCON with GEP decomposition tensors
+        :param alpha: width multiplier
+        :param bn: whether add batch normalization after FALCON
+        :param relu: whether add ReLU function after FALCON
+        :param groups: number of groups for pointwise convolution
+        """
         if self.benchmodel == 2:
             compress = GEPdecompose(self.branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
             self.branch1[0] = compress
@@ -214,6 +226,7 @@ class VGG_StConv_branch(nn.Module):
         Replace standard convolution by FALCON
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
+        :param alpha: width multiplier
         :param bn: whether add batch normalization after FALCON
         :param relu: whether add ReLU function after FALCON
         :param groups: number of groups for pointwise convolution

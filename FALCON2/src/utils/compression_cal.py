@@ -52,15 +52,6 @@ def print_model_parm_flops(net, imagenet=False):
     :param imagenet: which dataset is used
     """
 
-    # prods = {}
-    # def save_prods(self, input, output):
-    # print 'flops:{}'.format(self.__class__.__name__)
-    # print 'input:{}'.format(input)
-    # print '_dim:{}'.format(input[0].dim())
-    # print 'input_shape:{}'.format(np.prod(input[0].shape))
-    # grads.append(np.prod(input[0].shape))
-
-    # prods = {}
 
     # def save_hook(name):
     #     """

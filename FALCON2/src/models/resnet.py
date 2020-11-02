@@ -74,7 +74,10 @@ class BottleNeckBlock(nn.Module):
         )
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        :param x: input feature maps
+        """
         return self.conv(x)
 
 

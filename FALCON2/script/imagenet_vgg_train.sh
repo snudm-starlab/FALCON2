@@ -20,7 +20,7 @@
 # FALCON: Lightweight and Accurate Convolution
 #
 # File: scripts/imagenet_vgg_train.sh
-#  - Test trained model
+#  - training model shell script for imagenet dataset
 #
 # Version: 1.0
 #==========================================================================================

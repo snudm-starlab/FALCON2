@@ -23,7 +23,7 @@ FALCON
   │    │    ├── train.py: training process
   │    │    ├── test.py: testing process
   │    │    └── validation.py: validation process
-  │    ├── imagenetutils
+  │    ├── imagenetutils: this code are from https://github.com/d-li14/mobilenetv2.pytorch
   │    │    ├── dataloaders.py: dataloader for ImageNet 
   │    │    ├── eval.py: evaluate function for ImageNet 
   │    │    ├── logger.py: logger functions 

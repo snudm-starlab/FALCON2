@@ -49,7 +49,7 @@ FALCON
 
 **Rank**: Rank of convolution. Copy the conv layer for k times, run independently and add output together at the end of the layer. This hyperparameter helps balace compression rate/ accelerate rate and accuracy.
 
-**FALCONBranch**: New version of FALCON - for fitting FALCON into ShuffleUnitV2 architecture.
+**FALCON-branch**: New version of FALCON - for fitting FALCON into ShuffleUnitV2 architecture.
 
 #### Data description
 * CIFAR-100 datasets

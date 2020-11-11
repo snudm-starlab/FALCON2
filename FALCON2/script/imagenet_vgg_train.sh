@@ -36,4 +36,4 @@ python imagenet.py \
     --epochs 90 \
     --lr-decay cos \
     --lr 0.01 \
-     /data/quanchun/ImageNet_data/ \
+     /data/ImageNet_data/ \

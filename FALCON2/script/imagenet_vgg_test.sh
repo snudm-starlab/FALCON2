@@ -33,4 +33,4 @@ python imagenet.py \
     -b 96 \
 	-init \
     --resume ../checkpoints/model_best.pth.tar \
-     /data/quanchun/ImageNet_data/
+     /data/ImageNet_data/

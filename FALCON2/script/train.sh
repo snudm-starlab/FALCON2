@@ -27,4 +27,4 @@
 #==========================================================================================
 cd ../src/train_test
 
-CUDA_VISIBLE_DEVICES=0 python main.py -m ResNet -conv FALCON -init -data cifar100 -train
+CUDA_VISIBLE_DEVICES=0 python main.py -m ResNet -conv FALCON -init -data cifar100 -train -al 0.77

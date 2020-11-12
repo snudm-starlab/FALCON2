@@ -48,7 +48,6 @@ class GEPdecompose(nn.Module):
         self.alpha = alpha
         self.bn_ = bn
         self.relu_ = relu
-        # get device
         self.device = conv_layer.weight.device
 
         # get weight and bias

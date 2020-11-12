@@ -29,7 +29,7 @@ import argparse
 
 def get_default_param():
     """
-    Receive arguments.
+    Deal with several arguments.
     """
     parser = argparse.ArgumentParser()
 
@@ -76,7 +76,6 @@ def get_default_param():
 
     parser.add_argument("-al", "--alpha",
                         help="Width Multiplier in range (0,1]",
-                        # choices=[1, 0.75, 0.5, 0.33, 0.25],
                         type=float,
                         default=1)
 

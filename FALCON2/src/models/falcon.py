@@ -218,7 +218,8 @@ class GEPdecompose(nn.Module):
                 in_length = int(self.in_channels / group_num)
                 out_length = int(self.out_channels / group_num)
                 for i in range(group_num):
-                    self.pw.weight.data[(i*out_length):((i+1)*out_length), 0:(in_length), :, :] = pw[(i*out_length):((i+1)*out_length), (i*in_length):((i+1)*in_length), :, :]
+                    self.pw.weight.data[(i*out_length):((i+1)*out_length), 0:(in_length), :, :] =\
+                    pw[(i*out_length):((i+1)*out_length), (i*in_length):((i+1)*in_length), :, :]
         else:
             for i in range(self.rank):
                 pw = getattr(self, 'pw' + str(i)).weight.data
@@ -234,4 +235,5 @@ class GEPdecompose(nn.Module):
                     in_length = int(self.in_channels / group_num)
                     out_length = int(self.out_channels / group_num)
                     for j in range(group_num):
-                        getattr(self, 'pw'+str(i)).weight.data[(j*out_length):((j+1)*out_length), 0:(in_length), :, :] = pw[(j*out_length):((j+1)*out_length), (j*in_length):((j+1)*in_length), :, :]
+                        getattr(self, 'pw'+str(i)).weight.data[(j*out_length):((j+1)*out_length), 0:(in_length), :, :] =\
+                        pw[(j*out_length):((j+1)*out_length), (j*in_length):((j+1)*in_length), :, :]

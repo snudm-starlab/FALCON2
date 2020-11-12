@@ -31,6 +31,7 @@ import torch.optim as optim
 def get_optimizer(net, lr, optimizer='SGD',  weight_decay=1e-4, momentum=0.9):
     """
     Get optimizer accroding to arguments.
+    There are four optimizers, SGD, Adagrad, Adam, and RMSprop.
     :param net: the model
     :param lr: learing rate
     :param optimizer: choose an optimizer - SGD/Adagrad/Adam/RMSprop

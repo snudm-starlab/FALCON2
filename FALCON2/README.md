@@ -127,6 +127,7 @@ FALCON
     data directory
     ```
     The trained model will be saved in `src/checkpoint directory/`
+    Note: dataloader function is implemented based on DALI library; hence, you install DALI library before training a model with ImageNet dataset. Our dataloader function is from https://github.com/d-li14/mobilenetv2.pytorch
 * To test the modelon ImageNet dataset, run script:
     ```    
     python imagenet.py \

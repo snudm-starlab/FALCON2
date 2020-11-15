@@ -22,6 +22,15 @@ except ImportError:
 
 class HybridTrainPipe(Pipeline):
     def __init__(self, batch_size, num_threads, device_id, data_dir, crop, dali_cpu=False):
+        '''
+        Init function for training pipeline
+        :param batch_size: batch size for training
+        :param num_threads: number of threads to use
+        :param device_id: device id
+        :param data_dir: name of data directory
+        :param crop: shape of cropped image
+        :param dali_cpu: whether running on cpu or not
+        '''
         super(HybridTrainPipe, self).__init__(batch_size, num_threads, device_id, seed = 12 + device_id)
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()

@@ -119,9 +119,8 @@ if __name__ == '__main__':
 
     # Example: logger monitor
     paths = {
-    'resadvnet20':'/home/wyang/code/pytorch-classification/checkpoint/cifar10/resadvnet20/log.txt', 
-    'resadvnet32':'/home/wyang/code/pytorch-classification/checkpoint/cifar10/resadvnet32/log.txt',
-    'resadvnet44':'/home/wyang/code/pytorch-classification/checkpoint/cifar10/resadvnet44/log.txt',
+    'resadvnet20':'/home/name/code/checkpoint/cifar10/resadvnet20/log.txt', 
+    'resadvnet32':'/home/name/code/checkpoint/cifar10/resadvnet32/log.txt'
     }
 
     field = ['Valid Acc.']

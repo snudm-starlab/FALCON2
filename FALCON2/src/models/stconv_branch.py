@@ -364,9 +364,7 @@ class ResNet_StConv_branch(nn.Module):
         """Run forward propagation"""
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)
-        # for i in range(len(self.residuals)):
-        #     out_conv = self.residuals[i].stacked.conv[0](out_conv)
-        #     out_conv = self.residuals[i].stacked.conv[1](out_conv)
+
         if out_conv.size(3) == 2:
             out_conv = self.avgpool_2(out_conv)
         else:
@@ -386,14 +384,12 @@ class ResNet_StConv_branch(nn.Module):
         """
         for i in range(len(self.residuals)):
             if isinstance(self.residuals[i].stacked.conv[0], StConv_branch):
-                # print(self.residuals[i].stacked.conv[0])
                 if self.residuals[i].stacked.conv[0].benchmodel == 2:
                     compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                     self.residuals[i].stacked.conv[0].branch1[0] = compress
                 compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch2[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                 self.residuals[i].stacked.conv[0].branch2[0] = compress
             if isinstance(self.residuals[i].stacked.conv[1], StConv_branch):
-                # print(self.residuals[i].stacked.conv[1])
                 if self.residuals[i].stacked.conv[1].benchmodel == 2:
                     compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                     self.residuals[i].stacked.conv[1].branch1[0] = compress

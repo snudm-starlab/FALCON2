@@ -265,10 +265,6 @@ class ResNetModel_imagenet(nn.Module):
                     self.features[i].conv1.falcon(init=init)
                 if isinstance(self.features[i].conv2, StConv_branch):
                     self.features[i].conv2.falcon(init=init)
-        # for i in range(len(self.features.module)):
-        #     if isinstance(self.features.module[i], StConv_branch):
-        #        self.features.module[i].falcon(init=init)
-
 
 class VGGModel_imagenet_inf(nn.Module):
     """

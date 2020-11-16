@@ -103,20 +103,6 @@ class LoggerMonitor(object):
         plt.grid(True)
                     
 if __name__ == '__main__':
-    # # Example
-    # logger = Logger('test.txt')
-    # logger.set_names(['Train loss', 'Valid loss','Test loss'])
-
-    # length = 100
-    # t = np.arange(length)
-    # train_loss = np.exp(-t / 10.0) + np.random.rand(length) * 0.1
-    # valid_loss = np.exp(-t / 10.0) + np.random.rand(length) * 0.1
-    # test_loss = np.exp(-t / 10.0) + np.random.rand(length) * 0.1
-
-    # for i in range(0, length):
-    #     logger.append([train_loss[i], valid_loss[i], test_loss[i]])
-    # logger.plot()
-
     # Example: logger monitor
     paths = {
     'resadvnet20':'/home/name/code/checkpoint/cifar10/resadvnet20/log.txt', 

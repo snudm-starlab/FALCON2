@@ -124,9 +124,6 @@ def load_specific_model(net, args, convolution='', input_path=''):
         name += ',init'
     if args.convolution == 'FALCONBranch' and convolution == '' and args.init:
         name += ',init'
-    # if args.tucker:
-    #     name += ',tucker'
-    #     name += ',mul=' + str(args.mul)
     if args.convolution == 'FALCON' and convolution == '' and args.beta != 0:
         name += ',beta='
         name += str(args.beta)
@@ -139,7 +136,6 @@ def load_specific_model(net, args, convolution='', input_path=''):
     if args.convolution == 'ShuffleUnit':
         name += ',groups='
         name += str(args.groups)
-    # if args.convolution != 'StandardConv' and convolution != 'StandardConv':
     name += ',opt='
     name += str(args.optimizer)
     name += ',lr='

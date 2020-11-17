@@ -108,7 +108,7 @@ class BasicBlock(nn.Module):
         Run forward propagation
         :param x: input feature maps
         """
-      return self.conv(x)
+        return self.conv(x)
 
 
 class ResidualLayer(nn.Module):

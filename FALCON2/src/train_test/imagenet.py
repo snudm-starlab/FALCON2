@@ -45,8 +45,6 @@ from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
 from imagenetutils.dataloaders import *
 from tensorboardX import SummaryWriter
-#from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
-#from utils.timer import Timer
 
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")

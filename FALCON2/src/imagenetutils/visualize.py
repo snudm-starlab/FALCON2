@@ -57,16 +57,9 @@ def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     plt.imshow(images)
     plt.axis('off')
 
-    # for b in range(mask.size(0)):
-    #     mask[b] = (mask[b] - mask[b].min())/(mask[b].max() - mask[b].min())
     mask_size = mask.size(2)
-    # print('Max %f Min %f' % (mask.max(), mask.min()))
     mask = (upsampling(mask, scale_factor=im_size/mask_size))
-    # mask = colorize(upsampling(mask, scale_factor=im_size/mask_size))
-    # for c in range(3):
-    #     mask[:,c,:,:] = (mask[:,c,:,:] - Mean[c])/Std[c]
 
-    # print(mask.size())
     mask = make_image(torchvision.utils.make_grid(0.3*im_data+0.7*mask.expand_as(im_data)))
     # mask = make_image(torchvision.utils.make_grid(0.3*im_data+0.7*mask), Mean, Std)
     plt.subplot(2, 1, 2)

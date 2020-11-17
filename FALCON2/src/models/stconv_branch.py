@@ -233,8 +233,6 @@ class VGG_StConv_branch(nn.Module):
         """
         for i in range(len(self.layers)):
             if isinstance(self.layers[i], StConv_branch):
-                # print(self.layers[i])
-                # shape = self.layers[i].weight.shape
 
                 if self.layers[i].benchmodel == 2:
                     compress = GEPdecompose(self.layers[i].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)

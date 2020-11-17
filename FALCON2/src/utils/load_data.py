@@ -147,9 +147,6 @@ def load_imagenet(is_train=True, batch_size=128):
         train_set = datasets.ImageFolder(train_dir, transforms_train)
         val_set = datasets.ImageFolder(val_dir, transforms_val)
 
-        # print('Number of classes: %d' % len(train_set.classes))
-        # print(train_set.classes)
-
         # dataloader
         train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
         val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, num_workers=2)

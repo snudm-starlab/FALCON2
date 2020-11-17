@@ -141,24 +141,16 @@ def train(net,
                 last_time = now_time
 
         # validation
-        if data == 'tinyimagenet':
-            if epoch % 10 == 9:
-                net.eval()
-                val_acc = validation(net, valloader, log)
-                net.train()
-                if val_acc > best_acc:
-                    best_acc = val_acc
-                    best_param = net.state_dict()
-        else:
-            net.eval()
-            val_acc = validation(net, valloader, log)
-            net.train()
-            if val_acc > best_acc:
-                best_acc = val_acc
-                # Store the current parameters in the parameters of the best model
-                best_param = copy.deepcopy(net.state_dict())
+        net.eval()
+        val_acc = validation(net, valloader, log)
+        net.train()
+        if val_acc > best_acc:
+            best_acc = val_acc
+            # Store the current parameters in the parameters of the best model
+            best_param = copy.deepcopy(net.state_dict())
 
     print('Finished Training. It took %ds in total' % (time.time() - start_time))
     if log != None:
         log.write('Finished Training. It took %ds in total\n' % (time.time() - start_time))
+
     return best_param

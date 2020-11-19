@@ -183,7 +183,6 @@ def save_specific_model(best, args, convolution=''):
         name += ',groups='
         name += str(args.groups)
 
-    # if args.convolution != 'StandardConv' and convolution != 'StandardConv':
     name += ',opt='
     name += str(args.optimizer)
     name += ',lr='

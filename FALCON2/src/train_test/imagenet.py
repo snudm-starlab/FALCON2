@@ -217,7 +217,6 @@ def main_worker(gpu, ngpus_per_node, args):
     else:
         print('ONLY VGG like or ResNet like model is accepted!')
         sys.exit(0)
-    # print('*********** my model ***********')
 
     # count the number of parameters and flops
     print_model_parm_nums(model)

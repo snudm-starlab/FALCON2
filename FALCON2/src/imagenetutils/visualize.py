@@ -61,7 +61,6 @@ def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     mask = (upsampling(mask, scale_factor=im_size/mask_size))
 
     mask = make_image(torchvision.utils.make_grid(0.3*im_data+0.7*mask.expand_as(im_data)))
-    # mask = make_image(torchvision.utils.make_grid(0.3*im_data+0.7*mask), Mean, Std)
     plt.subplot(2, 1, 2)
     plt.imshow(mask)
     plt.axis('off')

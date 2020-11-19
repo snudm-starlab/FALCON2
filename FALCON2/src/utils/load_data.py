@@ -63,10 +63,6 @@ def load_cifar100(is_train=True, batch_size=128):
                                                   # sampler=train_sampler,
                                                   num_workers=2,
                                                   shuffle=True)
-        # valloader = torch.utils.data.DataLoader(valset,
-        #                                         batch_size=batch_size,
-        #                                         sampler=valid_sampler,
-        #                                         num_workers=2)
         return trainloader #, valloader
 
     else:

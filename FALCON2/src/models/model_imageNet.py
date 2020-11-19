@@ -81,7 +81,6 @@ class VGGModel_imagenet(nn.Module):
         """
         for i in range(len(self.features)):
             if isinstance(self.features[i], nn.Conv2d):
-                # print(self.features[i])
                 shape = self.features[i].weight.shape
                 if shape[1] == 3:
                     self.features[i] = nn.Conv2d(3, int(self.features[i].out_channels * alpha), kernel_size=3, padding=1)

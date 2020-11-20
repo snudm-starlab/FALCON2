@@ -24,10 +24,12 @@ File: train_test/test.py
 
 Version: 1.0
 """
+
+# pylint: disable=E1101,R0914,R1704
+import sys
+import time
 import torch
 import torch.nn.functional as F
-
-import time
 
 from utils.load_data import load_cifar100, load_svhn
 
@@ -50,23 +52,25 @@ def test(net, log=None, batch_size=128, data='cifar100'):
     elif data == 'svhn':
         test_loader = load_svhn(is_train, batch_size)
     else:
-        exit()
+        sys.exit()
 
     correct = 0
     total = 0
     inference_start = time.time()
     with torch.no_grad():
-        for i, data in enumerate(test_loader, 0):
+        for _, data in enumerate(test_loader, 0):
             inputs, labels = data
-            outputs, outputs_conv = net(inputs.cuda())
+            outputs, _ = net(inputs.cuda())
             _, predicted = torch.max(F.softmax(outputs, -1), 1)
             total += labels.size(0)
             correct += (predicted == labels.cuda()).sum()
     inference_time = time.time() - inference_start
-    print('Accuracy: %f %%; Inference time: %fs' % (float(100) * float(correct) / float(total), inference_time))
+    print('Accuracy: %f %%; Inference time: %fs' % (float(100) * float(correct) /\
+                float(total), inference_time))
 
-    if log != None:
-        log.write('Accuracy of the network on the 10000 test images: %f %%\n' % (float(100) * float(correct) / float(total)))
+    if log is not None:
+        log.write('Accuracy of the network on the 10000 test images: %f %%\n' %\
+                (float(100) * float(correct) / float(total)))
         log.write('Inference time is: %fs\n' % inference_time)
 
     return inference_time

@@ -23,11 +23,12 @@ File: train_test/validation.py
 
 Version: 1.0
 """
+# pylint: disable=E1101,R0914
+import time
 
 import torch
 import torch.nn.functional as F
 
-import time
 
 
 def validation(net, val_loader, log=None):
@@ -45,9 +46,9 @@ def validation(net, val_loader, log=None):
     total = 0
     inference_start = time.time()
     with torch.no_grad():
-        for i, data in enumerate(val_loader, 0):
+        for _, data in enumerate(val_loader, 0):
             inputs, labels = data
-            outputs, outputs_conv = net(inputs.cuda())
+            outputs, _ = net(inputs.cuda())
             _, predicted = torch.max(F.softmax(outputs, -1), 1)
             total += labels.size(0)
             correct += (predicted == labels.cuda()).sum()
@@ -58,7 +59,7 @@ def validation(net, val_loader, log=None):
     print('Accuracy of the network validation images: %f %%' % accuracy)
     print('Validation time is: %fs' % inference_time)
 
-    if log != None:
+    if log is not None:
         log.write("*************** Validation ***************\n")
         log.write('Accuracy of the network validation images: %f %%\n' % accuracy)
         log.write('Validation time is: %fs\n' % inference_time)

@@ -24,19 +24,21 @@ File: train_test/train.py
 Version: 1.0
 """
 
+# pylint: disable=C0103,R0912,R0913,R0914,R0915,R1704,C0200,W0621,E1101
+import time
+import sys
+import copy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
-import time
-import numpy as np
-import copy
 
 
-from train_test.validation import validation
 from utils.optimizer_option import get_optimizer
 from utils.load_data import load_cifar100, load_svhn
 from utils.lr_decay import adjust_lr
+from train_test.validation import validation
+
 
 
 def train(net,
@@ -64,7 +66,7 @@ def train(net,
     """
 
     net.train()
-    if net_st != None:
+    if net_st is not None:
         net_st.eval()
 
     if data == 'cifar100':
@@ -74,7 +76,7 @@ def train(net,
         trainloader = load_svhn(is_train, batch_size)
         valloader = load_svhn(False, batch_size)
     else:
-        exit()
+        sys.exit()
 
     criterion = nn.CrossEntropyLoss()
     criterion_mse = nn.MSELoss()
@@ -89,7 +91,7 @@ def train(net,
     iteration = 0
     for epoch in range(epochs):
         print("****************** EPOCH = %d ******************" % epoch)
-        if log != None:
+        if log is not None:
             log.write("****************** EPOCH = %d ******************\n" % epoch)
 
         total = 0
@@ -97,7 +99,7 @@ def train(net,
         loss_sum = 0
 
         # change learning rate
-        if epoch == 150 or epoch == 250:
+        if epoch in (150, 250):
             lr = adjust_lr(lr, lrd=lrd, log=log)
             optimizer = get_optimizer(net, lr, optimizer_option)
 
@@ -106,16 +108,18 @@ def train(net,
 
             # foward
             inputs, labels = data
-            inputs_V, labels_V = Variable(inputs.cuda()), Variable(labels.cuda())
-            outputs, outputs_conv = net(inputs_V)
-            loss = criterion(outputs, labels_V)
-            if net_st != None:
-                outputs_st, outputs_st_conv = net_st(inputs_V)
+            inputs_var, labels_var = Variable(inputs.cuda()), Variable(labels.cuda())
+            outputs, outputs_conv = net(inputs_var)
+            loss = criterion(outputs, labels_var)
+            if net_st is not None:
+                _, outputs_st_conv = net_st(inputs_var)
                 for i in range(len(outputs_st_conv)):
                     if i != (len(outputs_st_conv)-1):
-                        loss += beta / 50 * criterion_mse(outputs_conv[i], outputs_st_conv[i].detach())
+                        loss += beta / 50 * criterion_mse(outputs_conv[i], \
+                                outputs_st_conv[i].detach())
                     else:
-                        loss += beta * criterion_mse(outputs_conv[i], outputs_st_conv[i].detach())
+                        loss += beta * criterion_mse(outputs_conv[i], \
+                                outputs_st_conv[i].detach())
 
             # backward
             optimizer.zero_grad()
@@ -123,17 +127,19 @@ def train(net,
             optimizer.step()
 
             _, predicted = torch.max(F.softmax(outputs, -1), 1)
-            total += labels_V.size(0)
-            correct += (predicted == labels_V).sum()
+            total += labels_var.size(0)
+            correct += (predicted == labels_var).sum()
             loss_sum += loss
 
             if iteration % 100 == 99:
                 now_time = time.time()
                 print('accuracy: %f %%; loss: %f; time: %ds'
-                      % ((float(100) * float(correct) / float(total)), loss, (now_time - last_time)))
-                if log != None:
+                      % ((float(100) * float(correct) / float(total)), loss, \
+                          (now_time - last_time)))
+                if log is not None:
                     log.write('accuracy: %f %%; loss: %f; time: %ds\n'
-                              % ((float(100) * float(correct) / float(total)), loss, (now_time - last_time)))
+                              % ((float(100) * float(correct) / float(total)), loss, \
+                                  (now_time - last_time)))
 
                 total = 0
                 correct = 0
@@ -150,7 +156,7 @@ def train(net,
             best_param = copy.deepcopy(net.state_dict())
 
     print('Finished Training. It took %ds in total' % (time.time() - start_time))
-    if log != None:
+    if log is not None:
         log.write('Finished Training. It took %ds in total\n' % (time.time() - start_time))
 
     return best_param

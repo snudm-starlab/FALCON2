@@ -16,13 +16,15 @@ This software may be used only for research evaluation purposes.
 For other purposes (e.g., commercial), please contact the authors.
 
 """
-# pylint: disable=wrong-import-position,C0103,R0912,R0915,E1101
+# pylint: disable=wrong-import-position,C0102,C0103,R0912,R0913,R0914,R0915,E1101
+# pylint: disable=W0401,W0614,W0603,W0622,W0632
 import argparse
 import os
 import random
 import shutil
 import time
 import warnings
+from math import cos, pi
 import sys
 sys.path.append('../')
 
@@ -36,14 +38,13 @@ import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
 from torch.autograd import Variable
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+#import torchvision.transforms as transforms
+#import torchvision.datasets as datasets
 import torchvision.models as models
 from utils.timer import Timer
-
+from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, \
     VGGModel_imagenet_inf, ResNetModel_imagenet_inf
-from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
 from imagenetutils.dataloaders import *
 from tensorboardX import SummaryWriter
@@ -114,7 +115,7 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                          'fastest way to use PyTorch for either single node or '
                          'multi node data parallel training')
 parser.add_argument('-conv', '--convolution', default='StandardConv', type=str,
-                    choices=['StandardConv', 'FALCON', 'DepSepConv', 'MobileConvV2', 
+                    choices=['StandardConv', 'FALCON', 'DepSepConv', 'MobileConvV2',
                     'ShuffleUnit', 'ShuffleUnitV2', 'StConvBranch', 'FALCONBranch'],
                     help='convolution type')
 parser.add_argument('-init', '--init', action='store_true',
@@ -148,7 +149,7 @@ def main():
     Discription: main
     """
     args = parser.parse_args()
-    print('############################## %d * %d * %d ##############################' 
+    print('############################## %d * %d * %d ##############################'
             % (args.input_num, args.input_size, args.input_size))
 
     if args.seed is not None:
@@ -396,7 +397,8 @@ def main_worker(gpu, ngpus_per_node, args):
                 print("=> no checkpoint found at '{}'".format(args.resume))
         else:
             logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
-            logger.set_names(['Learning Rate', 'Train Loss', 'Valid Loss', 'Train Acc.', 'Valid Acc.'])
+            logger.set_names(['Learning Rate', 'Train Loss',\
+                    'Valid Loss', 'Train Acc.', 'Valid Acc.'])
 
     cudnn.benchmark = True
 
@@ -409,12 +411,14 @@ def main_worker(gpu, ngpus_per_node, args):
 
     get_train_loader = get_dali_train_loader(dali_cpu=False)
     get_val_loader = get_dali_val_loader()
-    train_loader, train_loader_len = get_train_loader(args.data, args.batch_size, workers=args.workers)
-    val_loader, val_loader_len = get_val_loader(args.data, args.batch_size, workers=args.workers)
+    train_loader, train_loader_len = get_train_loader(args.data, args.batch_size,\
+            workers=args.workers)
+    val_loader, val_loader_len = get_val_loader(args.data, args.batch_size, \
+            workers=args.workers)
 
     if args.evaluate:
         inf_times = 0
-        for i in range(1):
+        for _ in range(1):
             _, inf_time = validate(val_loader, val_loader_len, model, criterion)
             inf_times += inf_time
         print("\nAverage Inference Time: %f" % (float(inf_times) / 1.0))
@@ -425,7 +429,8 @@ def main_worker(gpu, ngpus_per_node, args):
     for epoch in range(args.start_epoch, args.epochs):
 
         # train for one epoch
-        train_loss, train_acc = train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args)
+        train_loss, train_acc = train(train_loader, train_loader_len, model, \
+                criterion, optimizer, epoch, args)
 
         # evaluate on validation set
         val_loss, prec1 = validate(val_loader, val_loader_len, model, criterion)
@@ -437,8 +442,10 @@ def main_worker(gpu, ngpus_per_node, args):
 
         # tensorboardX
         writer.add_scalar('learning rate', lr, epoch + 1)
-        writer.add_scalars('loss', {'train loss': train_loss, 'validation loss': val_loss}, epoch + 1)
-        writer.add_scalars('accuracy', {'train accuracy': train_acc, 'validation accuracy': prec1}, epoch + 1)
+        writer.add_scalars('loss', {'train loss': train_loss, \
+                'validation loss': val_loss}, epoch + 1)
+        writer.add_scalars('accuracy', {'train accuracy': train_acc, \
+                'validation accuracy': prec1}, epoch + 1)
 
         is_best = prec1 > best_acc1
         best_acc1 = max(prec1, best_acc1)
@@ -509,7 +516,9 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
         end = time.time()
 
         # plot progress
-        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | top1: {top1: .4f} | top5: {top5: .4f}'.format(
+        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s \
+                      | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | \
+                      top1: {top1: .4f} | top5: {top5: .4f}'.format(
                     batch=i + 1,
                     size=train_loader_len,
                     data=data_time.avg,
@@ -526,6 +535,13 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
 
 
 def validate(val_loader, val_loader_len, model, criterion):
+    '''
+    validation function for our model
+    :param val_loader: validation data
+    :param val_loader_len: length of validation data
+    :param model: our model to be validated
+    :param criterion: loss function
+    '''
     bar = Bar('Processing', max=val_loader_len)
 
     batch_time = AverageMeter()
@@ -560,7 +576,9 @@ def validate(val_loader, val_loader_len, model, criterion):
         end = time.time()
 
         # plot progress
-        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | top1: {top1: .4f} | top5: {top5: .4f}'.format(
+        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s \
+                      | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | \
+                      top1: {top1: .4f} | top5: {top5: .4f}'.format(
                     batch=i + 1,
                     size=val_loader_len,
                     data=data_time.avg,
@@ -577,46 +595,60 @@ def validate(val_loader, val_loader_len, model, criterion):
 
 
 def save_checkpoint(state, is_best, checkpoint='checkpoint', filename='checkpoint.pth.tar'):
+    '''
+    this function saves check point during training
+    :param state: current state of a model
+    :param is_best: best model or not
+    :param checkpoint: directory for checkpoint
+    :param filename: filename for checkpoint
+    '''
     filepath = os.path.join(checkpoint, filename)
     torch.save(state, filepath)
     if is_best:
         shutil.copyfile(filepath, os.path.join(checkpoint, 'model_best.pth.tar'))
 
 
-def adjust_learning_rate(optimizer, epoch, args):
-    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
-    lr = args.lr * (0.1 ** (epoch // 30))
+#def adjust_learning_rate(optimizer, epoch, args):
+#    """Sets the learning rate to the initial LR decayed by 10 every 30 epochs"""
+#    lr = args.lr * (0.1 ** (epoch // 30))
+#    for param_group in optimizer.param_groups:
+#        param_group['lr'] = lr
+
+
+def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
+    '''
+    adjust learning rate over epochs
+    :param optimizer: optimizer class
+    :param epoch: the number of epochs
+    :param iteration: current iterations in an epoch
+    :param num_iter: number of iterations in an epoch
+    :param args: arguments
+    '''
+    lr = optimizer.param_groups[0]['lr']
+
+    warmup_epoch = 0
+    warmup_iter = warmup_epoch * num_iter
+    current_iter = iteration + epoch * num_iter
+    max_iter = args.epochs * num_iter
+
+    if args.lr_decay == 'step':
+        lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
+    elif args.lr_decay == 'cos':
+        lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
+    elif args.lr_decay == 'linear':
+        lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
+    elif args.lr_decay == 'schedule':
+        count = sum([1 for s in args.schedule if s <= epoch])
+        lr = args.lr * pow(args.gamma, count)
+    else:
+        raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
+
+    if epoch < warmup_epoch:
+        lr = args.lr * current_iter / warmup_iter
+
+
     for param_group in optimizer.param_groups:
         param_group['lr'] = lr
-
-
-# from math import cos, pi
-# def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
-#     lr = optimizer.param_groups[0]['lr']
-#
-#     warmup_epoch = 0
-#     warmup_iter = warmup_epoch * num_iter
-#     current_iter = iteration + epoch * num_iter
-#     max_iter = args.epochs * num_iter
-#
-#     if args.lr_decay == 'step':
-#         lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
-#     elif args.lr_decay == 'cos':
-#         lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
-#     elif args.lr_decay == 'linear':
-#         lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
-#     elif args.lr_decay == 'schedule':
-#         count = sum([1 for s in args.schedule if s <= epoch])
-#         lr = args.lr * pow(args.gamma, count)
-#     else:
-#         raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
-#
-#     if epoch < warmup_epoch:
-#         lr = args.lr * current_iter / warmup_iter
-#
-#
-#     for param_group in optimizer.param_groups:
-#         param_group['lr'] = lr
 
 if __name__ == '__main__':
     main()

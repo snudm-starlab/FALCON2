@@ -23,15 +23,11 @@ File: train_test/main.py
 
 Version: 1.0
 """
-
 import sys
 sys.path.append('../')
 
 import torch
 from torch.autograd import Variable
-
-from train_test.train import train
-from train_test.test import test
 
 from models.vgg import VGG
 from models.resnet import ResNet
@@ -42,6 +38,11 @@ from utils.default_param import get_default_param
 from utils.save_restore import save_specific_model, load_specific_model, \
     init_with_alpha_resnet, init_with_alpha_vgg
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
+
+from train_test.train import train
+from train_test.test import test
+
+
 
 
 def main(args):
@@ -207,7 +208,7 @@ def main(args):
     net(x)
     timer = Timer()
     timer.tic()
-    for i in range(100):
+    for _ in range(100):
         net(x)
     timer.toc()
     print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 100.0))
@@ -221,3 +222,4 @@ if __name__ == "__main__":
     print(args)
 
     main(args)
+

@@ -24,15 +24,17 @@ File: models/falcon.py
 Version: 1.0
 """
 
-import torch
+# pylint: disable=C0103,W0223,R0902,R0913,R1725,R0201
+import time
 import torch.nn as nn
 import torch.nn.functional as F
-from torch.optim import SGD, AdamW
-import time
-import sys
+from torch.optim import AdamW
 
 
 class GEPdecompose(nn.Module):
+    """
+    GEP decomposition class
+    """
     def __init__(self, conv_layer, rank=1, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Initialize FALCON layer.
@@ -118,7 +120,7 @@ class GEPdecompose(nn.Module):
         if self.rank == 1:
             out = self.dw(self.pw(x))
         else:
-            names = locals()
+#            names = locals()
             for i in range(self.rank):
                 if i == 0:
                     out = getattr(self, 'pw' + str(i))(x)
@@ -149,7 +151,7 @@ class GEPdecompose(nn.Module):
         optimizer = AdamW({pw, dw}, lr=lr)
         st = time.time()
         for s in range(steps):
-            if steps == 400 or steps == 700:
+            if steps in (400, 700):
                 lr = lr / 10
                 optimizer = AdamW({pw, dw}, lr=lr)
             optimizer.zero_grad()
@@ -182,15 +184,19 @@ class GEPdecompose(nn.Module):
         optimizer = AdamW(param, lr=lr)
         st = time.time()
         for s in range(steps):
-            if steps == 400 or steps == 700:
+            if steps in (400, 700):
                 lr = lr / 10
                 optimizer = AdamW(param, lr=lr)
             optimizer.zero_grad()
             for i in range(self.rank):
                 if i == 0:
-                    kernel_pred = getattr(self, 'pw' + str(i)).weight.cuda() * getattr(self, 'dw' + str(i)).weight.cuda()
+                    kernel_pred = getattr(self, \
+                            'pw' + str(i)).weight.cuda() * \
+                getattr(self, 'dw' + str(i)).weight.cuda()
                 else:
-                    kernel_pred += getattr(self, 'pw' + str(i)).weight.cuda() * getattr(self, 'dw' + str(i)).weight.cuda()
+                    kernel_pred += getattr(self, \
+                            'pw' + str(i)).weight.cuda() * getattr(self, \
+                            'dw' + str(i)).weight.cuda()
             loss = criterion(kernel_pred, kernel.cuda())
             loss.backward()
             optimizer.step()
@@ -234,5 +240,7 @@ class GEPdecompose(nn.Module):
                     in_length = int(self.in_channels / group_num)
                     out_length = int(self.out_channels / group_num)
                     for j in range(group_num):
-                        getattr(self, 'pw'+str(i)).weight.data[(j*out_length):((j+1)*out_length), 0:(in_length), :, :] =\
+                        getattr(self, \
+                                'pw'+str(i)).weight.data[(j*out_length):((j+1)*out_length),\
+                                                                          0:(in_length), :, :] =\
                         pw[(j*out_length):((j+1)*out_length), (j*in_length):((j+1)*in_length), :, :]

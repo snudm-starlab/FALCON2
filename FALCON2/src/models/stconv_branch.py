@@ -23,6 +23,7 @@ File: models/stconv_branch.py
 Version: 1.0
 """
 
+# pylint: disable=E1101,C0103,R0913,R1725,W0223
 import torch
 import torch.nn as nn
 
@@ -100,12 +101,12 @@ class StConv_branch(nn.Module):
         Run forward propagation
         :param x: input feature maps
         """
-        if 1 == self.benchmodel:
+        if self.benchmodel == 1:
             x1 = x[:, :(x.shape[1] // 2), :, :]
             x2 = x[:, (x.shape[1] // 2):, :, :]
             out = self.branch2(x2)
             out = self._concat(x1, out)
-        elif 2 == self.benchmodel:
+        elif self.benchmodel == 2:
             x1 = self.branch1(x)
             x2 = self.branch2(x)
             out = self._concat(x1, x2)
@@ -123,9 +124,11 @@ class StConv_branch(nn.Module):
         :param groups: number of groups for pointwise convolution
         """
         if self.benchmodel == 2:
-            compress = GEPdecompose(self.branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+            compress = GEPdecompose(self.branch1[0], rank, init, alpha=alpha,\
+                    bn=bn, relu=relu, groups=groups)
             self.branch1[0] = compress
-        compress = GEPdecompose(self.branch2[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+        compress = GEPdecompose(self.branch2[0], rank, init, alpha=alpha,\
+                bn=bn, relu=relu, groups=groups)
         self.branch2[0] = compress
 
 
@@ -149,9 +152,12 @@ class VGG_StConv_branch(nn.Module):
 
     cfgs_VGG_en = [[64, 64], [64, 64, 2],
                    [64, 128], [128, 128], [128, 128, 2],
-                   [128, 256], [256, 256], [256, 256], [256, 256], [256, 256], [256, 256, 2],
-                   [256, 512], [512, 512], [512, 512], [512, 512], [512, 512], [512, 512, 2],
-                   [512, 512], [512, 512], [512, 512], [512, 512], [512, 512], [512, 512, 2]]  # [3, 64],
+                   [128, 256], [256, 256], [256, 256],\
+                       [256, 256], [256, 256], [256, 256, 2],
+                   [256, 512], [512, 512], [512, 512],\
+                       [512, 512], [512, 512], [512, 512, 2],
+                   [512, 512], [512, 512], [512, 512],\
+                       [512, 512], [512, 512], [512, 512, 2]]  # [3, 64],
 
     def __init__(self, num_classes=10, which='VGG16', alpha=1):
         """
@@ -235,10 +241,12 @@ class VGG_StConv_branch(nn.Module):
             if isinstance(self.layers[i], StConv_branch):
 
                 if self.layers[i].benchmodel == 2:
-                    compress = GEPdecompose(self.layers[i].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+                    compress = GEPdecompose(self.layers[i].branch1[0], rank, init,\
+                            alpha=alpha, bn=bn, relu=relu, groups=groups)
                     self.layers[i].branch1 = compress
 
-                compress = GEPdecompose(self.layers[i].branch2[0], rank, init, alpha=alpha, bn=bn, relu=relu,
+                compress = GEPdecompose(self.layers[i].branch2[0], rank, init,\
+                        alpha=alpha, bn=bn, relu=relu,
                                         groups=groups)
                 self.layers[i].branch2[0] = compress
 
@@ -282,6 +290,7 @@ class ResidualLayer(nn.Module):
         super(ResidualLayer, self).__init__()
 
         self.stacked = BasicBlock(in_channels, out_channels, stride)
+        self.layer_num = layer_num
 
         # shortcut
         self.shortcut = nn.Sequential()
@@ -296,7 +305,7 @@ class ResidualLayer(nn.Module):
     def forward(self, x):
         """Run forward propagation"""
         stacked_out = self.stacked(x)
-        shortcut_out = self.shortcut(x)
+#        shortcut_out = self.shortcut(x)
         return self.relu(stacked_out) # + shortcut_out)
 
 
@@ -351,11 +360,14 @@ class ResNet_StConv_branch(nn.Module):
             for j in range(cfg[i]):
                 if j == 0:
                     if i != 0:
-                        layers.append(ResidualLayer(self.basic_channels[i] // 2, self.basic_channels[i], layer_num=layer_num, stride=2))
+                        layers.append(ResidualLayer(self.basic_channels[i] // 2,\
+                                    self.basic_channels[i], layer_num=layer_num, stride=2))
                     else:
-                        layers.append(ResidualLayer(self.basic_channels[i], self.basic_channels[i], layer_num=layer_num, stride=2))
+                        layers.append(ResidualLayer(self.basic_channels[i],\
+                                    self.basic_channels[i], layer_num=layer_num, stride=2))
                 else:
-                    layers.append(ResidualLayer(self.basic_channels[i], self.basic_channels[i], layer_num=layer_num, stride=1))
+                    layers.append(ResidualLayer(self.basic_channels[i],\
+                                self.basic_channels[i], layer_num=layer_num, stride=1))
         return nn.Sequential(*layers)
 
     def forward(self, x):
@@ -383,13 +395,17 @@ class ResNet_StConv_branch(nn.Module):
         for i in range(len(self.residuals)):
             if isinstance(self.residuals[i].stacked.conv[0], StConv_branch):
                 if self.residuals[i].stacked.conv[0].benchmodel == 2:
-                    compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+                    compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch1[0], \
+                            rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                     self.residuals[i].stacked.conv[0].branch1[0] = compress
-                compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch2[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+                compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch2[0], \
+                        rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                 self.residuals[i].stacked.conv[0].branch2[0] = compress
             if isinstance(self.residuals[i].stacked.conv[1], StConv_branch):
                 if self.residuals[i].stacked.conv[1].benchmodel == 2:
-                    compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch1[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+                    compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch1[0],\
+                            rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                     self.residuals[i].stacked.conv[1].branch1[0] = compress
-                compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch2[0], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+                compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch2[0], rank,\
+                        init, alpha=alpha, bn=bn, relu=relu, groups=groups)
                 self.residuals[i].stacked.conv[1].branch2[0] = compress

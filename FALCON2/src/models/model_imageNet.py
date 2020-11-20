@@ -24,7 +24,7 @@ File: models/model_imageNet.py
 Version: 1.0
 """
 
-import torch
+# pylint: disable=C0103,R0913,R1725,W0223,W0603,C0200,R0912,W0613
 import torch.nn as nn
 
 from models.falcon import GEPdecompose
@@ -83,7 +83,9 @@ class VGGModel_imagenet(nn.Module):
             if isinstance(self.features[i], nn.Conv2d):
                 shape = self.features[i].weight.shape
                 if shape[1] == 3:
-                    self.features[i] = nn.Conv2d(3, int(self.features[i].out_channels * alpha), kernel_size=3, padding=1)
+                    self.features[i] = nn.Conv2d(3, \
+                            int(self.features[i].out_channels * alpha), \
+                            kernel_size=3, padding=1)
                     self.features[i+1] = nn.BatchNorm2d(self.features[i].out_channels)
                 else:
                     compress = StConv_branch(int(self.features[i].in_channels * alpha),
@@ -92,8 +94,10 @@ class VGGModel_imagenet(nn.Module):
                     self.features[i] = compress
         layers = []
         for i in range(len(self.features)):
-            if (isinstance(self.features[i], nn.BatchNorm2d) and isinstance(self.features[i - 1], StConv_branch)) \
-                    or (isinstance(self.features[i], nn.ReLU) and isinstance(self.features[i - 2], StConv_branch)):
+            if (isinstance(self.features[i], nn.BatchNorm2d) and \
+                    isinstance(self.features[i - 1], StConv_branch)) \
+                    or (isinstance(self.features[i], nn.ReLU) and \
+                            isinstance(self.features[i - 2], StConv_branch)):
                 pass
             else:
                 layers.append(self.features[i])
@@ -113,7 +117,7 @@ class VGGModel_imagenet(nn.Module):
         """
         for i in range(len(self.features.module)):
             if isinstance(self.features.module[i], StConv_branch):
-               self.features.module[i].falcon(init=init)
+                self.features.module[i].falcon(init=init)
 
 
 class BasicBlock_StConvBranch(nn.Module):
@@ -199,18 +203,22 @@ class ResNetModel_imagenet(nn.Module):
             for j in range(len(self.features[i])):
                 if isinstance(self.features[i][j].conv1, nn.Conv2d):
                     print(self.features[i][j].conv1)
-                    compress = GEPdecompose(self.features[i][j].conv1, rank, init, bn=bn, relu=relu)
+                    compress = GEPdecompose(self.features[i][j].conv1, rank, init, \
+                            bn=bn, relu=relu)
                     self.features[i][j].conv1 = compress
                 if isinstance(self.features[i][j].conv2, nn.Conv2d):
                     print(self.features[i][j].conv2)
-                    compress = GEPdecompose(self.features[i][j].conv2, rank, init, bn=bn, relu=relu)
+                    compress = GEPdecompose(self.features[i][j].conv2, rank, init, \
+                            bn=bn, relu=relu)
                     self.features[i][j].conv2 = compress
                 if isinstance(self.features[i][j].bn1, nn.BatchNorm2d):
                     device = self.features[i][j].bn1.weight.device
-                    self.features[i][j].bn1 = nn.BatchNorm2d(self.features[i][j].bn1.num_features).to(device)
+                    self.features[i][j].bn1 = nn.BatchNorm2d(\
+                            self.features[i][j].bn1.num_features).to(device)
                 if isinstance(self.features[i][j].bn2, nn.BatchNorm2d):
                     device = self.features[i][j].bn2.weight.device
-                    self.features[i][j].bn2 = nn.BatchNorm2d(self.features[i][j].bn2.num_features).to(device)
+                    self.features[i][j].bn2 = nn.BatchNorm2d(\
+                            self.features[i][j].bn2.num_features).to(device)
 
     def stconv_branch(self, alpha=1):
         """
@@ -240,14 +248,17 @@ class ResNetModel_imagenet(nn.Module):
         for i in range(1, 5):
             for j in range(len(self.features[i])):
                 if self.features[i][j].downsample is not None:
-                    self.features[i][j].downsample[0] = nn.Conv2d(int(self.features[i][j].downsample[0].in_channels * alpha),
-                                                                  int(self.features[i][j].downsample[0].out_channels * alpha),
-                                                                  kernel_size=self.features[i][j].downsample[0].kernel_size,
-                                                                  stride=self.features[i][j].downsample[0].stride,
-                                                                  padding=self.features[i][j].downsample[0].padding,
-                                                                  bias=self.features[i][j].downsample[0].bias)
-                    self.features[i][j].downsample[1] = nn.BatchNorm2d(int(self.features[i][j].downsample[1].num_features * alpha))
-                layers.append(BasicBlock_StConvBranch(self.features[i][j].conv1, self.features[i][j].conv2, self.features[i][j].downsample))
+                    self.features[i][j].downsample[0] = nn.Conv2d(\
+                            int(self.features[i][j].downsample[0].in_channels * alpha), \
+                            int(self.features[i][j].downsample[0].out_channels * alpha),\
+                            kernel_size=self.features[i][j].downsample[0].kernel_size,\
+                            stride=self.features[i][j].downsample[0].stride,\
+                            padding=self.features[i][j].downsample[0].padding,\
+                            bias=self.features[i][j].downsample[0].bias)
+                    self.features[i][j].downsample[1] = \
+    nn.BatchNorm2d(int(self.features[i][j].downsample[1].num_features * alpha))
+                layers.append(BasicBlock_StConvBranch(self.features[i][j].conv1,\
+                            self.features[i][j].conv2, self.features[i][j].downsample))
         layers.append(self.features[5])
         self.features = nn.Sequential(*layers)
 

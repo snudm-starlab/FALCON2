@@ -24,6 +24,7 @@ File: models/vgg.py
 Version: 1.0
 """
 
+# pylint: disable=C0103, R0913,R1725,W0223
 import torch.nn as nn
 from models.falcon import GEPdecompose
 
@@ -73,6 +74,8 @@ class VGG(nn.Module):
             nn.Linear(512, num_classes)
         )
 
+        self.alpha = alpha
+
     def _make_layers(self, which):
         """
         Make standard-conv Model layers.
@@ -120,10 +123,10 @@ class VGG(nn.Module):
         """
         for i in range(len(self.layers)):
             if isinstance(self.layers[i], nn.Conv2d):
-                shape = self.layers[i].weight.shape
-                compress = GEPdecompose(self.layers[i], rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
+#                shape = self.layers[i].weight.shape
+                compress = GEPdecompose(self.layers[i], rank, init, \
+                        alpha=alpha, bn=bn, relu=relu, groups=groups)
                 self.layers[i] = compress
             if isinstance(self.layers[i], nn.BatchNorm2d):
                 device = self.layers[i].weight.device
                 self.layers[i] = nn.BatchNorm2d(self.layers[i].num_features).to(device)
-

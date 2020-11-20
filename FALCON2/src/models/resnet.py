@@ -24,7 +24,7 @@ File: models/resnet.py
 Version: 1.0
 """
 
-import torch
+# pylint: disable=E1101,C0103,R0913,R1725,W0223,W0603,C0200,R0912,W0613
 import torch.nn as nn
 from models.falcon import GEPdecompose
 
@@ -126,7 +126,7 @@ class ResidualLayer(nn.Module):
         """
         super(ResidualLayer, self).__init__()
 
-        if layer_num == "18" or layer_num =="32" or layer_num == "34":
+        if layer_num in ("18", "32", "34"):
             self.stacked = BasicBlock(in_channels, out_channels, stride)
         else:  # layer_num == "50" or layer_num == "101" or layer_num == "152":
             self.stacked = BottleNeckBlock(in_channels, out_channels, stride)
@@ -174,7 +174,7 @@ class ResNet(nn.Module):
         self.avgpool_4 = nn.AvgPool2d(kernel_size=4)
         self.avgpool_2 = nn.AvgPool2d(kernel_size=2)
 
-        if layer_num == "18" or layer_num == "32" or layer_num == "34":
+        if layer_num in ("18","32","34"):
             last_channels = basic_channels[-1]
         else:
             last_channels = bottle_neck_channels[-1]
@@ -206,23 +206,29 @@ class ResNet(nn.Module):
 
         for i in range(4):
             for j in range(cfg[i]):
-                if layer_num == "18" or layer_num == "32" or layer_num == "34":
+                if layer_num in ("18", "32", "34"):
                     if j == 0:
                         if i != 0:
-                            layers.append(ResidualLayer(basic_channels[i] // 2, basic_channels[i], layer_num=layer_num, stride=2))
+                            layers.append(ResidualLayer(basic_channels[i] // 2, \
+                                        basic_channels[i], layer_num=layer_num, stride=2))
                         else:
-                            layers.append(ResidualLayer(basic_channels[i], basic_channels[i], layer_num=layer_num, stride=2))
+                            layers.append(ResidualLayer(basic_channels[i], basic_channels[i],\
+                                        layer_num=layer_num, stride=2))
                     else:
-                        layers.append(ResidualLayer(basic_channels[i], basic_channels[i], layer_num=layer_num, stride=1))
+                        layers.append(ResidualLayer(basic_channels[i], basic_channels[i],\
+                                    layer_num=layer_num, stride=1))
                 else:
                     if j == 0:
                         if i == 0:
-                            layers.append(ResidualLayer(bottle_neck_channels[i], bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
+                            layers.append(ResidualLayer(bottle_neck_channels[i], \
+                                        bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
                         else:
                             layers.append(
-                                ResidualLayer(bottle_neck_channels[i] * 2, bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
+                                ResidualLayer(bottle_neck_channels[i] * 2, \
+                                    bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
                     else:
-                        layers.append(ResidualLayer(bottle_neck_channels[i], bottle_neck_channels[i], layer_num=layer_num, stride=1))
+                        layers.append(ResidualLayer(bottle_neck_channels[i], \
+                                    bottle_neck_channels[i], layer_num=layer_num, stride=1))
         return nn.Sequential(*layers)
 
     def forward(self, x):
@@ -252,16 +258,19 @@ class ResNet(nn.Module):
         for i in range(len(self.residuals)):
             if isinstance(self.residuals[i].stacked.conv[0], nn.Conv2d):
                 # print(self.residuals[i].stacked.conv[0])
-                compress = GEPdecompose(self.residuals[i].stacked.conv[0], rank, init, groups=groups, alpha=alpha)
+                compress = GEPdecompose(self.residuals[i].stacked.conv[0], rank, \
+                        init, groups=groups, alpha=alpha)
                 self.residuals[i].stacked.conv[0] = compress
             if isinstance(self.residuals[i].stacked.conv[3], nn.Conv2d):
                 # print(self.residuals[i].stacked.conv[3])
-                compress = GEPdecompose(self.residuals[i].stacked.conv[3], rank, init, groups=groups, alpha=alpha)
+                compress = GEPdecompose(self.residuals[i].stacked.conv[3], rank, \
+                        init, groups=groups, alpha=alpha)
                 self.residuals[i].stacked.conv[3] = compress
             if isinstance(self.residuals[i].stacked.conv[1], nn.BatchNorm2d):
                 device = self.residuals[i].stacked.conv[1].weight.device
-                self.residuals[i].stacked.conv[1] = nn.BatchNorm2d(int(self.residuals[i].stacked.conv[1].num_features*alpha)).to(device)
+                self.residuals[i].stacked.conv[1] = nn.BatchNorm2d(\
+                        int(self.residuals[i].stacked.conv[1].num_features*alpha)).to(device)
             if isinstance(self.residuals[i].stacked.conv[4], nn.BatchNorm2d):
                 device = self.residuals[i].stacked.conv[4].weight.device
-                self.residuals[i].stacked.conv[4] = nn.BatchNorm2d(int(self.residuals[i].stacked.conv[4].num_features*alpha)).to(device)
-
+                self.residuals[i].stacked.conv[4] = nn.BatchNorm2d(\
+                        int(self.residuals[i].stacked.conv[4].num_features*alpha)).to(device)

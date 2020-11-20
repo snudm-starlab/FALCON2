@@ -24,6 +24,7 @@ File: utils/optimizer_option.py
 Version: 1.0
 """
 
+# pylint: disable=C0103,R1705
 import sys
 import torch.optim as optim
 

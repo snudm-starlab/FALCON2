@@ -25,12 +25,14 @@ File: utils/compression_cal.py
 Version: 1.0
 """
 
-import sys
-sys.path.append('../')
+#pylint: disable=W0622,R0914,W0613,C0102,C0103,E1101,W0612
 
+import sys
 import torch
 from torch.autograd import Variable
-import numpy as np
+#import numpy as np
+sys.path.append('../')
+
 
 
 def print_model_parm_nums(net):
@@ -62,10 +64,11 @@ def print_model_parm_flops(net, imagenet=False):
         :param input: input size
         :param output: output size
         """
-        batch_size, input_channels, input_height, input_width = input[0].size()
+        batch_size, _, _, _ = input[0].size()
         output_channels, output_height, output_width = output[0].size()
 
-        kernel_ops = self.kernel_size[0] * self.kernel_size[1] * (self.in_channels / self.groups) * (2 if multiply_adds else 1)
+        kernel_ops = self.kernel_size[0] * self.kernel_size[1] *\
+                     (self.in_channels / self.groups) * (2 if multiply_adds else 1)
         bias_ops = 1 if self.bias is not None else 0
 
         params = output_channels * (kernel_ops + bias_ops)
@@ -121,7 +124,7 @@ def print_model_parm_flops(net, imagenet=False):
         :param input: input size
         :param output: output size
         """
-        batch_size, input_channels, input_height, input_width = input[0].size()
+        batch_size, _, _, _ = input[0].size()
         output_channels, output_height, output_width = output[0].size()
 
         kernel_ops = self.kernel_size * self.kernel_size
@@ -146,7 +149,7 @@ def print_model_parm_flops(net, imagenet=False):
                 net.register_forward_hook(bn_hook)
             if isinstance(net, torch.nn.ReLU):
                 net.register_forward_hook(relu_hook)
-            if isinstance(net, torch.nn.MaxPool2d) or isinstance(net, torch.nn.AvgPool2d):
+            if isinstance(net, (torch.nn.MaxPool2d, torch.nn.AvgPool2d)):
                 net.register_forward_hook(pooling_hook)
             return
         for c in childrens:
@@ -158,6 +161,7 @@ def print_model_parm_flops(net, imagenet=False):
     else:
         input = Variable(torch.rand(3, 32, 32).unsqueeze(0), requires_grad=True).cuda()
     out = net(input)
-    total_flops = (sum(list_conv) + sum(list_linear))    # + sum(list_bn) + sum(list_relu) + sum(list_pooling)))
+    total_flops = (sum(list_conv) + sum(list_linear))
+    # + sum(list_bn) + sum(list_relu) + sum(list_pooling)))
 
     print('  + Number of FLOPs: %.2fM' % (total_flops / 1e6))

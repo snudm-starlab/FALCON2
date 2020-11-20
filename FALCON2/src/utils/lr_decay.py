@@ -23,7 +23,7 @@ File: utils/lr_decay.py
 
 Version: 1.0
 """
-
+#pylint: disable=C0103
 
 def adjust_lr(lr, lrd=10, log=None):
     """
@@ -34,7 +34,6 @@ def adjust_lr(lr, lrd=10, log=None):
     """
     lr = lr / lrd
     print("learning rate change to %f" % lr)
-    if log != None:
+    if log is not None:
         log.write(("learning rate change to %f\n" % lr))
     return lr
-

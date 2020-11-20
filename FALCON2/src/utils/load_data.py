@@ -23,16 +23,16 @@ File: utils/load_data.py
 
 Version: 1.0
 """
+# pylint: disable=R1705
+
 import sys
-sys.path.append('../')
 import torch
 import torchvision
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
-import numpy as np
-from torch.utils.data.sampler import SubsetRandomSampler
-import os, shutil, random
+#from torch.utils.data.sampler import SubsetRandomSampler
 
+sys.path.append('../')
 
 
 # CIFAR100 data
@@ -46,9 +46,11 @@ def load_cifar100(is_train=True, batch_size=128):
     transform_train = transforms.Compose([transforms.RandomCrop(32, padding=4),
                                           transforms.RandomHorizontalFlip(),
                                           transforms.ToTensor(),
-                                          transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
+                                          transforms.Normalize((0.4914, 0.4822, 0.4465),\
+                                              (0.247, 0.243, 0.261))])
     transform_test = transforms.Compose([transforms.ToTensor(),
-                                         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
+                                         transforms.Normalize((0.4914, 0.4822, 0.4465),\
+                                             (0.247, 0.243, 0.261))])
 
     if is_train:
         # dataset
@@ -86,11 +88,14 @@ def load_svhn(is_train=True, batch_size=128):
     """
 
     transform_train = transforms.Compose([transforms.ToTensor(),
-                                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                                          transforms.Normalize((0.5, 0.5, 0.5),\
+                                              (0.5, 0.5, 0.5))])
     transform_test = transforms.Compose([transforms.ToTensor(),
-                                         transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
+                                         transforms.Normalize((0.4914, 0.4822, 0.4465),\
+                                             (0.247, 0.243, 0.261))])
     if is_train:
-        trainset = torchvision.datasets.SVHN(root='./data', split='train', download=True, transform=transform_train)
+        trainset = torchvision.datasets.SVHN(root='./data', split='train', download=True,\
+                transform=transform_train)
         trainloader = torch.utils.data.DataLoader(trainset,
                                                   batch_size=batch_size,
                                                   shuffle=True,
@@ -98,13 +103,13 @@ def load_svhn(is_train=True, batch_size=128):
         return trainloader
 
     else:
-        testset = torchvision.datasets.SVHN(root='./data', split='test', download=True, transform=transform_test)
+        testset = torchvision.datasets.SVHN(root='./data', split='test', download=True,\
+                transform=transform_test)
         testloader = torch.utils.data.DataLoader(testset,
                                                  batch_size=batch_size,
                                                  shuffle=False,
                                                  num_workers=2)
         return testloader
-
 
 
 # imagenet
@@ -144,7 +149,8 @@ def load_imagenet(is_train=True, batch_size=128):
         val_set = datasets.ImageFolder(val_dir, transforms_val)
 
         # dataloader
-        train_loader = torch.utils.data.DataLoader(train_set, batch_size=batch_size, shuffle=True, num_workers=2)
+        train_loader = torch.utils.data.DataLoader(train_set,\
+                batch_size=batch_size, shuffle=True, num_workers=2)
         val_loader = torch.utils.data.DataLoader(val_set, batch_size=batch_size, num_workers=2)
 
         return train_loader, val_loader

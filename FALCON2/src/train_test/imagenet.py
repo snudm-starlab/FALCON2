@@ -16,7 +16,7 @@ This software may be used only for research evaluation purposes.
 For other purposes (e.g., commercial), please contact the authors.
 
 """
-# pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position,C0103,R0912,R0915,E1101
 import argparse
 import os
 import random
@@ -39,9 +39,10 @@ from torch.autograd import Variable
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
+from utils.timer import Timer
 
-from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, 
-     VGGModel_imagenet_inf, ResNetModel_imagenet_inf
+from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, \
+    VGGModel_imagenet_inf, ResNetModel_imagenet_inf
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
 from imagenetutils.dataloaders import *
@@ -267,7 +268,7 @@ def main_worker(gpu, ngpus_per_node, args):
         timer = Timer()
         timer.tic()
         model.eval()
-        for i in range(1000):
+        for _ in range(1000):
             model(x)
         timer.toc()
         print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 1000.0))
@@ -400,10 +401,10 @@ def main_worker(gpu, ngpus_per_node, args):
     cudnn.benchmark = True
 
     # Data loading code
-    traindir = os.path.join(args.data, 'train')
-    valdir = os.path.join(args.data, 'val')
-    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])
+    # traindir = os.path.join(args.data, 'train')
+    # valdir = os.path.join(args.data, 'val')
+    # normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+    #                                  std=[0.229, 0.224, 0.225])
 
 
     get_train_loader = get_dali_train_loader(dali_cpu=False)
@@ -414,7 +415,7 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.evaluate:
         inf_times = 0
         for i in range(1):
-            top1, inf_time = validate(val_loader, val_loader_len, model, criterion)
+            _, inf_time = validate(val_loader, val_loader_len, model, criterion)
             inf_times += inf_time
         print("\nAverage Inference Time: %f" % (float(inf_times) / 1.0))
         return
@@ -458,6 +459,16 @@ def main_worker(gpu, ngpus_per_node, args):
     print(best_acc1)
 
 def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args):
+    '''
+    train function for imagenet
+    :param train_loader: train data
+    :param train_loader_len: length of train data
+    :param model: which model we use
+    :param criterion: loss function
+    :param optimizer: which optimizer we use
+    :param epoch: number of epochs
+    :param args: arguments for training
+    '''
     bar = Bar('Processing', max=train_loader_len)
 
     batch_time = AverageMeter()
@@ -479,7 +490,7 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
         target = target.cuda(non_blocking=True)
 
         # compute output
-        output, out_conv = model(input)
+        output, _ = model(input)
         loss = criterion(output, target)
 
         # measure accuracy and record loss
@@ -535,7 +546,7 @@ def validate(val_loader, val_loader_len, model, criterion):
 
         with torch.no_grad():
             # compute output
-            output, out_conv = model(input)
+            output, _ = model(input)
             loss = criterion(output, target)
 
         # measure accuracy and record loss
@@ -579,33 +590,33 @@ def adjust_learning_rate(optimizer, epoch, args):
         param_group['lr'] = lr
 
 
-from math import cos, pi
-def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
-    lr = optimizer.param_groups[0]['lr']
-
-    warmup_epoch = 0
-    warmup_iter = warmup_epoch * num_iter
-    current_iter = iteration + epoch * num_iter
-    max_iter = args.epochs * num_iter
-
-    if args.lr_decay == 'step':
-        lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
-    elif args.lr_decay == 'cos':
-        lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
-    elif args.lr_decay == 'linear':
-        lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
-    elif args.lr_decay == 'schedule':
-        count = sum([1 for s in args.schedule if s <= epoch])
-        lr = args.lr * pow(args.gamma, count)
-    else:
-        raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
-
-    if epoch < warmup_epoch:
-        lr = args.lr * current_iter / warmup_iter
-
-
-    for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+# from math import cos, pi
+# def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
+#     lr = optimizer.param_groups[0]['lr']
+#
+#     warmup_epoch = 0
+#     warmup_iter = warmup_epoch * num_iter
+#     current_iter = iteration + epoch * num_iter
+#     max_iter = args.epochs * num_iter
+#
+#     if args.lr_decay == 'step':
+#         lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
+#     elif args.lr_decay == 'cos':
+#         lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
+#     elif args.lr_decay == 'linear':
+#         lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
+#     elif args.lr_decay == 'schedule':
+#         count = sum([1 for s in args.schedule if s <= epoch])
+#         lr = args.lr * pow(args.gamma, count)
+#     else:
+#         raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
+#
+#     if epoch < warmup_epoch:
+#         lr = args.lr * current_iter / warmup_iter
+#
+#
+#     for param_group in optimizer.param_groups:
+#         param_group['lr'] = lr
 
 if __name__ == '__main__':
     main()

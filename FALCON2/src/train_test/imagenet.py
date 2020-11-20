@@ -16,7 +16,7 @@ This software may be used only for research evaluation purposes.
 For other purposes (e.g., commercial), please contact the authors.
 
 """
-
+# pylint: disable=wrong-import-position
 import argparse
 import os
 import random
@@ -40,7 +40,8 @@ import torchvision.transforms as transforms
 import torchvision.datasets as datasets
 import torchvision.models as models
 
-from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, VGGModel_imagenet_inf, ResNetModel_imagenet_inf
+from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, 
+     VGGModel_imagenet_inf, ResNetModel_imagenet_inf
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
 from imagenetutils.dataloaders import *
@@ -112,7 +113,8 @@ parser.add_argument('--multiprocessing-distributed', action='store_true',
                          'fastest way to use PyTorch for either single node or '
                          'multi node data parallel training')
 parser.add_argument('-conv', '--convolution', default='StandardConv', type=str,
-                    choices=['StandardConv', 'FALCON', 'DepSepConv', 'MobileConvV2', 'ShuffleUnit', 'ShuffleUnitV2', 'StConvBranch', 'FALCONBranch'],
+                    choices=['StandardConv', 'FALCON', 'DepSepConv', 'MobileConvV2', 
+                    'ShuffleUnit', 'ShuffleUnitV2', 'StConvBranch', 'FALCONBranch'],
                     help='convolution type')
 parser.add_argument('-init', '--init', action='store_true',
                     help='initialize model with EHP decomposed tensors')
@@ -145,7 +147,8 @@ def main():
     Discription: main
     """
     args = parser.parse_args()
-    print('############################## %d * %d * %d ##############################' % (args.input_num, args.input_size, args.input_size))
+    print('############################## %d * %d * %d ##############################' 
+            % (args.input_num, args.input_size, args.input_size))
 
     if args.seed is not None:
         random.seed(args.seed)

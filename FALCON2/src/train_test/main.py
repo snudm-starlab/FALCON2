@@ -23,22 +23,21 @@ File: train_test/main.py
 
 Version: 1.0
 """
+# pylint: disable=redefined-outer-name,C0103,R0912,R0915,E1101
+# pylint: disable=wrong-import-position
+
 import sys
 sys.path.append('../')
-
 import torch
 from torch.autograd import Variable
-
 from models.vgg import VGG
 from models.resnet import ResNet
 from models.stconv_branch import VGG_StConv_branch, ResNet_StConv_branch
-
 from utils.timer import Timer
 from utils.default_param import get_default_param
 from utils.save_restore import save_specific_model, load_specific_model, \
     init_with_alpha_resnet, init_with_alpha_vgg
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
-
 from train_test.train import train
 from train_test.test import test
 
@@ -222,4 +221,3 @@ if __name__ == "__main__":
     print(args)
 
     main(args)
-

@@ -1,24 +1,34 @@
 '''
 The following codes are from https://github.com/d-li14/mobilenetv2.pytorch
 '''
+
+# pylint: disable=W0401,C0103,E1101,C0200,E0402,E0602
 import matplotlib.pyplot as plt
 import torch
-import torch.nn as nn
 import torchvision
-import torchvision.transforms as transforms
 import numpy as np
-from .misc import *   
+from .misc import *
 
 __all__ = ['make_image', 'show_batch', 'show_mask', 'show_mask_single']
 
 # functions to show an image
 def make_image(img, mean=(0,0,0), std=(1,1,1)):
+    """
+    image generation function
+    :param img: target image
+    :param mean: mean value of the image
+    :param std: standard deviation of the image
+    """
     for i in range(0, 3):
         img[i] = img[i] * std[i] + mean[i]    # unnormalize
     npimg = img.numpy()
     return np.transpose(npimg, (1, 2, 0))
 
 def gauss(x,a,b,c):
+    """
+    gauss function
+    refer to https://en.wikipedia.org/wiki/Gaussian_function
+    """
     return torch.exp(-torch.pow(torch.add(x,-b),2).div(2*c*c)).mul(a)
 
 def colorize(x):
@@ -39,12 +49,25 @@ def colorize(x):
     return cl
 
 def show_batch(images, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
+    """
+    batch images showing function
+    :param images: batch images
+    :param Mean: mean value of the image
+    :param Std: standard deviation of the image
+    """
     images = make_image(torchvision.utils.make_grid(images), Mean, Std)
     plt.imshow(images)
     plt.show()
 
 
 def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
+    """
+    batch images with mask showing function
+    :param images: batch images
+    :param mask: mask
+    :param Mean: mean value of the image
+    :param Std: standard deviation of the image
+    """
     im_size = images.size(2)
 
     # save for adding mask
@@ -66,6 +89,13 @@ def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     plt.axis('off')
 
 def show_mask(images, masklist, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
+    """
+    mask showing function
+    :param images: batch images
+    :param masklist: target masks
+    :param Mean: mean value of the image
+    :param Std: standard deviation of the image
+    """
     im_size = images.size(2)
 
     # save for adding mask

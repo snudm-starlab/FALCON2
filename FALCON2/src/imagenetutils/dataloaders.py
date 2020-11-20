@@ -2,6 +2,8 @@
 The following codes are from https://github.com/d-li14/mobilenetv2.pytorch
 '''
 
+#pylint: disable=E1101,E1102,R0913,R1725,W0201,W0622,C0103,E1120,R0201,E0213
+
 import os
 import torch
 import numpy as np
@@ -21,6 +23,9 @@ except ImportError:
 
 
 class HybridTrainPipe(Pipeline):
+    """
+        Pipeline for training
+    """
     def __init__(self, batch_size, num_threads, device_id, data_dir, crop, dali_cpu=False):
         '''
         Init function for training pipeline
@@ -31,7 +36,8 @@ class HybridTrainPipe(Pipeline):
         :param crop: shape of cropped image
         :param dali_cpu: whether running on cpu or not
         '''
-        super(HybridTrainPipe, self).__init__(batch_size, num_threads, device_id, seed = 12 + device_id)
+        super(HybridTrainPipe, self).__init__(batch_size, num_threads, \
+                device_id, seed = 12 + device_id)
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
             world_size = torch.distributed.get_world_size()
@@ -53,14 +59,18 @@ class HybridTrainPipe(Pipeline):
                                                     num_attempts=100)
         else:
             dali_device = "gpu"
-            # This padding sets the size of the internal nvJPEG buffers to be able to handle all images from full-sized ImageNet
+            # This padding sets the size of the internal nvJPEG buffers to
+            # be able to handle all images from full-sized ImageNet
             # without additional reallocations
-            self.decode = ops.ImageDecoderRandomCrop(device="mixed", output_type=types.RGB, device_memory_padding=211025920, host_memory_padding=140544512,
+            self.decode = ops.ImageDecoderRandomCrop(device="mixed", \
+                    output_type=types.RGB, device_memory_padding=211025920, \
+                    host_memory_padding=140544512,
                                                       random_aspect_ratio=[0.75, 4./3.],
                                                       random_area=[0.08, 1.0],
                                                       num_attempts=100)
 
-        self.res = ops.Resize(device=dali_device, resize_x=crop, resize_y=crop, interp_type=types.INTERP_TRIANGULAR)
+        self.res = ops.Resize(device=dali_device, resize_x=crop,\
+                resize_y=crop, interp_type=types.INTERP_TRIANGULAR)
         self.cmnp = ops.CropMirrorNormalize(device = "gpu",
                                             output_dtype = types.FLOAT,
                                             output_layout = types.NCHW,
@@ -71,6 +81,9 @@ class HybridTrainPipe(Pipeline):
         self.coin = ops.CoinFlip(probability = 0.5)
 
     def define_graph(self):
+        """
+        Define graph function
+        """
         rng = self.coin()
         self.jpegs, self.labels = self.input(name = "Reader")
         images = self.decode(self.jpegs)
@@ -80,8 +93,21 @@ class HybridTrainPipe(Pipeline):
 
 
 class HybridValPipe(Pipeline):
+    """
+    Pipeline for validation
+    """
     def __init__(self, batch_size, num_threads, device_id, data_dir, crop, size):
-        super(HybridValPipe, self).__init__(batch_size, num_threads, device_id, seed = 12 + device_id)
+        '''
+        Init function for validation pipeline
+        :param batch_size: batch size for training
+        :param num_threads: number of threads to use
+        :param device_id: device id
+        :param data_dir: name of data directory
+        :param crop: shape of cropped image
+        :param size: size of images
+        '''
+        super(HybridValPipe, self).__init__(batch_size, num_threads,\
+                device_id, seed = 12 + device_id)
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
             world_size = torch.distributed.get_world_size()
@@ -106,6 +132,9 @@ class HybridValPipe(Pipeline):
                 std = [0.229 * 255,0.224 * 255,0.225 * 255])
 
     def define_graph(self):
+        """
+        Define graph function
+        """
         self.jpegs, self.labels = self.input(name = "Reader")
         images = self.decode(self.jpegs)
         images = self.res(images)
@@ -113,8 +142,15 @@ class HybridValPipe(Pipeline):
         return [output, self.labels]
 
 
-class DALIWrapper(object):
+class DALIWrapper:
+    """
+    Wrapper Class
+    """
     def gen_wrapper(dalipipeline):
+        """
+        generate wrapper function
+        :param dalipipeline: dali pipeline
+        """
         for data in dalipipeline:
             input = data[0]["data"]
             target = data[0]["label"].squeeze().cuda().long()
@@ -122,13 +158,30 @@ class DALIWrapper(object):
         dalipipeline.reset()
 
     def __init__(self, dalipipeline):
+        """
+        Init function
+        """
         self.dalipipeline = dalipipeline
 
     def __iter__(self):
+        """
+        Iterator function
+        """
         return DALIWrapper.gen_wrapper(self.dalipipeline)
 
 def get_dali_train_loader(dali_cpu=False):
+    """
+    DALI train loader
+    :param dali_cpu: whether cpus is used
+    """
     def gdtl(data_path, batch_size, workers=5, _worker_init_fn=None):
+        """
+        DALI train loader function
+        :param data_path: image data path
+        :param batch_size: batch size in training phase
+        :param workers: how much workers we use
+        :param _worker_init_fn: initialize worker function
+        """
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
             world_size = torch.distributed.get_world_size()
@@ -143,15 +196,27 @@ def get_dali_train_loader(dali_cpu=False):
                 data_dir = traindir, crop = 224, dali_cpu=dali_cpu)
 
         pipe.build()
-        train_loader = DALIClassificationIterator(pipe, size = int(pipe.epoch_size("Reader") / world_size))
+        train_loader = DALIClassificationIterator(pipe, size \
+                = int(pipe.epoch_size("Reader") / world_size))
 
-        return DALIWrapper(train_loader), int(pipe.epoch_size("Reader") / (world_size * batch_size))
+        return DALIWrapper(train_loader), \
+            int(pipe.epoch_size("Reader") / (world_size * batch_size))
 
     return gdtl
 
 
 def get_dali_val_loader():
+    """
+    DALI valid loader
+    """
     def gdvl(data_path, batch_size, workers=5, _worker_init_fn=None):
+        """
+        DALI valid loader function
+        :param data_path: image data path
+        :param batch_size: batch size in validation phase
+        :param workers: how much workers we use
+        :param _worker_init_fn: initialize worker function
+        """
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
             world_size = torch.distributed.get_world_size()
@@ -166,13 +231,19 @@ def get_dali_val_loader():
                 data_dir = valdir,
                 crop = 224, size = 256)
         pipe.build()
-        val_loader = DALIClassificationIterator(pipe, size = int(pipe.epoch_size("Reader") / world_size), fill_last_batch=False)
+        val_loader = DALIClassificationIterator(pipe, size \
+                = int(pipe.epoch_size("Reader") / world_size), fill_last_batch=False)
 
-        return DALIWrapper(val_loader), int(pipe.epoch_size("Reader") / (world_size * batch_size))
+        return DALIWrapper(val_loader), \
+            int(pipe.epoch_size("Reader") / (world_size * batch_size))
     return gdvl
 
 
 def fast_collate(batch):
+    """
+    collate function
+    :param batch: batch images
+    """
     imgs = [img[0] for img in batch]
     targets = torch.tensor([target[1] for target in batch], dtype=torch.int64)
     w = imgs[0].size[0]
@@ -180,8 +251,8 @@ def fast_collate(batch):
     tensor = torch.zeros( (len(imgs), 3, h, w), dtype=torch.uint8 )
     for i, img in enumerate(imgs):
         nump_array = np.asarray(img, dtype=np.uint8)
-        tens = torch.from_numpy(nump_array)
-        if(nump_array.ndim < 3):
+#        tens = torch.from_numpy(nump_array)
+        if nump_array.ndim < 3:
             nump_array = np.expand_dims(nump_array, axis=-1)
         nump_array = np.rollaxis(nump_array, 2)
 
@@ -190,8 +261,15 @@ def fast_collate(batch):
     return tensor, targets
 
 
-class PrefetchedWrapper(object):
-    def prefetched_loader(loader):
+class PrefetchedWrapper:
+    """
+    Prefetched Wrapper
+    """
+    def prefetched_loader(self,loader):
+        """
+        Prefetched loader function
+        :param loader: loading data
+        """
         mean = torch.tensor([0.485 * 255, 0.456 * 255, 0.406 * 255]).cuda().view(1,3,1,1)
         std = torch.tensor([0.229 * 255, 0.224 * 255, 0.225 * 255]).cuda().view(1,3,1,1)
 
@@ -217,10 +295,17 @@ class PrefetchedWrapper(object):
         yield input, target
 
     def __init__(self, dataloader):
+        """
+        Init function
+        :param dataloader: loading data
+        """
         self.dataloader = dataloader
         self.epoch = 0
 
     def __iter__(self):
+        """
+        Iterator function
+        """
         if (self.dataloader.sampler is not None and
             isinstance(self.dataloader.sampler,
                        torch.utils.data.distributed.DistributedSampler)):
@@ -229,7 +314,16 @@ class PrefetchedWrapper(object):
         self.epoch += 1
         return PrefetchedWrapper.prefetched_loader(self.dataloader)
 
-def get_pytorch_train_loader(data_path, batch_size, workers=5, _worker_init_fn=None, input_size=224):
+def get_pytorch_train_loader(data_path, batch_size, workers=5, \
+        _worker_init_fn=None, input_size=224):
+    """
+    train loader function
+    :param data_path: image data path
+    :param batch_size: batch size in training phase
+    :param workers: how much workers we use
+    :param _worker_init_fn: initialize worker function
+    :param input_size: image size
+    """
     traindir = os.path.join(data_path, 'train')
     train_dataset = datasets.ImageFolder(
             traindir,
@@ -245,11 +339,20 @@ def get_pytorch_train_loader(data_path, batch_size, workers=5, _worker_init_fn=N
 
     train_loader = torch.utils.data.DataLoader(
             train_dataset, batch_size=batch_size, shuffle=(train_sampler is None),
-            num_workers=workers, worker_init_fn=_worker_init_fn, pin_memory=True, sampler=train_sampler, collate_fn=fast_collate)
+            num_workers=workers, worker_init_fn=_worker_init_fn, \
+            pin_memory=True, sampler=train_sampler, collate_fn=fast_collate)
 
     return PrefetchedWrapper(train_loader), len(train_loader)
 
 def get_pytorch_val_loader(data_path, batch_size, workers=5, _worker_init_fn=None, input_size=224):
+    """
+    validation loader function
+    :param data_path: image data path
+    :param batch_size: batch size in training phase
+    :param workers: how much workers we use
+    :param _worker_init_fn: initialize worker function
+    :param input_size: image size
+    """
     valdir = os.path.join(data_path, 'val')
     val_dataset = datasets.ImageFolder(
             valdir, transforms.Compose([

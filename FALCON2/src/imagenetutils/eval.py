@@ -12,7 +12,7 @@ def accuracy(output, target, topk=(1,)):
     Computes the precision@k for the specified values of k
     :param output: pred labels
     :param target: true labels
-    :param topk: determine k for top-k accuracy 
+    :param topk: determine k for top-k accuracy
     """
     with torch.no_grad():
         maxk = max(topk)

@@ -38,6 +38,7 @@ class VGGModel_imagenet(nn.Module):
     def __init__(self, model):
         """
         Initialize a given model.
+        
         :param model: the given model
         """
 
@@ -49,7 +50,10 @@ class VGGModel_imagenet(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return x2: output of forward propagation
+        :return x1: intermediate tensor after convolutions
         """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)
@@ -59,6 +63,7 @@ class VGGModel_imagenet(nn.Module):
     def falcon(self, init=True, rank=1, bn=False, relu=False):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param bn: whether add batch normalization after FALCON
@@ -77,6 +82,7 @@ class VGGModel_imagenet(nn.Module):
     def stconv_branch(self, alpha=1):
         """
         Replace standard convolution by stconv_branch (vs shuffleunitv2)
+        
         :param alpha: width multiplier
         """
         for i in range(len(self.features)):
@@ -113,6 +119,7 @@ class VGGModel_imagenet(nn.Module):
     def falcon_branch(self, init=True):
         """
         Replace standard convolution in stconv_branch by falcon
+        
         :param init: whether initialize falcon
         """
         for i in range(len(self.features.module)):
@@ -127,6 +134,7 @@ class BasicBlock_StConvBranch(nn.Module):
     def __init__(self, conv1, conv2, downsample=None):
         """
         Initialize BasicBlock_ShuffleUnit
+        
         :param conv1: the first convolution layer in BasicBlock_StConvBranch
         :param conv2: the second convolution layer in BasicBlock_StConvBranch
         """
@@ -139,7 +147,9 @@ class BasicBlock_StConvBranch(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return out: output tensor of forward propagation
         """
         out = self.conv1(x)
         out = self.conv2(out)
@@ -160,6 +170,7 @@ class ResNetModel_imagenet(nn.Module):
     def __init__(self, model):
         """
         Initialize a given model.
+        
         :param model: the given model
         """
 
@@ -183,7 +194,10 @@ class ResNetModel_imagenet(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return x2: output of forward propagation
+        :return x1: intermediate tensor after convolutions
         """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)
@@ -193,6 +207,7 @@ class ResNetModel_imagenet(nn.Module):
     def falcon(self, rank=1, init=True, bn=False, relu=False):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param bn: whether add batch normalization after FALCON
@@ -223,6 +238,7 @@ class ResNetModel_imagenet(nn.Module):
     def stconv_branch(self, alpha=1):
         """
         Replace standard convolution by StConvBranch
+        
         :param alpha: width multiplier
         """
         self.features[0][0] = nn.Conv2d(3, int(self.features[0][0].out_channels * alpha),
@@ -267,6 +283,7 @@ class ResNetModel_imagenet(nn.Module):
     def falcon_branch(self, init=True):
         """
         Replace standard convolution in stconv_branch by falcon
+        
         :param init: whether initialize falcon
         """
         for i in range(len(self.features)):
@@ -284,6 +301,7 @@ class VGGModel_imagenet_inf(nn.Module):
     def __init__(self, model):
         """
         Initialize a given model.
+        
         :param model: the given model
         """
 
@@ -294,7 +312,9 @@ class VGGModel_imagenet_inf(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return features(x): output features of forward propagation
         """
         return self.features(x)
 
@@ -308,6 +328,7 @@ class ResNetModel_imagenet_inf(nn.Module):
     def __init__(self, model):
         """
         Initialize a given model.
+        
         :param model: the given model
         """
 
@@ -318,6 +339,8 @@ class ResNetModel_imagenet_inf(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return features(x): output features of forward propagation    
         """
         return self.features(x)

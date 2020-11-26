@@ -55,6 +55,7 @@ class VGG(nn.Module):
     def __init__(self, num_classes=10, which='VGG16', alpha = 1.0):
         """
         Initialize VGG Model as argument configurations.
+        
         :param num_classes: number of classification labels
         :param which: choose a model architecture from VGG16/VGG19/MobileNet
         """
@@ -79,7 +80,9 @@ class VGG(nn.Module):
     def _make_layers(self, which):
         """
         Make standard-conv Model layers.
+        
         :param which: choose a model architecture from VGG16/VGG19/MobileNet
+        :return nn.Sequential(*layers): vgg layers
         """
 
         layers = []
@@ -102,7 +105,10 @@ class VGG(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return out: output features
+        :return out_conv: output features before the fully connected layer
         """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)
@@ -115,6 +121,7 @@ class VGG(nn.Module):
     def falcon(self, rank, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param bn: whether add batch normalization after FALCON

@@ -39,8 +39,10 @@ sys.path.append('../')
 def load_cifar100(is_train=True, batch_size=128):
     """
     Load cifar-100 datasets.
+    
     :param is_train: if true, load train_test/val data; else load test data.
     :param batch_size: batch_size of train_test data
+    :return loader: training loader or test loader
     """
 
     transform_train = transforms.Compose([transforms.RandomCrop(32, padding=4),
@@ -83,8 +85,10 @@ def load_cifar100(is_train=True, batch_size=128):
 def load_svhn(is_train=True, batch_size=128):
     """
     Load SVHN datasets.
+    
     :param is_train: if true, load train_test/val data; else load test data.
     :param batch_size: batch_size of train_test data
+    :return loader: training loader or test loader    
     """
 
     transform_train = transforms.Compose([transforms.ToTensor(),
@@ -116,8 +120,11 @@ def load_svhn(is_train=True, batch_size=128):
 def load_imagenet(is_train=True, batch_size=128):
     """
         Load imagenet datasets.
+        
         :param is_train: if true, load train_test/val data; else load test data.
         :param batch_size: batch_size of train_test data
+        :return train_loader: training loader
+        :return valid_loaer: validation loader
     """
     # path
     data_path = './data/ImageNet_data/'

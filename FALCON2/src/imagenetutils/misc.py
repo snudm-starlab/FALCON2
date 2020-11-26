@@ -17,7 +17,11 @@ __all__ = ['get_mean_and_std', 'init_params', 'mkdir_p', 'AverageMeter']
 
 
 def get_mean_and_std(dataset):
-    '''Compute the mean and std value of dataset.'''
+    '''
+    Compute the mean and std value of dataset.
+    
+    :param dataset: input data
+    '''
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
 
     mean = torch.zeros(3)
@@ -32,7 +36,11 @@ def get_mean_and_std(dataset):
     return mean, std
 
 def init_params(net):
-    '''Init layer parameters.'''
+    '''
+    Init layer parameters.
+    
+    :param net: input network to be initialized
+    '''
     for m in net.modules():
         if isinstance(m, nn.Conv2d):
             init.kaiming_normal(m.weight, mode='fan_out')
@@ -47,7 +55,11 @@ def init_params(net):
                 init.constant(m.bias, 0)
 
 def mkdir_p(path):
-    '''make dir if not exist'''
+    '''
+    make dir if not exist
+    
+    :param path: directory path we make
+    '''
     try:
         os.makedirs(path)
     except OSError as exc:  # Python >2.5
@@ -57,7 +69,8 @@ def mkdir_p(path):
             raise
 
 class AverageMeter:
-    """Computes and stores the average and current value
+    """
+    Computes and stores the average and current value
        Imported from https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262
     """
     def __init__(self):
@@ -71,7 +84,12 @@ class AverageMeter:
         self.count = 0
 
     def update(self, val, n=1):
-        """ update function """
+        """
+        update function
+        
+        :param val: input current average value
+        :param n: number of items for val
+        """
         self.val = val
         self.sum += val * n
         self.count += n

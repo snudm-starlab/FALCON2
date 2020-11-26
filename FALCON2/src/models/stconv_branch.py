@@ -111,7 +111,7 @@ class StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return channel_shuffle(out, 2): channel suffled output feature maps
+        :return channel_shuffle(out, 2): channel shuffled output feature maps
         """
         if self.benchmodel == 1:
             x1 = x[:, :(x.shape[1] // 2), :, :]

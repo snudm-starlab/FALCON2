@@ -47,6 +47,8 @@ from train_test.test import test
 def main(args):
     '''
     main function of FALCON
+    
+    :param args: arguments for a model
     '''
 
     # choose dataset

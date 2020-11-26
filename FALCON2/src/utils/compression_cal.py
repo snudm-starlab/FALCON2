@@ -38,6 +38,7 @@ sys.path.append('../')
 def print_model_parm_nums(net):
     """
     Counting number of parameters in the model
+    
     :param net: the model
     """
     total = sum([param.nelement() for param in net.parameters()])
@@ -50,6 +51,7 @@ def print_model_parm_nums(net):
 def print_model_parm_flops(net, imagenet=False):
     """
     Counting number of parameters in the model
+    
     :param net: the model to be calculated for parameters and flops
     :param imagenet: which dataset is used
     """
@@ -61,6 +63,7 @@ def print_model_parm_flops(net, imagenet=False):
         """
         Hook of convolution layer
         Calculate the FLOPs of the convolution layer
+        
         :param input: input size
         :param output: output size
         """
@@ -82,6 +85,7 @@ def print_model_parm_flops(net, imagenet=False):
         """
         Hook of linear layer
         Calculate the FLOPs of the linear layer
+        
         :param input: input size
         :param output: output size
         """
@@ -99,6 +103,7 @@ def print_model_parm_flops(net, imagenet=False):
         """
         Hook of batch normalization(BN) layer
         Calculate the FLOPs of the BN layer
+        
         :param input: input size
         :param output: output size
         """
@@ -110,6 +115,7 @@ def print_model_parm_flops(net, imagenet=False):
         """
         Hook of ReLU layer
         Calculate the FLOPs of the ReLU layer
+        
         :param input: input size
         :param output: output size
         """
@@ -121,6 +127,7 @@ def print_model_parm_flops(net, imagenet=False):
         """
         Hook of pooling layer
         Calculate the FLOPs of the pooling layer
+        
         :param input: input size
         :param output: output size
         """
@@ -137,6 +144,7 @@ def print_model_parm_flops(net, imagenet=False):
     def foo(net):
         """
         Calculate the total number of FLOPs of a net
+        
         :param net: net to be calculated
         """
         childrens = list(net.children())

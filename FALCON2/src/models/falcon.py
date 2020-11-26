@@ -38,6 +38,7 @@ class GEPdecompose(nn.Module):
     def __init__(self, conv_layer, rank=1, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Initialize FALCON layer.
+        
         :param conv_layer: standard convolution layer
         :param rank: rank of GEP
         :param init: whether initialize FALCON with decomposed tensors
@@ -115,7 +116,9 @@ class GEPdecompose(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return out: output tensor of forward propagation
         """
         if self.rank == 1:
             out = self.dw(self.pw(x))
@@ -136,6 +139,7 @@ class GEPdecompose(nn.Module):
     def decompose(self, conv, pw, dw, lr=0.001, steps=600):
         """
         GEP decompose standard convolution kernel
+        
         :param conv: standard convolution kernel
         :param pw: decomposed pointwise convolution kernel
         :param dw: decomposed depthwise convolution kernel
@@ -166,6 +170,7 @@ class GEPdecompose(nn.Module):
     def decompose_rank(self, kernel, lr=5e-3, steps=600):
         """
         GEP decompose standard convolution kernel with different rank
+        
         :param conv: standard convolution kernel
         :param lr: learning rate
         :param steps: training steps for decomposing
@@ -207,6 +212,7 @@ class GEPdecompose(nn.Module):
     def group1x1(self, group_num):
         """
         Replace 1x1 pointwise convolution in FALCON with 1x1 group convolution
+        
         :param group_num: number of groups for 1x1 group
         """
         if self.rank == 1:

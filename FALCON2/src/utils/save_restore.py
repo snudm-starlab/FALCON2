@@ -32,7 +32,9 @@ import torch
 def create_log(args):
     """
     Save the training process.
+    
     :param args: arguments of the trained model
+    :return open: open file
     """
     name = 'conv=' + str(args.convolution) + \
            ',model=' + str(args.model) + \
@@ -47,6 +49,7 @@ def create_log(args):
 def save_model(best, args, log):
     """
     Save the trained model.
+    
     :param best: best trained model (to be saved)
     :param args: arguments of the trained model
     """
@@ -65,6 +68,7 @@ def save_model(best, args, log):
 def load_model(net, args):
     """
     Restore the pre-trained model.
+    
     :param net: model architecture without parameters
     :param args: arguments of the trained model
     """
@@ -89,6 +93,7 @@ def load_model(net, args):
 def mkdir(path):
     """
     Make a directory if it doesn't exist.
+    
     :param path: directory path
     """
     if not os.path.exists(path):
@@ -98,6 +103,7 @@ def mkdir(path):
 def load_specific_model(net, args, convolution='', input_path=''):
     """
     Restore the pre-trained model.
+    
     :param net: model architecture without parameters
     :param convolution:
     :param model:
@@ -157,6 +163,7 @@ def load_specific_model(net, args, convolution='', input_path=''):
 def save_specific_model(best, args, convolution=''):
     """
     Save the trained model.
+    
     :param best: best trained model (to be saved)
     :param args: arguments of the trained model
     """
@@ -195,13 +202,15 @@ def save_specific_model(best, args, convolution=''):
 
 def init_with_alpha_resnet(source_net, dest_net, alpha):
     """
-    initialize with width multiplier for resnet.
+    Initialize with width multiplier for resnet.
+    
     :param source_net: a base model
     :param dest_net: a model to be compressed
     :param alpha: width multiplier.
                   if alpha is less than 1,
                   a part of standard convolution kernel
                   is used for initializing kernels of FALCON.
+    :param dest_net: a model to be compressed
     """
     for i in range(len(source_net.first)):
         if isinstance(source_net.first[i], torch.nn.Conv2d):
@@ -233,13 +242,15 @@ def init_with_alpha_resnet(source_net, dest_net, alpha):
 
 def init_with_alpha_vgg(source_net, dest_net, alpha):
     """
-    initialize with width multiplier for vgg.
+    Initialize with width multiplier for vgg.
+    
     :param source_net: a base model
     :param dest_net: a model to be compressed
     :param alpha: width multiplier.
                   if alpha is less than 1,
                   a part of standard convolution kernel
                   is used for initializing kernels of FALCON.
+    :param dest_net: a model to be compressed
     """
 
     for i in range(len(source_net.first)):

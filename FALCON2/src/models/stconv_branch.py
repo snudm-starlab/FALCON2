@@ -32,8 +32,10 @@ from models.falcon import GEPdecompose
 def channel_shuffle(x, groups):
     """
     Description: channel shuffle operation
+    
     :param x: output feature maps of last layer
     :param groups: number of groups for group convolution
+    :return x: channel shuffled feature maps
     """
     batchsize, num_channels, height, width = x.data.size()
 
@@ -58,6 +60,7 @@ class StConv_branch(nn.Module):
     def __init__(self, inp, oup, stride=1):
         """
         Initialize basic unit of StConv_branch.
+        
         :param inp: the number of input channels
         :param oup: the number of output channels
         :param stride: stride of convolution
@@ -93,13 +96,22 @@ class StConv_branch(nn.Module):
 
     @staticmethod
     def _concat(x, out):
+        """
+        concatenate x and out
+        
+        :param x: input feature maps
+        :param out: output feature maps
+        :return torch.cat((x, out), 1): concatenated feature maps along channel axis
+        """
         # concatenate along channel axis
         return torch.cat((x, out), 1)
 
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return channel_shuffle(out, 2): channel suffled output feature maps
         """
         if self.benchmodel == 1:
             x1 = x[:, :(x.shape[1] // 2), :, :]
@@ -116,6 +128,7 @@ class StConv_branch(nn.Module):
     def falcon(self, rank=1, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param alpha: width multiplier
@@ -162,6 +175,7 @@ class VGG_StConv_branch(nn.Module):
     def __init__(self, num_classes=10, which='VGG16', alpha=1):
         """
         Initialize Model as argument configurations.
+        
         :param num_classes: number of classification labels
         :param which: choose a model architecture from VGG16/VGG19/VGG_en
         :param alpha: width multiplier
@@ -193,7 +207,9 @@ class VGG_StConv_branch(nn.Module):
     def _make_layers(self, which):
         """
         Make Model layers.
+        
         :param which: choose a model architecture from VGG16/VGG19/VGG_en
+        :return nn.Sequential(*layers): vgg layers
         """
 
         layers = []
@@ -218,7 +234,13 @@ class VGG_StConv_branch(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        
+        :param x: input features
+        :return out: output features
+        :return out_conv: output features before the fully connected layer
+        """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)
         if out_conv.size(2) != 1:
@@ -230,6 +252,7 @@ class VGG_StConv_branch(nn.Module):
     def falcon(self, rank, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param alpha: width multiplier
@@ -258,6 +281,7 @@ class BasicBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         """
         Initialize BasicBlock with StConv_branch
+        
         :param in_planes: the number of input channels
         :param out_planes: the number of output channels
         :param stride: stride of depthwise convolution
@@ -269,7 +293,12 @@ class BasicBlock(nn.Module):
         )
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        
+        :param x: input features
+        :return x: output features
+        """
         x = self.conv[0](x)
         x = self.conv[1](x)
         return x
@@ -283,6 +312,7 @@ class ResidualLayer(nn.Module):
     def __init__(self, in_channels, out_channels, layer_num="34", stride=1):
         """
         Initialize basic unit of StConv_branch.
+        
         :param in_planes: the number of input channels
         :param out_planes: the number of output channels
         :param stride: stride of depthwise convolution
@@ -303,7 +333,12 @@ class ResidualLayer(nn.Module):
         self.relu = nn.ReLU(True)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        
+        :param x: input features
+        :return self.relu(stacked_out): output features of residual layer
+        """
         stacked_out = self.stacked(x)
 #        shortcut_out = self.shortcut(x)
         return self.relu(stacked_out) # + shortcut_out)
@@ -320,6 +355,7 @@ class ResNet_StConv_branch(nn.Module):
     def __init__(self, layer_num='18', num_classes=10, alpha=1):
         """
         Initialize ResNet with StConv_branch.
+        
         :param layer_num: number of layers in ResNet
         :param num_classes: number of classification categories
         :param alpha: width multiplier
@@ -351,7 +387,9 @@ class ResNet_StConv_branch(nn.Module):
     def _make_layers(self, layer_num):
         """
         Make Model layers.
+        
         :param layer_num: number of convolution layers of ResNet-(18, 34, 50, 101, 152)
+        :return nn.Sequential(*layers): residual layers
         """
         layers = []
         cfg = (3, 4, 6, 3)
@@ -371,7 +409,13 @@ class ResNet_StConv_branch(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        """Run forward propagation"""
+        """
+        Run forward propagation
+        
+        :param x: input features
+        :return out: output features
+        :return out_conv: output features before the fully connected layer
+        """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)
 
@@ -386,6 +430,7 @@ class ResNet_StConv_branch(nn.Module):
     def falcon(self, rank, init=True, alpha=1.0, bn=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param bn: whether add batch normalization after FALCON

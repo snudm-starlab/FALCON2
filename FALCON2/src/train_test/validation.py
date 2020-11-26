@@ -34,9 +34,11 @@ import torch.nn.functional as F
 def validation(net, val_loader, log=None):
     """
     Validation process.
+    
     :param net: model to be trained
     :param val_loader: validation data loader
     :param log: log dir
+    :param accuracy: accuracy for validation dataset
     """
 
     # set testing mode

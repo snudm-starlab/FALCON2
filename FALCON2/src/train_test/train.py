@@ -54,6 +54,7 @@ def train(net,
           lrd=10):
     """
     Train the model.
+    
     :param net: model to be trained
     :param lr: learning rate
     :param optimizer_option: optimizer type
@@ -63,6 +64,7 @@ def train(net,
     :param is_train: whether it is a training process
     :param net_st: uncompressed model
     :param beta: transfer parameter
+    :param best_param: the parameters of the model that achieves the best accuracy
     """
 
     net.train()

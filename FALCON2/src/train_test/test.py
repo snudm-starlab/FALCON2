@@ -37,10 +37,12 @@ from utils.load_data import load_cifar100, load_svhn
 def test(net, log=None, batch_size=128, data='cifar100'):
     """
     Test on trained model.
+    
     :param net: model to be tested
     :param log: log dir
     :param batch_size: batch size
     :param data: datasets used
+    :return inference_time: inference time
     """
 
     net.eval()

@@ -15,9 +15,11 @@ __all__ = ['make_image', 'show_batch', 'show_mask', 'show_mask_single']
 def make_image(img, mean=(0,0,0), std=(1,1,1)):
     """
     image generation function
+    
     :param img: target image
     :param mean: mean value of the image
     :param std: standard deviation of the image
+    :return np.transpose(npimg, (1, 2, 0)): unnormalized image
     """
     for i in range(0, 3):
         img[i] = img[i] * std[i] + mean[i]    # unnormalize
@@ -28,11 +30,18 @@ def gauss(x,a,b,c):
     """
     gauss function
     refer to https://en.wikipedia.org/wiki/Gaussian_function
+    
+    return torch.exp(-torch.pow(torch.add(x,-b),2).div(2*c*c)).mul(a): normalized value
     """
     return torch.exp(-torch.pow(torch.add(x,-b),2).div(2*c*c)).mul(a)
 
 def colorize(x):
-    ''' Converts a one-channel grayscale image to a color heatmap image '''
+    ''' 
+    Converts a one-channel grayscale image to a color heatmap image 
+    
+    :param x: image
+    :return cl: color heatmap image
+    '''
     if x.dim() == 2:
         torch.unsqueeze(x, 0, out=x)
     if x.dim() == 3:
@@ -51,6 +60,7 @@ def colorize(x):
 def show_batch(images, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     """
     batch images showing function
+    
     :param images: batch images
     :param Mean: mean value of the image
     :param Std: standard deviation of the image
@@ -63,6 +73,7 @@ def show_batch(images, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
 def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     """
     batch images with mask showing function
+    
     :param images: batch images
     :param mask: mask
     :param Mean: mean value of the image
@@ -91,6 +102,7 @@ def show_mask_single(images, mask, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
 def show_mask(images, masklist, Mean=(2, 2, 2), Std=(0.5,0.5,0.5)):
     """
     mask showing function
+    
     :param images: batch images
     :param masklist: target masks
     :param Mean: mean value of the image

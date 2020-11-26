@@ -30,6 +30,8 @@ import argparse
 def get_default_param():
     """
     Deal with several arguments.
+    
+    :return parser: parser including several arguments
     """
     parser = argparse.ArgumentParser()
 

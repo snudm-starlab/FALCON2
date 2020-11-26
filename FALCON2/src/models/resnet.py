@@ -51,6 +51,7 @@ class BottleNeckBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         """
         Initializ BottleNeckBlock
+        
         :param in_channels: number of input channels
         :param out_channels: number of output channels
         :param stride: number of stride
@@ -76,7 +77,9 @@ class BottleNeckBlock(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return conv(x): features of convolution
         """
         return self.conv(x)
 
@@ -89,6 +92,7 @@ class BasicBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1):
         """
         Initializ BasicBlock
+        
         :param in_channels: number of input channels
         :param out_channels: number of output channels
         :param stride: number of stride
@@ -106,7 +110,9 @@ class BasicBlock(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return conv(x): features of convolution
         """
         return self.conv(x)
 
@@ -119,6 +125,7 @@ class ResidualLayer(nn.Module):
     def __init__(self, in_channels, out_channels, layer_num="34", stride=1):
         """
         Initialize Residual Layer (add shortcut to BottleNeckBlock or BasicBlock)
+        
         :param in_channels: number of input channels
         :param out_channels: number of output channels
         :param layer_num: number of layers in ResNet (default ResNet34)
@@ -144,7 +151,9 @@ class ResidualLayer(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return self.relu(stacked_out + shortcut_out): features of residual
         """
         stacked_out = self.stacked(x)
         shortcut_out = self.shortcut(x)
@@ -157,6 +166,7 @@ class ResNet(nn.Module):
     def __init__(self, layer_num='18', num_classes=10, alpha=1.0):
         """
         Initialize ResNet
+        
         :param layer_num: number of layers in ResNet (default ResNet34)
         :param num_classes: number of classes of datasets
         """
@@ -183,7 +193,9 @@ class ResNet(nn.Module):
     def _make_layers(self, layer_num):
         """
         Make standard-conv Model layers.
+        
         :param layer_num: number of convolution layers of ResNet-(18, 34, 50, 101, 152)
+        :return nn.Sequential(*layers): layers of resnet
         """
 
         layers = []
@@ -234,7 +246,10 @@ class ResNet(nn.Module):
     def forward(self, x):
         """
         Run forward propagation
+        
         :param x: input feature maps
+        :return out: output features after the fully connected layer
+        :return out_conv: output features of residual layers
         """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)
@@ -249,6 +264,7 @@ class ResNet(nn.Module):
     def falcon(self, rank, init=False, bn=False, relu=False, groups=1, alpha=1.0):
         """
         Replace standard convolution by FALCON
+        
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param bn: whether add batch normalization after FALCON

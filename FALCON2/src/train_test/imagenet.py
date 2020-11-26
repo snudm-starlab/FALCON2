@@ -187,6 +187,7 @@ def main():
 def main_worker(gpu, ngpus_per_node, args):
     """
     Discription: laod model and train/test
+    
     :param gpu: gpu id to use
     :param ngpus_per_node: number of gpus
     :param args: arguments from input
@@ -468,6 +469,7 @@ def main_worker(gpu, ngpus_per_node, args):
 def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args):
     '''
     train function for imagenet
+    
     :param train_loader: train data
     :param train_loader_len: length of train data
     :param model: which model we use
@@ -475,6 +477,8 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
     :param optimizer: which optimizer we use
     :param epoch: number of epochs
     :param args: arguments for training
+    :return losses.avg: average loss of training
+    :return top1.avg: average top1 accuracy of training
     '''
     bar = Bar('Processing', max=train_loader_len)
 
@@ -537,10 +541,13 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
 def validate(val_loader, val_loader_len, model, criterion):
     '''
     validation function for our model
+    
     :param val_loader: validation data
     :param val_loader_len: length of validation data
     :param model: our model to be validated
     :param criterion: loss function
+    :return losses.avg: average loss of validation
+    :return top1.avg: average top1 accuracy of validation
     '''
     bar = Bar('Processing', max=val_loader_len)
 
@@ -597,6 +604,7 @@ def validate(val_loader, val_loader_len, model, criterion):
 def save_checkpoint(state, is_best, checkpoint='checkpoint', filename='checkpoint.pth.tar'):
     '''
     this function saves check point during training
+    
     :param state: current state of a model
     :param is_best: best model or not
     :param checkpoint: directory for checkpoint
@@ -618,6 +626,7 @@ def save_checkpoint(state, is_best, checkpoint='checkpoint', filename='checkpoin
 def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
     '''
     adjust learning rate over epochs
+    
     :param optimizer: optimizer class
     :param epoch: the number of epochs
     :param iteration: current iterations in an epoch

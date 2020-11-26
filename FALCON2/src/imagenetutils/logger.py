@@ -11,12 +11,23 @@ import numpy as np
 __all__ = ['Logger', 'LoggerMonitor', 'savefig']
 
 def savefig(fname, dpi=None):
-    """ save figure function """
+    """
+    save figure function
+    
+    :param fname: file name
+    :param dpi: set dpi of figure
+    """
     dpi = 150 if dpi is None else dpi
     plt.savefig(fname, dpi=dpi)
 
 def plot_overlap(logger, names=None):
-    """ draw plot """
+    """
+    draw plot
+    
+    :param logger: logger
+    :param names: customized names of log
+    :return title list: list of logger titles
+    """
     names = logger.names if names is None else names
     numbers = logger.numbers
     for _, name in enumerate(names):
@@ -27,6 +38,14 @@ def plot_overlap(logger, names=None):
 class Logger:
     '''Save training process to log file with simple plot function.'''
     def __init__(self, fpath, title=None, resume=False):
+        '''
+        initialize the Logger class
+
+        :param fpath: file path
+        :param title: title of logger
+        :param resume: whether resume or not
+        '''
+
         self.file = None
         self.resume = resume
         self.title = '' if title is None else title
@@ -50,7 +69,11 @@ class Logger:
                 self.file = open(fpath, 'w')
 
     def set_names(self, names):
-        """ name setting function """
+        """
+        name setting function
+        
+        :param names: set names of logger
+        """
         if self.resume:
             pass
         # initialize numbers as empty list
@@ -65,7 +88,11 @@ class Logger:
 
 
     def append(self, numbers):
-        """ append function """
+        """
+        append function
+        
+        :param numbers: result with respect to names
+        """
         assert len(self.names) == len(numbers), 'Numbers do not match names'
         for index, num in enumerate(numbers):
             self.file.write("{0:.6f}".format(num))
@@ -75,7 +102,11 @@ class Logger:
         self.file.flush()
 
     def plot(self, names=None):
-        """ draw plot function """
+        """
+        draw plot function
+        
+        :param names: names of logger
+        """
         names = self.names if names is None else names
         numbers = self.numbers
         for _, name in enumerate(names):
@@ -85,21 +116,31 @@ class Logger:
         plt.grid(True)
 
     def close(self):
-        """ file close function """
+        """
+        file close function
+        """
         if self.file is not None:
             self.file.close()
 
 class LoggerMonitor:
     '''Load and visualize multiple logs.'''
     def __init__ (self, paths):
-        '''paths is a distionary with {name:filepath} pair'''
+        '''
+        paths is a distionary with {name:filepath} pair
+        
+        param paths: file paths
+        '''
         self.loggers = []
         for title, path in paths.items():
             logger = Logger(path, title=title, resume=True)
             self.loggers.append(logger)
 
     def plot(self, names=None):
-        """ draw plot function """
+        """
+        draw plot function
+        
+        :param names: names of logger
+        """
         plt.figure()
         plt.subplot(121)
         legend_text = []

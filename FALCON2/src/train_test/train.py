@@ -64,7 +64,7 @@ def train(net,
     :param is_train: whether it is a training process
     :param net_st: uncompressed model
     :param beta: transfer parameter
-    :param best_param: the parameters of the model that achieves the best accuracy
+    :return best_param: the parameters of the model that achieves the best accuracy
     """
 
     net.train()

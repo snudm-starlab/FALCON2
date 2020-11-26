@@ -51,7 +51,9 @@ class Timer:
     def toc(self, average=True):
         """
         Stop timer.
+        
         :param average: whether to calculate the average time
+        :return average_time: average time
         """
         self.diff = time.time() - self.start_time
         self.total_time += self.diff

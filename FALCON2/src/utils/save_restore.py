@@ -106,7 +106,7 @@ def load_specific_model(net, args, convolution='', input_path=''):
     
     :param net: model architecture without parameters
     :param args: arguments for a current model
-    :param convolution: what convolution we use (e.g., StandardConv, FALCON, and FALCONBranch, and so on)
+    :param convolution: kinds of convolution
     :param input_path: path of a stored model
     """
     if convolution != '':

@@ -248,8 +248,7 @@ class ResNet(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return: out: output features after the fully connected layer
-        :return: out_conv: output features of residual layers
+        :return: (out, out_conv): output features after the fully connected layer, and output features of residual layers
         """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)

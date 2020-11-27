@@ -123,8 +123,7 @@ def load_imagenet(is_train=True, batch_size=128):
         
         :param is_train: if true, load train_test/val data; else load test data.
         :param batch_size: batch_size of train_test data
-        :return: train_loader: training loader
-        :return: valid_loaer: validation loader
+        :return: (train_loader, valid_loader): training loader, and validation loader
     """
     # path
     data_path = './data/ImageNet_data/'

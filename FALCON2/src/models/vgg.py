@@ -107,8 +107,7 @@ class VGG(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return: out: output features
-        :return: out_conv: output features before the fully connected layer
+        :return: (out, out_conv): output features, and output features before the fully connected layer
         """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)

@@ -186,7 +186,7 @@ def main():
 
 def main_worker(gpu, ngpus_per_node, args):
     """
-    Discription: laod model and train/test
+    Discription: load model and train/test
     
     :param gpu: gpu id to use
     :param ngpus_per_node: number of gpus
@@ -477,8 +477,7 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
     :param optimizer: which optimizer we use
     :param epoch: number of epochs
     :param args: arguments for training
-    :return: losses.avg: average loss of training
-    :return: top1.avg: average top1 accuracy of training
+    :return: (losses.avg, top1.avg): average loss of training, and average top1 accuracy of training
     '''
     bar = Bar('Processing', max=train_loader_len)
 
@@ -546,8 +545,7 @@ def validate(val_loader, val_loader_len, model, criterion):
     :param val_loader_len: length of validation data
     :param model: our model to be validated
     :param criterion: loss function
-    :return: losses.avg: average loss of validation
-    :return: top1.avg: average top1 accuracy of validation
+    :return: (losses.avg, top1.avg): average loss of validation, and average top1 accuracy of validation
     '''
     bar = Bar('Processing', max=val_loader_len)
 

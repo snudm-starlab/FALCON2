@@ -21,8 +21,7 @@ def get_mean_and_std(dataset):
     Compute the mean and std value of dataset.
     
     :param dataset: input data
-    :return: mean: mean value of dataset
-    :return: std: standard deviation value of dataset
+    :return: (mean, std): mean value of dataset, and standard deviation value of dataset
     '''
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
 

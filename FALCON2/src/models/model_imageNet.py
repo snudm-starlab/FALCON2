@@ -52,8 +52,7 @@ class VGGModel_imagenet(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return: x2: output of forward propagation
-        :return: x1: intermediate tensor after convolutions
+        :return: (x2, x1): output of forward propagation, and intermediate tensor after convolutions
         """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)
@@ -196,8 +195,7 @@ class ResNetModel_imagenet(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return: x2: output of forward propagation
-        :return: x1: intermediate tensor after convolutions
+        :return: (x2, x1): output of forward propagation, and intermediate tensor after convolutions
         """
         x1 = self.features(x)
         x1 = x1.view(x1.size(0), -1)

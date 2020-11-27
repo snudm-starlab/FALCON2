@@ -238,8 +238,7 @@ class VGG_StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return: out: output features
-        :return: out_conv: output features before the fully connected layer
+        :return: (out, out_conv): output features, and output features before the fully connected layer
         """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)
@@ -413,8 +412,7 @@ class ResNet_StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return: out: output features
-        :return: out_conv: output features before the fully connected layer
+        :return: (out, out_conv): output features, and output features before the fully connected layer
         """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)

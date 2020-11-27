@@ -105,11 +105,9 @@ def load_specific_model(net, args, convolution='', input_path=''):
     Restore the pre-trained model.
     
     :param net: model architecture without parameters
-    :param convolution:
-    :param model:
-    :param datasets:
-    :param rank:
-    :param alpha:
+    :param args: arguments of the trained model
+    :param convolution: what convolution we use (e.g., StandardConv, FALCON, and FALCONBranch, and so on)
+    :param input_path: path of a stored model
     """
     if convolution != '':
         name = 'conv=' + str(convolution)

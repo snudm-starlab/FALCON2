@@ -118,7 +118,7 @@ class GEPdecompose(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return out: output tensor of forward propagation
+        :return: out: output tensor of forward propagation
         """
         if self.rank == 1:
             out = self.dw(self.pw(x))

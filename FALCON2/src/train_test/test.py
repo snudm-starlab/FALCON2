@@ -42,7 +42,7 @@ def test(net, log=None, batch_size=128, data='cifar100'):
     :param log: log dir
     :param batch_size: batch size
     :param data: datasets used
-    :return inference_time: inference time
+    :return: inference_time: inference time
     """
 
     net.eval()

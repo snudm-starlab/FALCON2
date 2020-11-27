@@ -26,7 +26,7 @@ def plot_overlap(logger, names=None):
     
     :param logger: logger
     :param names: customized names of log
-    :return title list: list of logger titles
+    :return: title list: list of logger titles
     """
     names = logger.names if names is None else names
     numbers = logger.numbers

@@ -35,7 +35,7 @@ def channel_shuffle(x, groups):
     
     :param x: output feature maps of last layer
     :param groups: number of groups for group convolution
-    :return x: channel shuffled feature maps
+    :return: x: channel shuffled feature maps
     """
     batchsize, num_channels, height, width = x.data.size()
 
@@ -101,7 +101,7 @@ class StConv_branch(nn.Module):
         
         :param x: input feature maps
         :param out: output feature maps
-        :return torch.cat((x, out), 1): concatenated feature maps along channel axis
+        :return: torch.cat((x, out), 1): concatenated feature maps along channel axis
         """
         # concatenate along channel axis
         return torch.cat((x, out), 1)
@@ -111,7 +111,7 @@ class StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return channel_shuffle(out, 2): channel shuffled output feature maps
+        :return: channel_shuffle(out, 2): channel shuffled output feature maps
         """
         if self.benchmodel == 1:
             x1 = x[:, :(x.shape[1] // 2), :, :]
@@ -209,7 +209,7 @@ class VGG_StConv_branch(nn.Module):
         Make Model layers.
         
         :param which: choose a model architecture from VGG16/VGG19/VGG_en
-        :return nn.Sequential(*layers): vgg layers
+        :return: nn.Sequential(*layers): vgg layers
         """
 
         layers = []
@@ -238,8 +238,8 @@ class VGG_StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return out: output features
-        :return out_conv: output features before the fully connected layer
+        :return: out: output features
+        :return: out_conv: output features before the fully connected layer
         """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)
@@ -297,7 +297,7 @@ class BasicBlock(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return x: output features
+        :return: x: output features
         """
         x = self.conv[0](x)
         x = self.conv[1](x)
@@ -337,7 +337,7 @@ class ResidualLayer(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return self.relu(stacked_out): output features of residual layer
+        :return: self.relu(stacked_out): output features of residual layer
         """
         stacked_out = self.stacked(x)
 #        shortcut_out = self.shortcut(x)
@@ -389,7 +389,7 @@ class ResNet_StConv_branch(nn.Module):
         Make Model layers.
         
         :param layer_num: number of convolution layers of ResNet-(18, 34, 50, 101, 152)
-        :return nn.Sequential(*layers): residual layers
+        :return: nn.Sequential(*layers): residual layers
         """
         layers = []
         cfg = (3, 4, 6, 3)
@@ -413,8 +413,8 @@ class ResNet_StConv_branch(nn.Module):
         Run forward propagation
         
         :param x: input features
-        :return out: output features
-        :return out_conv: output features before the fully connected layer
+        :return: out: output features
+        :return: out_conv: output features before the fully connected layer
         """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)

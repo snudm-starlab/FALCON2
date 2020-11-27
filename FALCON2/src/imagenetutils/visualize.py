@@ -19,7 +19,7 @@ def make_image(img, mean=(0,0,0), std=(1,1,1)):
     :param img: target image
     :param mean: mean value of the image
     :param std: standard deviation of the image
-    :return np.transpose(npimg, (1, 2, 0)): unnormalized image
+    :return: np.transpose(npimg, (1, 2, 0)): unnormalized image
     """
     for i in range(0, 3):
         img[i] = img[i] * std[i] + mean[i]    # unnormalize
@@ -40,7 +40,7 @@ def colorize(x):
     Converts a one-channel grayscale image to a color heatmap image 
     
     :param x: image
-    :return cl: color heatmap image
+    :return: cl: color heatmap image
     '''
     if x.dim() == 2:
         torch.unsqueeze(x, 0, out=x)

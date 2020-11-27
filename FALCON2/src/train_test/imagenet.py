@@ -477,8 +477,8 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
     :param optimizer: which optimizer we use
     :param epoch: number of epochs
     :param args: arguments for training
-    :return losses.avg: average loss of training
-    :return top1.avg: average top1 accuracy of training
+    :return: losses.avg: average loss of training
+    :return: top1.avg: average top1 accuracy of training
     '''
     bar = Bar('Processing', max=train_loader_len)
 
@@ -546,8 +546,8 @@ def validate(val_loader, val_loader_len, model, criterion):
     :param val_loader_len: length of validation data
     :param model: our model to be validated
     :param criterion: loss function
-    :return losses.avg: average loss of validation
-    :return top1.avg: average top1 accuracy of validation
+    :return: losses.avg: average loss of validation
+    :return: top1.avg: average top1 accuracy of validation
     '''
     bar = Bar('Processing', max=val_loader_len)
 

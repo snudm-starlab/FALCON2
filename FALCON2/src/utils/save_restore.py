@@ -34,7 +34,7 @@ def create_log(args):
     Save the training process.
     
     :param args: arguments of the trained model
-    :return open: open file
+    :return: open: open file
     """
     name = 'conv=' + str(args.convolution) + \
            ',model=' + str(args.model) + \

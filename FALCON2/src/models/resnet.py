@@ -79,7 +79,7 @@ class BottleNeckBlock(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return conv(x): features of convolution
+        :return: conv(x): features of convolution
         """
         return self.conv(x)
 
@@ -112,7 +112,7 @@ class BasicBlock(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return conv(x): features of convolution
+        :return: conv(x): features of convolution
         """
         return self.conv(x)
 
@@ -153,7 +153,7 @@ class ResidualLayer(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return self.relu(stacked_out + shortcut_out): features of residual
+        :return: self.relu(stacked_out + shortcut_out): features of residual
         """
         stacked_out = self.stacked(x)
         shortcut_out = self.shortcut(x)
@@ -195,7 +195,7 @@ class ResNet(nn.Module):
         Make standard-conv Model layers.
         
         :param layer_num: number of convolution layers of ResNet-(18, 34, 50, 101, 152)
-        :return nn.Sequential(*layers): layers of resnet
+        :return: nn.Sequential(*layers): layers of resnet
         """
 
         layers = []
@@ -248,8 +248,8 @@ class ResNet(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return out: output features after the fully connected layer
-        :return out_conv: output features of residual layers
+        :return: out: output features after the fully connected layer
+        :return: out_conv: output features of residual layers
         """
         out_conv = self.first(x)
         out_conv = self.residuals(out_conv)

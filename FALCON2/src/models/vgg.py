@@ -82,7 +82,7 @@ class VGG(nn.Module):
         Make standard-conv Model layers.
         
         :param which: choose a model architecture from VGG16/VGG19/MobileNet
-        :return nn.Sequential(*layers): vgg layers
+        :return: nn.Sequential(*layers): vgg layers
         """
 
         layers = []
@@ -107,8 +107,8 @@ class VGG(nn.Module):
         Run forward propagation
         
         :param x: input feature maps
-        :return out: output features
-        :return out_conv: output features before the fully connected layer
+        :return: out: output features
+        :return: out_conv: output features before the fully connected layer
         """
         out_conv = self.conv(x)
         out_conv = self.layers(out_conv)

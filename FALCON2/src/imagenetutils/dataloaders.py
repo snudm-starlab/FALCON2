@@ -85,8 +85,8 @@ class HybridTrainPipe(Pipeline):
         """
         Define graph function
         
-        :return output: images of data
-        :return labels: labels of data
+        :return: output: images of data
+        :return: labels: labels of data
         """
         rng = self.coin()
         self.jpegs, self.labels = self.input(name = "Reader")
@@ -140,8 +140,8 @@ class HybridValPipe(Pipeline):
         """
         Define graph function
         
-        :return output: images of data
-        :return labels: labels of data
+        :return: output: images of data
+        :return: labels: labels of data
         """
         self.jpegs, self.labels = self.input(name = "Reader")
         images = self.decode(self.jpegs)
@@ -183,7 +183,7 @@ def get_dali_train_loader(dali_cpu=False):
     DALI train loader
     
     :param dali_cpu: whether cpus is used
-    :return gdtl: output of gdtl function
+    :return: gdtl: output of gdtl function
     """
     def gdtl(data_path, batch_size, workers=5, _worker_init_fn=None):
         """
@@ -194,8 +194,8 @@ def get_dali_train_loader(dali_cpu=False):
         :param workers: how much workers we use
         :param _worker_init_fn: initialize worker function
         
-        :return DALIWrapper(train_loader): wrapper of train loader
-        :return int(pipe.epoch_size("Reader") / (world_size * batch_size)): number of batch 
+        :return: DALIWrapper(train_loader): wrapper of train loader
+        :return: int(pipe.epoch_size("Reader") / (world_size * batch_size)): number of batch
         """
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
@@ -224,7 +224,7 @@ def get_dali_val_loader():
     """
     DALI valid loader
     
-    :return gdvl: output of gdvl function
+    :return: gdvl: output of gdvl function
     """
     def gdvl(data_path, batch_size, workers=5, _worker_init_fn=None):
         """
@@ -234,8 +234,8 @@ def get_dali_val_loader():
         :param batch_size: batch size in validation phase
         :param workers: how much workers we use
         :param _worker_init_fn: initialize worker function
-        :return DALIWrapper(val_loader): wrapper of validation loader
-        :return int(pipe.epoch_size("Reader") / (world_size * batch_size)): number of batch 
+        :return: DALIWrapper(val_loader): wrapper of validation loader
+        :return: int(pipe.epoch_size("Reader") / (world_size * batch_size)): number of batch
         """
         if torch.distributed.is_initialized():
             local_rank = torch.distributed.get_rank()
@@ -264,8 +264,8 @@ def fast_collate(batch):
     collate function
     
     :param batch: batch images
-    :return tensor: tensor for images
-    :return targets: labels of images
+    :return: tensor: tensor for images
+    :return: targets: labels of images
     """
     imgs = [img[0] for img in batch]
     targets = torch.tensor([target[1] for target in batch], dtype=torch.int64)
@@ -293,8 +293,8 @@ class PrefetchedWrapper:
         Prefetched loader function
         
         :param loader: loading data
-        :return input: input batch images
-        :return target: input batch labels
+        :return: input: input batch images
+        :return: target: input batch labels
         """
         mean = torch.tensor([0.485 * 255, 0.456 * 255, 0.406 * 255]).cuda().view(1,3,1,1)
         std = torch.tensor([0.229 * 255, 0.224 * 255, 0.225 * 255]).cuda().view(1,3,1,1)
@@ -333,7 +333,7 @@ class PrefetchedWrapper:
         """
         Iterator function
         
-        :return PrefetchedWrapper.prefetched_loader(self.dataloader): wrapper of prefetched loader
+        :return: PrefetchedWrapper.prefetched_loader(self.dataloader): wrapper of prefetched loader
         """
         if (self.dataloader.sampler is not None and
             isinstance(self.dataloader.sampler,
@@ -353,8 +353,8 @@ def get_pytorch_train_loader(data_path, batch_size, workers=5, \
     :param workers: how much workers we use
     :param _worker_init_fn: initialize worker function
     :param input_size: image size
-    :return PrefetchedWrapper(train_loader): prefetcehd wrapper of training loader
-    :return len(train_loader): length of training loader
+    :return: PrefetchedWrapper(train_loader): prefetcehd wrapper of training loader
+    :return: len(train_loader): length of training loader
     """
     traindir = os.path.join(data_path, 'train')
     train_dataset = datasets.ImageFolder(
@@ -385,8 +385,8 @@ def get_pytorch_val_loader(data_path, batch_size, workers=5, _worker_init_fn=Non
     :param workers: how much workers we use
     :param _worker_init_fn: initialize worker function
     :param input_size: image size
-    :return PrefetchedWrapper(val_loader): prefetcehd wrapper of validation loader
-    :return len(val_loader): length of validation loader
+    :return: PrefetchedWrapper(val_loader): prefetcehd wrapper of validation loader
+    :return: len(val_loader): length of validation loader
     """
     valdir = os.path.join(data_path, 'val')
     val_dataset = datasets.ImageFolder(

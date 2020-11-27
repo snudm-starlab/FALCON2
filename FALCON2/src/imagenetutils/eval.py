@@ -14,7 +14,7 @@ def accuracy(output, target, topk=(1,)):
     :param output: pred labels
     :param target: true labels
     :param topk: determine k for top-k accuracy
-    :return res: accuracy for outputs and targets
+    :return: res: accuracy for outputs and targets
     """
     with torch.no_grad():
         maxk = max(topk)

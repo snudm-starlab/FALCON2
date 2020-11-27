@@ -32,7 +32,7 @@ def adjust_lr(lr, lrd=10, log=None):
     :param lr: original learning rate.
     :param lrd: decrease ratio of learning rate.
     :param log: if log is not None, print the comments for changing learning rate.
-    return lr: adjusted learning rate.
+    :return lr: adjusted learning rate.
     """
     lr = lr / lrd
     print("learning rate change to %f" % lr)

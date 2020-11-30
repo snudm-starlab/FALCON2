@@ -1,0 +1,497 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Train and Test &mdash; FALCON2 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Utils" href="utils.html" />
+    <link rel="prev" title="Models" href="models.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FALCON2
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="imagenetutils.html">ImageNetUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Train and Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FALCON2</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Train and Test</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/train_test.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-train_test.imagenet">
+<span id="train-and-test"></span><h1>Train and Test<a class="headerlink" href="#module-train_test.imagenet" title="Permalink to this headline">¶</a></h1>
+<p>FALCON: FAst and Lightweight CONvolution</p>
+<dl class="simple">
+<dt>Authors:</dt><dd><ul class="simple">
+<li><p>Chun Quan (<a class="reference external" href="mailto:quanchun&#37;&#52;&#48;snu&#46;ac&#46;kr">quanchun<span>&#64;</span>snu<span>&#46;</span>ac<span>&#46;</span>kr</a>)</p></li>
+<li><p>U Kang (<a class="reference external" href="mailto:ukang&#37;&#52;&#48;snu&#46;ac&#46;kr">ukang<span>&#64;</span>snu<span>&#46;</span>ac<span>&#46;</span>kr</a>)</p></li>
+<li><p>Data Mining Lab. at Seoul National University.</p></li>
+</ul>
+</dd>
+<dt>File: train_test/imagenet.py</dt><dd><ul class="simple">
+<li><p>receive arguments and train_test/test the model on imagenet.</p></li>
+<li><p>Code is modified from <a class="reference external" href="https://github.com/pytorch/examples/tree/master/imagenet">https://github.com/pytorch/examples/tree/master/imagenet</a></p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<p>This software may be used only for research evaluation purposes.
+For other purposes (e.g., commercial), please contact the authors.</p>
+<dl class="function">
+<dt id="train_test.imagenet.adjust_learning_rate">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">adjust_learning_rate</code><span class="sig-paren">(</span><em class="sig-param">optimizer</em>, <em class="sig-param">epoch</em>, <em class="sig-param">iteration</em>, <em class="sig-param">num_iter</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.adjust_learning_rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>adjust learning rate over epochs</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>optimizer</strong> – optimizer class</p></li>
+<li><p><strong>epoch</strong> – the number of epochs</p></li>
+<li><p><strong>iteration</strong> – current iterations in an epoch</p></li>
+<li><p><strong>num_iter</strong> – number of iterations in an epoch</p></li>
+<li><p><strong>args</strong> – arguments</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="train_test.imagenet.main">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discription: main</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="train_test.imagenet.main_worker">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">main_worker</code><span class="sig-paren">(</span><em class="sig-param">gpu</em>, <em class="sig-param">ngpus_per_node</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.main_worker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Discription: load model and train/test</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gpu</strong> – gpu id to use</p></li>
+<li><p><strong>ngpus_per_node</strong> – number of gpus</p></li>
+<li><p><strong>args</strong> – arguments from input</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="train_test.imagenet.save_checkpoint">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">save_checkpoint</code><span class="sig-paren">(</span><em class="sig-param">state</em>, <em class="sig-param">is_best</em>, <em class="sig-param">checkpoint='checkpoint'</em>, <em class="sig-param">filename='checkpoint.pth.tar'</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.save_checkpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>this function saves check point during training</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> – current state of a model</p></li>
+<li><p><strong>is_best</strong> – best model or not</p></li>
+<li><p><strong>checkpoint</strong> – directory for checkpoint</p></li>
+<li><p><strong>filename</strong> – filename for checkpoint</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="train_test.imagenet.train">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">train_loader</em>, <em class="sig-param">train_loader_len</em>, <em class="sig-param">model</em>, <em class="sig-param">criterion</em>, <em class="sig-param">optimizer</em>, <em class="sig-param">epoch</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>train function for imagenet</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train_loader</strong> – train data</p></li>
+<li><p><strong>train_loader_len</strong> – length of train data</p></li>
+<li><p><strong>model</strong> – which model we use</p></li>
+<li><p><strong>criterion</strong> – loss function</p></li>
+<li><p><strong>optimizer</strong> – which optimizer we use</p></li>
+<li><p><strong>epoch</strong> – number of epochs</p></li>
+<li><p><strong>args</strong> – arguments for training</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(losses.avg, top1.avg): average loss of training, and average top1 accuracy of training</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="train_test.imagenet.validate">
+<code class="sig-prename descclassname">train_test.imagenet.</code><code class="sig-name descname">validate</code><span class="sig-paren">(</span><em class="sig-param">val_loader</em>, <em class="sig-param">val_loader_len</em>, <em class="sig-param">model</em>, <em class="sig-param">criterion</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.imagenet.validate" title="Permalink to this definition">¶</a></dt>
+<dd><p>validation function for our model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val_loader</strong> – validation data</p></li>
+<li><p><strong>val_loader_len</strong> – length of validation data</p></li>
+<li><p><strong>model</strong> – our model to be validated</p></li>
+<li><p><strong>criterion</strong> – loss function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(losses.avg, top1.avg): average loss of validation, and average top1 accuracy of validation</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-train_test.main"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: train_test/main.py</dt><dd><ul class="simple">
+<li><p>receive arguments and train/test the model.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="train_test.main.main">
+<code class="sig-prename descclassname">train_test.main.</code><code class="sig-name descname">main</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.main.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>main function of FALCON</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – arguments for a model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-train_test.test"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: train_test/test.py</dt><dd><ul class="simple">
+<li><p>test the pre-trained model on test datasets.</p></li>
+<li><p>print the test accuracy and inference time.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="train_test.test.test">
+<code class="sig-prename descclassname">train_test.test.</code><code class="sig-name descname">test</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">log=None</em>, <em class="sig-param">batch_size=128</em>, <em class="sig-param">data='cifar100'</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.test.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test on trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – model to be tested</p></li>
+<li><p><strong>log</strong> – log dir</p></li>
+<li><p><strong>batch_size</strong> – batch size</p></li>
+<li><p><strong>data</strong> – datasets used</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>inference_time: inference time</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-train_test.train"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: train_test/train.py</dt><dd><ul class="simple">
+<li><p>Contain training code for execution for model.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="train_test.train.train">
+<code class="sig-prename descclassname">train_test.train.</code><code class="sig-name descname">train</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">lr</em>, <em class="sig-param">log=None</em>, <em class="sig-param">optimizer_option='SGD'</em>, <em class="sig-param">data='cifar100'</em>, <em class="sig-param">epochs=350</em>, <em class="sig-param">batch_size=128</em>, <em class="sig-param">is_train=True</em>, <em class="sig-param">net_st=None</em>, <em class="sig-param">beta=0.0</em>, <em class="sig-param">lrd=10</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.train.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Train the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – model to be trained</p></li>
+<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>optimizer_option</strong> – optimizer type</p></li>
+<li><p><strong>data</strong> – datasets used to train</p></li>
+<li><p><strong>epochs</strong> – number of training epochs</p></li>
+<li><p><strong>batch_size</strong> – batch size</p></li>
+<li><p><strong>is_train</strong> – whether it is a training process</p></li>
+<li><p><strong>net_st</strong> – uncompressed model</p></li>
+<li><p><strong>beta</strong> – transfer parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>best_param: the parameters of the model that achieves the best accuracy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-train_test.validation"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: train_test/validation.py</dt><dd><ul class="simple">
+<li><p>Contain validation code for execution for model.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="train_test.validation.validation">
+<code class="sig-prename descclassname">train_test.validation.</code><code class="sig-name descname">validation</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">val_loader</em>, <em class="sig-param">log=None</em><span class="sig-paren">)</span><a class="headerlink" href="#train_test.validation.validation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validation process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – model to be trained</p></li>
+<li><p><strong>val_loader</strong> – validation data loader</p></li>
+<li><p><strong>log</strong> – log dir</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>accuracy: accuracy for validation dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="utils.html" class="btn btn-neutral float-right" title="Utils" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="models.html" class="btn btn-neutral float-left" title="Models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, dmlab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

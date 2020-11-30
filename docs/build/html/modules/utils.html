@@ -1,0 +1,649 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Utils &mdash; FALCON2 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Train and Test" href="train_test.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FALCON2
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="imagenetutils.html">ImageNetUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_test.html">Train and Test</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FALCON2</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Utils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-utils.compression_cal">
+<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-utils.compression_cal" title="Permalink to this headline">¶</a></h1>
+<p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/compression_cal.py</dt><dd><ul class="simple">
+<li><p>Contain source code for counting number of parameters and number of flops in model.</p></li>
+<li><p>Code is modified from <a class="reference external" href="https://zhuanlan.zhihu.com/p/33992733">https://zhuanlan.zhihu.com/p/33992733</a></p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.compression_cal.print_model_parm_flops">
+<code class="sig-prename descclassname">utils.compression_cal.</code><code class="sig-name descname">print_model_parm_flops</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">imagenet=False</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_flops" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counting number of parameters in the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – the model to be calculated for parameters and flops</p></li>
+<li><p><strong>imagenet</strong> – which dataset is used</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.compression_cal.print_model_parm_nums">
+<code class="sig-prename descclassname">utils.compression_cal.</code><code class="sig-name descname">print_model_parm_nums</code><span class="sig-paren">(</span><em class="sig-param">net</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_nums" title="Permalink to this definition">¶</a></dt>
+<dd><p>Counting number of parameters in the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>net</strong> – the model</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-utils.default_param"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/default_param.py</dt><dd><ul class="simple">
+<li><p>Contain source code for receiving arguments .</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.default_param.get_default_param">
+<code class="sig-prename descclassname">utils.default_param.</code><code class="sig-name descname">get_default_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.default_param.get_default_param" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deal with several arguments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>parser: parser including several arguments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-utils.load_data"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/load_data.py</dt><dd><ul class="simple">
+<li><p>Contain source code for loading data.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.load_data.load_cifar100">
+<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_cifar100</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_cifar100" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load cifar-100 datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
+<li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loader: training loader or test loader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.load_data.load_imagenet">
+<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_imagenet</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_imagenet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load imagenet datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
+<li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(train_loader, valid_loader): training loader, and validation loader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.load_data.load_svhn">
+<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_svhn</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_svhn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load SVHN datasets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
+<li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>loader: training loader or test loader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-utils.lr_decay"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/lr_decay.py</dt><dd><ul class="simple">
+<li><p>Contain source code for updating learning rate.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.lr_decay.adjust_lr">
+<code class="sig-prename descclassname">utils.lr_decay.</code><code class="sig-name descname">adjust_lr</code><span class="sig-paren">(</span><em class="sig-param">lr</em>, <em class="sig-param">lrd=10</em>, <em class="sig-param">log=None</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.lr_decay.adjust_lr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update learnign rate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lr</strong> – original learning rate.</p></li>
+<li><p><strong>lrd</strong> – decrease ratio of learning rate.</p></li>
+<li><p><strong>log</strong> – if log is not None, print the comments for changing learning rate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return lr</dt>
+<dd class="field-even"><p>adjusted learning rate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-utils.optimizer_option"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/optimizer_option.py</dt><dd><ul class="simple">
+<li><p>Contain source code for choosing optimizer.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.optimizer_option.get_optimizer">
+<code class="sig-prename descclassname">utils.optimizer_option.</code><code class="sig-name descname">get_optimizer</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">lr</em>, <em class="sig-param">optimizer='SGD'</em>, <em class="sig-param">weight_decay=0.0001</em>, <em class="sig-param">momentum=0.9</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.optimizer_option.get_optimizer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get optimizer accroding to arguments.</p>
+<p>There are four optimizers, SGD, Adagrad, Adam, and RMSprop.
+:param net: the model
+:param lr: learing rate
+:param optimizer: choose an optimizer - SGD/Adagrad/Adam/RMSprop
+:param weight_decay: weight decay rate
+:param momentum: momentum of the optimizer</p>
+</dd></dl>
+
+<span class="target" id="module-utils.save_restore"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl class="simple">
+<dt>File: utils/save_restore.py</dt><dd><ul class="simple">
+<li><p>Contain source code for saving and restoring the model.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="function">
+<dt id="utils.save_restore.create_log">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">create_log</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.create_log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the training process.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>args</strong> – arguments of the trained model</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>open: open file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.init_with_alpha_resnet">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">init_with_alpha_resnet</code><span class="sig-paren">(</span><em class="sig-param">source_net</em>, <em class="sig-param">dest_net</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_resnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize with width multiplier for resnet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_net</strong> – a base model</p></li>
+<li><p><strong>dest_net</strong> – a model to be compressed</p></li>
+<li><p><strong>alpha</strong> – width multiplier.
+if alpha is less than 1,
+a part of standard convolution kernel
+is used for initializing kernels of FALCON.</p></li>
+<li><p><strong>dest_net</strong> – a model to be compressed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.init_with_alpha_vgg">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">init_with_alpha_vgg</code><span class="sig-paren">(</span><em class="sig-param">source_net</em>, <em class="sig-param">dest_net</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_vgg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize with width multiplier for vgg.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>source_net</strong> – a base model</p></li>
+<li><p><strong>dest_net</strong> – a model to be compressed</p></li>
+<li><p><strong>alpha</strong> – width multiplier.
+if alpha is less than 1,
+a part of standard convolution kernel
+is used for initializing kernels of FALCON.</p></li>
+<li><p><strong>dest_net</strong> – a model to be compressed</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.load_model">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the pre-trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – model architecture without parameters</p></li>
+<li><p><strong>args</strong> – arguments of the trained model</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.load_specific_model">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">load_specific_model</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">args</em>, <em class="sig-param">convolution=''</em>, <em class="sig-param">input_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_specific_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Restore the pre-trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>net</strong> – model architecture without parameters</p></li>
+<li><p><strong>args</strong> – arguments for a current model</p></li>
+<li><p><strong>convolution</strong> – kinds of convolution</p></li>
+<li><p><strong>input_path</strong> – path of a stored model</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.mkdir">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Make a directory if it doesn’t exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – directory path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.save_model">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param">best</em>, <em class="sig-param">args</em>, <em class="sig-param">log</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>best</strong> – best trained model (to be saved)</p></li>
+<li><p><strong>args</strong> – arguments of the trained model</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="utils.save_restore.save_specific_model">
+<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">save_specific_model</code><span class="sig-paren">(</span><em class="sig-param">best</em>, <em class="sig-param">args</em>, <em class="sig-param">convolution=''</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_specific_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the trained model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>best</strong> – best trained model (to be saved)</p></li>
+<li><p><strong>args</strong> – arguments for the trained model</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-utils.timer"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+“License”); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at</p>
+<blockquote>
+<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+</div></blockquote>
+<p>Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.</p>
+<p>FALCON: Lightweight and Accurate Convolution</p>
+<dl>
+<dt>File: utils/timer.py</dt><dd><ul class="simple">
+<li><p>Contain source code for a timer.</p></li>
+<li><p>Code is got from</p></li>
+</ul>
+<p><a class="reference external" href="https://dev.tencent.com/u/zzpu/p/yolov2/git/raw/">https://dev.tencent.com/u/zzpu/p/yolov2/git/raw/</a>
+4b2c6c7df1876363aba3bbd600aa68e4deeb4487/utils/timer.py</p>
+</dd>
+</dl>
+<p>Version: 1.0</p>
+<dl class="class">
+<dt id="utils.timer.Timer">
+<em class="property">class </em><code class="sig-prename descclassname">utils.timer.</code><code class="sig-name descname">Timer</code><a class="headerlink" href="#utils.timer.Timer" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple timer.</p>
+<dl class="method">
+<dt id="utils.timer.Timer.tic">
+<code class="sig-name descname">tic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.tic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start timer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="utils.timer.Timer.toc">
+<code class="sig-name descname">toc</code><span class="sig-paren">(</span><em class="sig-param">average=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.toc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop timer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>average</strong> – whether to calculate the average time</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>average_time: average time</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="train_test.html" class="btn btn-neutral float-left" title="Train and Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, dmlab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

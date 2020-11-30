@@ -1,0 +1,603 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ImageNetUtils &mdash; FALCON2 1.0 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Welcome to falcon’s documentation!" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FALCON2
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ImageNetUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="train_test.html">Train and Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FALCON2</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>ImageNetUtils</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/modules/imagenetutils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-imagenetutils.dataloaders">
+<span id="imagenetutils"></span><h1>ImageNetUtils<a class="headerlink" href="#module-imagenetutils.dataloaders" title="Permalink to this headline">¶</a></h1>
+<p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+<dl class="class">
+<dt id="imagenetutils.dataloaders.DALIWrapper">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">DALIWrapper</code><span class="sig-paren">(</span><em class="sig-param">dalipipeline</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.DALIWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper Class</p>
+<dl class="method">
+<dt id="imagenetutils.dataloaders.DALIWrapper.gen_wrapper">
+<code class="sig-name descname">gen_wrapper</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.DALIWrapper.gen_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>generate wrapper function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dalipipeline</strong> – dali pipeline</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imagenetutils.dataloaders.HybridTrainPipe">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">HybridTrainPipe</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">num_threads</em>, <em class="sig-param">device_id</em>, <em class="sig-param">data_dir</em>, <em class="sig-param">crop</em>, <em class="sig-param">dali_cpu=False</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.HybridTrainPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pipeline for training</p>
+<dl class="method">
+<dt id="imagenetutils.dataloaders.HybridTrainPipe.define_graph">
+<code class="sig-name descname">define_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.HybridTrainPipe.define_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define graph function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(output, labels): images of data, and labels of data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imagenetutils.dataloaders.HybridValPipe">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">HybridValPipe</code><span class="sig-paren">(</span><em class="sig-param">batch_size</em>, <em class="sig-param">num_threads</em>, <em class="sig-param">device_id</em>, <em class="sig-param">data_dir</em>, <em class="sig-param">crop</em>, <em class="sig-param">size</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.HybridValPipe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pipeline for validation</p>
+<dl class="method">
+<dt id="imagenetutils.dataloaders.HybridValPipe.define_graph">
+<code class="sig-name descname">define_graph</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.HybridValPipe.define_graph" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define graph function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>(output, labels): images of data, and labels of data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imagenetutils.dataloaders.PrefetchedWrapper">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">PrefetchedWrapper</code><span class="sig-paren">(</span><em class="sig-param">dataloader</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.PrefetchedWrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefetched Wrapper</p>
+<dl class="method">
+<dt id="imagenetutils.dataloaders.PrefetchedWrapper.prefetched_loader">
+<code class="sig-name descname">prefetched_loader</code><span class="sig-paren">(</span><em class="sig-param">loader</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.PrefetchedWrapper.prefetched_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prefetched loader function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>loader</strong> – loading data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(tensor, targets): tensor for images, and labels of images</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.dataloaders.fast_collate">
+<code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">fast_collate</code><span class="sig-paren">(</span><em class="sig-param">batch</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.fast_collate" title="Permalink to this definition">¶</a></dt>
+<dd><p>collate function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – batch images</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(tensor, targets): tensor for images, and labels of images</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.dataloaders.get_dali_train_loader">
+<code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">get_dali_train_loader</code><span class="sig-paren">(</span><em class="sig-param">dali_cpu=False</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.get_dali_train_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>DALI train loader</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dali_cpu</strong> – whether cpus is used</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>gdtl: output of gdtl function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.dataloaders.get_dali_val_loader">
+<code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">get_dali_val_loader</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.get_dali_val_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>DALI valid loader</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>gdvl: output of gdvl function</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.dataloaders.get_pytorch_train_loader">
+<code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">get_pytorch_train_loader</code><span class="sig-paren">(</span><em class="sig-param">data_path</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">workers=5</em>, <em class="sig-param">_worker_init_fn=None</em>, <em class="sig-param">input_size=224</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.get_pytorch_train_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>train loader function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> – image data path</p></li>
+<li><p><strong>batch_size</strong> – batch size in training phase</p></li>
+<li><p><strong>workers</strong> – how much workers we use</p></li>
+<li><p><strong>_worker_init_fn</strong> – initialize worker function</p></li>
+<li><p><strong>input_size</strong> – image size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(PrefetchedWrapper(train_loader), len(train_loader)): prefetcehd wrapper of training loader, and length of training loader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.dataloaders.get_pytorch_val_loader">
+<code class="sig-prename descclassname">imagenetutils.dataloaders.</code><code class="sig-name descname">get_pytorch_val_loader</code><span class="sig-paren">(</span><em class="sig-param">data_path</em>, <em class="sig-param">batch_size</em>, <em class="sig-param">workers=5</em>, <em class="sig-param">_worker_init_fn=None</em>, <em class="sig-param">input_size=224</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.dataloaders.get_pytorch_val_loader" title="Permalink to this definition">¶</a></dt>
+<dd><p>validation loader function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data_path</strong> – image data path</p></li>
+<li><p><strong>batch_size</strong> – batch size in training phase</p></li>
+<li><p><strong>workers</strong> – how much workers we use</p></li>
+<li><p><strong>_worker_init_fn</strong> – initialize worker function</p></li>
+<li><p><strong>input_size</strong> – image size</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(PrefetchedWrapper(val_loader), len(val_loader): prefetcehd wrapper of validation loader, and length of validation loader</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-imagenetutils.eval"></span><p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+<dl class="function">
+<dt id="imagenetutils.eval.accuracy">
+<code class="sig-prename descclassname">imagenetutils.eval.</code><code class="sig-name descname">accuracy</code><span class="sig-paren">(</span><em class="sig-param">output</em>, <em class="sig-param">target</em>, <em class="sig-param">topk=(1</em>, <em class="sig-param">)</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.eval.accuracy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the precision&#64;k for the specified values of k</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output</strong> – pred labels</p></li>
+<li><p><strong>target</strong> – true labels</p></li>
+<li><p><strong>topk</strong> – determine k for top-k accuracy</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>res: accuracy for outputs and targets</p>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-imagenetutils.logger"></span><p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+<dl class="class">
+<dt id="imagenetutils.logger.Logger">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.logger.</code><code class="sig-name descname">Logger</code><span class="sig-paren">(</span><em class="sig-param">fpath</em>, <em class="sig-param">title=None</em>, <em class="sig-param">resume=False</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save training process to log file with simple plot function.</p>
+<dl class="method">
+<dt id="imagenetutils.logger.Logger.append">
+<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">numbers</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>append function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>numbers</strong> – result with respect to names</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="imagenetutils.logger.Logger.close">
+<code class="sig-name descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>file close function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imagenetutils.logger.Logger.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">names=None</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw plot function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> – names of logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="imagenetutils.logger.Logger.set_names">
+<code class="sig-name descname">set_names</code><span class="sig-paren">(</span><em class="sig-param">names</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger.set_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>name setting function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> – set names of logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="imagenetutils.logger.LoggerMonitor">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.logger.</code><code class="sig-name descname">LoggerMonitor</code><span class="sig-paren">(</span><em class="sig-param">paths</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.LoggerMonitor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load and visualize multiple logs.</p>
+<dl class="method">
+<dt id="imagenetutils.logger.LoggerMonitor.plot">
+<code class="sig-name descname">plot</code><span class="sig-paren">(</span><em class="sig-param">names=None</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.LoggerMonitor.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>draw plot function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>names</strong> – names of logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.logger.savefig">
+<code class="sig-prename descclassname">imagenetutils.logger.</code><code class="sig-name descname">savefig</code><span class="sig-paren">(</span><em class="sig-param">fname</em>, <em class="sig-param">dpi=None</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.savefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>save figure function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> – file name</p></li>
+<li><p><strong>dpi</strong> – set dpi of figure</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-imagenetutils.misc"></span><p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a>
+Some helper functions for PyTorch, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>get_mean_and_std: calculate the mean and std value of dataset.</p></li>
+<li><p>msr_init: net parameter initialization.</p></li>
+<li><p>progress_bar: progress bar mimic xlua.progress.</p></li>
+</ul>
+</div></blockquote>
+<dl class="function">
+<dt id="imagenetutils.misc.get_mean_and_std">
+<code class="sig-prename descclassname">imagenetutils.misc.</code><code class="sig-name descname">get_mean_and_std</code><span class="sig-paren">(</span><em class="sig-param">dataset</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.misc.get_mean_and_std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the mean and std value of dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dataset</strong> – input data</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>(mean, std): mean value of dataset, and standard deviation value of dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.misc.init_params">
+<code class="sig-prename descclassname">imagenetutils.misc.</code><code class="sig-name descname">init_params</code><span class="sig-paren">(</span><em class="sig-param">net</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.misc.init_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Init layer parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>net</strong> – input network to be initialized</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.misc.mkdir_p">
+<code class="sig-prename descclassname">imagenetutils.misc.</code><code class="sig-name descname">mkdir_p</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.misc.mkdir_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>make dir if not exist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> – directory path we make</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagenetutils.misc.AverageMeter">
+<em class="property">class </em><code class="sig-prename descclassname">imagenetutils.misc.</code><code class="sig-name descname">AverageMeter</code><a class="headerlink" href="#imagenetutils.misc.AverageMeter" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Computes and stores the average and current value</dt><dd><p>Imported from <a class="reference external" href="https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262">https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262</a></p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="imagenetutils.misc.AverageMeter.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.misc.AverageMeter.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>reset function</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="imagenetutils.misc.AverageMeter.update">
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">val</em>, <em class="sig-param">n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.misc.AverageMeter.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> – input current average value</p></li>
+<li><p><strong>n</strong> – number of items for val</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-imagenetutils.visualize"></span><p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+<dl class="function">
+<dt id="imagenetutils.visualize.make_image">
+<code class="sig-prename descclassname">imagenetutils.visualize.</code><code class="sig-name descname">make_image</code><span class="sig-paren">(</span><em class="sig-param">img</em>, <em class="sig-param">mean=(0</em>, <em class="sig-param">0</em>, <em class="sig-param">0)</em>, <em class="sig-param">std=(1</em>, <em class="sig-param">1</em>, <em class="sig-param">1)</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.visualize.make_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>image generation function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>img</strong> – target image</p></li>
+<li><p><strong>mean</strong> – mean value of the image</p></li>
+<li><p><strong>std</strong> – standard deviation of the image</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>np.transpose(npimg, (1, 2, 0)): unnormalized image</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.visualize.show_batch">
+<code class="sig-prename descclassname">imagenetutils.visualize.</code><code class="sig-name descname">show_batch</code><span class="sig-paren">(</span><em class="sig-param">images</em>, <em class="sig-param">Mean=(2</em>, <em class="sig-param">2</em>, <em class="sig-param">2)</em>, <em class="sig-param">Std=(0.5</em>, <em class="sig-param">0.5</em>, <em class="sig-param">0.5)</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.visualize.show_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>batch images showing function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> – batch images</p></li>
+<li><p><strong>Mean</strong> – mean value of the image</p></li>
+<li><p><strong>Std</strong> – standard deviation of the image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.visualize.show_mask">
+<code class="sig-prename descclassname">imagenetutils.visualize.</code><code class="sig-name descname">show_mask</code><span class="sig-paren">(</span><em class="sig-param">images</em>, <em class="sig-param">masklist</em>, <em class="sig-param">Mean=(2</em>, <em class="sig-param">2</em>, <em class="sig-param">2)</em>, <em class="sig-param">Std=(0.5</em>, <em class="sig-param">0.5</em>, <em class="sig-param">0.5)</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.visualize.show_mask" title="Permalink to this definition">¶</a></dt>
+<dd><p>mask showing function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> – batch images</p></li>
+<li><p><strong>masklist</strong> – target masks</p></li>
+<li><p><strong>Mean</strong> – mean value of the image</p></li>
+<li><p><strong>Std</strong> – standard deviation of the image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="imagenetutils.visualize.show_mask_single">
+<code class="sig-prename descclassname">imagenetutils.visualize.</code><code class="sig-name descname">show_mask_single</code><span class="sig-paren">(</span><em class="sig-param">images</em>, <em class="sig-param">mask</em>, <em class="sig-param">Mean=(2</em>, <em class="sig-param">2</em>, <em class="sig-param">2)</em>, <em class="sig-param">Std=(0.5</em>, <em class="sig-param">0.5</em>, <em class="sig-param">0.5)</em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.visualize.show_mask_single" title="Permalink to this definition">¶</a></dt>
+<dd><p>batch images with mask showing function</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>images</strong> – batch images</p></li>
+<li><p><strong>mask</strong> – mask</p></li>
+<li><p><strong>Mean</strong> – mean value of the image</p></li>
+<li><p><strong>Std</strong> – standard deviation of the image</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to falcon’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, dmlab
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

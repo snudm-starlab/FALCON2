@@ -197,7 +197,7 @@ def main(args):
         inference_time = 0
         inference_time += \
             test(net, batch_size=args.batch_size, data=args.datasets)
-        print("Average Inference Time: %f" % (float(inference_time) / float(1)))
+#        print("Average Inference Time: %f" % (float(inference_time) / float(1)))
 
     # calculate number of parameters & FLOPs
     print_model_parm_nums(net)
@@ -212,7 +212,7 @@ def main(args):
     for _ in range(100):
         net(x)
     timer.toc()
-    print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 100.0))
+#    print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 100.0))
 
 
 if __name__ == "__main__":

@@ -61,13 +61,14 @@ class VGG(nn.Module):
         """
 
         super(VGG, self).__init__()
+        self.alpha = alpha
         self.conv = nn.Sequential()
 
         self.layers = self._make_layers(which)
 
         self.avgPooling = nn.AvgPool2d(2, 2)
 
-        output_size = 512
+        output_size = int(512*self.alpha)
         self.fc = nn.Sequential(
             nn.Linear(output_size, 512),
             nn.Dropout2d(0.3),
@@ -75,7 +76,6 @@ class VGG(nn.Module):
             nn.Linear(512, num_classes)
         )
 
-        self.alpha = alpha
 
     def _make_layers(self, which):
         """
@@ -95,8 +95,11 @@ class VGG(nn.Module):
 
         for cfg in self.cfgs:
 
-            layers.append(nn.Conv2d(cfg[0], cfg[1], kernel_size=3, stride=1, padding=1))
-            layers.append(nn.BatchNorm2d(cfg[1]))
+            if cfg[0] == 3:
+                layers.append(nn.Conv2d(int(cfg[0]), int(cfg[1]*self.alpha), kernel_size=3, stride=1, padding=1))
+            else:
+                layers.append(nn.Conv2d(int(cfg[0]*self.alpha), int(cfg[1]*self.alpha), kernel_size=3, stride=1, padding=1))
+            layers.append(nn.BatchNorm2d(int(cfg[1]*self.alpha)))
             layers.append(nn.ReLU())
             if len(cfg) == 3:
                 layers.append(nn.MaxPool2d(kernel_size=2, stride=2))

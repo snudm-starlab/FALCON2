@@ -67,12 +67,12 @@ def test(net, log=None, batch_size=128, data='cifar100'):
             total += labels.size(0)
             correct += (predicted == labels.cuda()).sum()
     inference_time = time.time() - inference_start
-    print('Accuracy: %f %%; Inference time: %fs' % (float(100) * float(correct) /\
-                float(total), inference_time))
+    print('Accuracy: %f %%' % (float(100) * float(correct) /\
+                float(total)))
 
     if log is not None:
         log.write('Accuracy of the network on the 10000 test images: %f %%\n' %\
                 (float(100) * float(correct) / float(total)))
-        log.write('Inference time is: %fs\n' % inference_time)
+#        log.write('Inference time is: %fs\n' % inference_time)
 
     return inference_time

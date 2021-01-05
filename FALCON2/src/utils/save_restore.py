@@ -251,30 +251,17 @@ def init_with_alpha_vgg(source_net, dest_net, alpha):
     :param dest_net: a model to be compressed
     """
 
-    for i in range(len(source_net.first)):
-        if isinstance(source_net.first[i], torch.nn.Conv2d):
-            shape = source_net.first[i].weight.shape
-#            last_conv = i
-            if i == 0:
-                dest_net.first[i].weight = torch.nn.Parameter(\
-                        source_net.first[i].weight[:int(shape[0]*alpha), :shape[1], :,:])
+    for i in range(len(source_net.layers)):
+        if isinstance(source_net.layers[i], torch.nn.Conv2d):
+            shape = source_net.layers[i].weight.shape
+            if shape[1] == 3:
+                dest_net.layers[i].weight = torch.nn.Parameter(\
+                        source_net.layers[i].weight[:int(shape[0]*alpha),\
+                        :int(shape[1]), :,:])
             else:
-                dest_net.first[i].weight = torch.nn.Parameter(\
-                        source_net.first[i].weight[:int(shape[0]*alpha), :int(shape[1]*alpha), :,:])
-
-    for i in range(len(source_net.residuals)):
-        for j in range(len(source_net.residuals[i].stacked.conv)):
-            if isinstance(source_net.residuals[i].stacked.conv[j], torch.nn.Conv2d):
-                shape = source_net.residuals[i].stacked.conv[j].weight.shape
-                dest_net.residuals[i].stacked.conv[j].weight = torch.nn.Parameter(\
-                        source_net.residuals[i].stacked.conv[j].weight[:int(shape[0]*alpha),\
+                dest_net.layers[i].weight = torch.nn.Parameter(\
+                        source_net.layers[i].weight[:int(shape[0]*alpha),\
                         :int(shape[1]*alpha), :,:])
 
-        for j in range(len(source_net.residuals[i].shortcut)):
-            if isinstance(source_net.residuals[i].shortcut[j], torch.nn.Conv2d):
-                shape = source_net.residuals[i].shortcut[j].weight.shape
-                dest_net.residuals[i].shortcut[j].weight = torch.nn.Parameter(\
-                        source_net.residuals[i].shortcut[j].weight[:int(shape[0]*alpha),\
-                        :int(shape[1]*alpha), :,:])
 
     return dest_net

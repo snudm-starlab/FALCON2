@@ -1,4 +1,4 @@
-FALCON: Lightweight and Accurate Convolution
+FALCON2: Lightweight and Accurate Convolution
 ===
 
 This package provides implementations of FALCON/FALCONBranch convolution with their corresponding CNN model.

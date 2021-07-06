@@ -1,12 +1,12 @@
 FALCON2: Lightweight and Accurate Convolution
 ===
 
-This package provides implementations of FALCON/FALCONBranch convolution with their corresponding CNN model.
+This package provides implementations of FALCON2/FALCONBranch convolution with their corresponding CNN model.
 
 ## Overview
 #### Code structure
 ``` unicode
-FALCON
+FALCON2
   │ 
   ├── src
   │    │     
@@ -45,7 +45,7 @@ FALCON
 #### Naming convention
 **StandardConv**: Standard Convolution (baseline)
 
-**FALCON**: Lightweight and Accurate Convolution - the new convolution architecture we proposed
+**FALCON2**: Lightweight and Accurate Convolution - the new convolution architecture we proposed
 
 **Rank**: Rank of convolution. Copy the conv layer for k times, run independently and add output together at the end of the layer. This hyperparameter helps balace compression rate/ accelerate rate and accuracy.
 

@@ -41,10 +41,7 @@ def print_model_parm_nums(net):
     
     :param net: model to print param_num
     """
-    total = sum([param.nelement() for param in net.parameters()])
-    num_param = []
-    for param in net.parameters():
-        num_param.append(param.nelement())
+    total = np.sum([param.numel() for param in net.parameters()])
     print('  + Number of params: %.2fM' % (total / 1e6))
 
 

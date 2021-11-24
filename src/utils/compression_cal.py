@@ -166,7 +166,9 @@ def print_model_parm_flops(net, imagenet=False):
     else:
         input = Variable(torch.rand(3, 32, 32).unsqueeze(0), requires_grad=True).cuda()
     out = net(input)
-    total_flops = (sum(list_conv) + sum(list_linear))
+    total_flops = (sum(list_conv) + sum(list_linear)) 
     # + sum(list_bn) + sum(list_relu) + sum(list_pooling)))
+    # If we want to compute FLOPs of non-conv and non-linear operations,
+    # (e.g., batch norm, relu), then remove # in above line.
 
     print('  + Number of FLOPs: %.2fM' % (total_flops / 1e6))

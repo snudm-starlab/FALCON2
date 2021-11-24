@@ -152,7 +152,7 @@ def train(net,
         net.eval()
         val_acc = validation(net, valloader, log)
         net.train()
-        if val_acc > best_acc:
+        if val_acc >= best_acc:
             best_acc = val_acc
             # Store the current parameters in the parameters of the best model
             best_param = copy.deepcopy(net.state_dict())

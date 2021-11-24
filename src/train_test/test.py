@@ -48,7 +48,7 @@ def test(net, log=None, batch_size=128, data='cifar100'):
     net.eval()
     is_train = False
 
-    # data
+    # Data
     if data == 'cifar100':
         test_loader = load_cifar100(is_train, batch_size)
     elif data == 'svhn':

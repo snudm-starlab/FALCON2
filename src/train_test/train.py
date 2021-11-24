@@ -157,7 +157,7 @@ def train(net,
             # Store the current parameters in the parameters of the best model
             best_param = copy.deepcopy(net.state_dict())
 
-    print('Finished Training. It took %ds in total' % (time.time() - start_time))
+    print('Training finished. It took %ds in total' % (time.time() - start_time))
     if log is not None:
         log.write('Finished Training. It took %ds in total\n' % (time.time() - start_time))
 

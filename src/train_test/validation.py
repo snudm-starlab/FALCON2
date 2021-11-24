@@ -56,12 +56,12 @@ def validation(net, val_loader, log=None):
     inference_time = time.time() - inference_start
     accuracy = float(100) * float(correct) / float(total)
 
-    print("*************** Validation ***************")
+    print("*"*15, Validation","*"*15)
     print('Accuracy of the network validation images: %f %%' % accuracy)
     print('Validation time is: %fs' % inference_time)
 
     if log is not None:
-        log.write("*************** Validation ***************\n")
+        log.write("*"*15, "Validation", "*"*15,"\n")
         log.write('Accuracy of the network validation images: %f %%\n' % accuracy)
         log.write('Validation time is: %fs\n' % inference_time)
 

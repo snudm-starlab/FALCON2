@@ -52,7 +52,7 @@ class Timer:
         """
         Stop timer.
         
-        :param average: whether to calculate the average time
+        :param average: whether to calculate the average time or not
         :return: average_time: average time
         """
         self.diff = time.time() - self.start_time

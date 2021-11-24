@@ -35,7 +35,7 @@ def validation(net, val_loader, log=None):
     """
     Validation process.
     
-    :param net: model to be trained
+    :param net: model to be validate
     :param val_loader: validation data loader
     :param log: log dir
     :return: accuracy: accuracy for validation dataset

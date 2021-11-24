@@ -159,6 +159,6 @@ def train(net,
 
     print('Training finished. It took %ds in total' % (time.time() - start_time))
     if log is not None:
-        log.write('Finished Training. It took %ds in total\n' % (time.time() - start_time))
+        log.write('Training finished. It took %ds in total\n' % (time.time() - start_time))
 
     return best_param

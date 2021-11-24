@@ -30,7 +30,7 @@ Version: 1.0
 import sys
 import torch
 from torch.autograd import Variable
-#import numpy as np
+import numpy as np
 sys.path.append('../')
 
 

@@ -39,7 +39,7 @@ def print_model_parm_nums(net):
     """
     Counting number of parameters in the model
     
-    :param net: the model
+    :param net: model to print param_num
     """
     total = sum([param.nelement() for param in net.parameters()])
     num_param = []

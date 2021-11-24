@@ -73,6 +73,5 @@ def test(net, log=None, batch_size=128, data='cifar100'):
     if log is not None:
         log.write('Accuracy of the network on the 10000 test images: %f %%\n' %\
                 (float(100) * float(correct) / float(total)))
-#        log.write('Inference time is: %fs\n' % inference_time)
 
     return inference_time

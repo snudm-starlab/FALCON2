@@ -23,11 +23,12 @@ File: utils/lr_decay.py
 
 Version: 1.0
 """
+
 #pylint: disable=C0103
 
 def adjust_lr(lr, lrd=10, log=None):
     """
-    Update learnign rate.
+    Update learning rate.
     
     :param lr: original learning rate.
     :param lrd: decrease ratio of learning rate.

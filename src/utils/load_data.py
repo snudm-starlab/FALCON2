@@ -30,10 +30,8 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import torchvision.datasets as datasets
-#from torch.utils.data.sampler import SubsetRandomSampler
 
 sys.path.append('../')
-
 
 # CIFAR100 data
 def load_cifar100(is_train=True, batch_size=128):
@@ -67,7 +65,7 @@ def load_cifar100(is_train=True, batch_size=128):
                                                   # sampler=train_sampler,
                                                   num_workers=2,
                                                   shuffle=True)
-        return trainloader #, valloader
+        return trainloader
 
     else:
         testset = torchvision.datasets.CIFAR100(root='./data',

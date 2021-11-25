@@ -216,7 +216,7 @@ if __name__ == "__main__":
     parser = get_default_param()
     args = parser.parse_args()
 
-    # print configuration
+    # Print configuration
     print(args)
 
     main(args)

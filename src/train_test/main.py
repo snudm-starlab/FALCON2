@@ -211,8 +211,6 @@ def main(args):
     for _ in range(100):
         net(x)
     timer.toc()
-#    print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 100.0))
-
 
 if __name__ == "__main__":
     parser = get_default_param()

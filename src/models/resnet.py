@@ -161,7 +161,9 @@ class ResidualLayer(nn.Module):
 
 
 class ResNet(nn.Module):
-    """ResNet model"""
+    """
+    ResNet model
+    """
 
     def __init__(self, layer_num='18', num_classes=10, alpha=1.0):
         """

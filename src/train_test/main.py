@@ -196,7 +196,6 @@ def main(args):
         inference_time = 0
         inference_time += \
             test(net, batch_size=args.batch_size, data=args.datasets)
-#        print("Average Inference Time: %f" % (float(inference_time) / float(1)))
 
     # Calculate number of parameters & FLOPs
     print_model_parm_nums(net)

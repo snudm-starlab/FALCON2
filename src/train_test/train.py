@@ -39,8 +39,6 @@ from utils.load_data import load_cifar100, load_svhn
 from utils.lr_decay import adjust_lr
 from train_test.validation import validation
 
-
-
 def train(net,
           lr,
           log=None,
@@ -100,7 +98,7 @@ def train(net,
         correct = 0
         loss_sum = 0
 
-        # change learning rate
+        # Change learning rate
         if epoch in (150, 250):
             lr = adjust_lr(lr, lrd=lrd, log=log)
             optimizer = get_optimizer(net, lr, optimizer_option)
@@ -108,7 +106,7 @@ def train(net,
         for i, data in enumerate(trainloader, 0):
             iteration += 1
 
-            # foward
+            # Foward
             inputs, labels = data
             inputs_var, labels_var = Variable(inputs.cuda()), Variable(labels.cuda())
             outputs, outputs_conv = net(inputs_var)
@@ -123,7 +121,7 @@ def train(net,
                         loss += beta * criterion_mse(outputs_conv[i], \
                                 outputs_st_conv[i].detach())
 
-            # backward
+            # Backward
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
@@ -148,7 +146,7 @@ def train(net,
                 loss_sum = 0
                 last_time = now_time
 
-        # validation
+        # Validation
         net.eval()
         val_acc = validation(net, valloader, log)
         net.train()

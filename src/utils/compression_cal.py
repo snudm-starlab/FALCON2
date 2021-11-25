@@ -168,6 +168,6 @@ def print_model_parm_flops(net, imagenet=False):
     out = net(input)
     total_flops = (sum(list_conv) + sum(list_linear)) 
     # + sum(list_bn) + sum(list_relu) + sum(list_pooling)))
-    # Remove # if you want to include bn, relu, pooling operations for FLOPs computation.
+    # Remove # if you want to include bn, relu, and pooling operations for FLOPs computation.
 
     print('  + Number of FLOPs: %.2fM' % (total_flops / 1e6))

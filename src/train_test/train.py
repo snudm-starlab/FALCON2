@@ -94,7 +94,7 @@ def train(net,
     for epoch in range(epochs):
         print("*"*18, "EPOCH = %d", "*"*18 % epoch)
         if log is not None:
-            log.write("****************** EPOCH = %d ******************\n" % epoch)
+            log.write("*"*18, "EPOCH = %d", "*"*18 % epoch)
 
         total = 0
         correct = 0

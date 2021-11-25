@@ -46,12 +46,11 @@ from train_test.test import test
 
 def main(args):
     '''
-    main function of FALCON
-    
+    main function of FALCON2
     :param args: arguments for a model
     '''
 
-    # choose dataset
+    # Choose dataset
     if args.datasets == "svhn":
         num_classes = 10
     elif args.datasets == "cifar100":

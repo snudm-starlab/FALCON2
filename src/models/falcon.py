@@ -169,7 +169,7 @@ class GEPdecompose(nn.Module):
 
     def decompose_rank(self, kernel, lr=5e-3, steps=600):
         """
-        GEP decompose standard convolution kernel with different rank
+        GEP decomposes standard convolution kernel with different rank
         
         :param conv: standard convolution kernel
         :param lr: learning rate

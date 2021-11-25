@@ -202,7 +202,7 @@ def main(args):
     print_model_parm_nums(net)
     print_model_parm_flops(net)
 
-    # time of forwarding 100 data sample (ms)
+    # Time of forwarding 100 data sample (ms)
     x = torch.rand(100, 3, 32, 32)
     x = Variable(x.cuda())
     net(x)

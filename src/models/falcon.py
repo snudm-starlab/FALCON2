@@ -138,7 +138,7 @@ class GEPdecompose(nn.Module):
 
     def decompose(self, conv, pw, dw, lr=0.001, steps=600):
         """
-        GEP decompose standard convolution kernel
+        GEP decomposes standard convolution kernel
         
         :param conv: standard convolution kernel
         :param pw: decomposed pointwise convolution kernel

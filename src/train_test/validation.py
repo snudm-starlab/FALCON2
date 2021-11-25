@@ -34,13 +34,13 @@ def validation(net, val_loader, log=None):
     """
     Validation process.
     
-    :param net: model to be validate
+    :param net: model to be validated
     :param val_loader: data loader for validation
     :param log: log dir
     :return: accuracy: accuracy for validation dataset
     """
 
-    # set testing mode
+    # Set testing mode
     net.eval()
 
     correct = 0

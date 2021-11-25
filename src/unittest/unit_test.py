@@ -33,8 +33,6 @@ GEP_rank_1 = GEPdecompose(conv1, rank=1, init=False)
 k = 5
 GEP_rank_k = GEPdecompose(conv1, rank=k, init=False)
 
-
-
 class TestFalcon(unittest.TestCase):
     def test1_pw_kernel_size_rank_1(self):
         self.assertEqual(GEP_rank_1.pw.kernel_size, (1,1))

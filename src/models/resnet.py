@@ -119,7 +119,7 @@ class BasicBlock(nn.Module):
 
 class ResidualLayer(nn.Module):
     """
-    add shortcut
+    Add shortcut
     """
 
     def __init__(self, in_channels, out_channels, layer_num="34", stride=1):

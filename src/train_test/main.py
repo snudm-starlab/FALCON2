@@ -178,7 +178,7 @@ def main(args):
     print_model_parm_flops(net)
 
     if args.is_train:
-        # training
+        # Training
         best = train(net,
                      lr=args.learning_rate,
                      optimizer_option=args.optimizer,
@@ -191,14 +191,14 @@ def main(args):
             save_specific_model(best, args)
         test(net, batch_size=args.batch_size, data=args.datasets)
     else:
-        # testing
+        # Testing
         load_specific_model(net, args, input_path=args.restore_path)
         inference_time = 0
         inference_time += \
             test(net, batch_size=args.batch_size, data=args.datasets)
 #        print("Average Inference Time: %f" % (float(inference_time) / float(1)))
 
-    # calculate number of parameters & FLOPs
+    # Calculate number of parameters & FLOPs
     print_model_parm_nums(net)
     print_model_parm_flops(net)
 

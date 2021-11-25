@@ -57,11 +57,11 @@ def train(net,
     
     :param net: model to be trained
     :param lr: learning rate
-    :param optimizer_option: optimizer type
+    :param optimizer_option: type of optimizer
     :param data: datasets used to train
     :param epochs: number of training epochs
     :param batch_size: batch size
-    :param is_train: whether it is a training process
+    :param is_train: Whether it is a training process
     :param net_st: uncompressed model
     :param beta: transfer parameter
     :return: best_param: the parameters of the model that achieves the best accuracy
@@ -92,7 +92,7 @@ def train(net,
 
     iteration = 0
     for epoch in range(epochs):
-        print("****************** EPOCH = %d ******************" % epoch)
+        print("*"*18, "EPOCH = %d", "*"*18 % epoch)
         if log is not None:
             log.write("****************** EPOCH = %d ******************\n" % epoch)
 

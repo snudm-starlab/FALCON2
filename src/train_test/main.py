@@ -197,7 +197,7 @@ def main(args):
         inference_time += \
             test(net, batch_size=args.batch_size, data=args.datasets)
 
-    # Calculate number of parameters & FLOPs
+    # Calculate and print number of parameters & FLOPs
     print_model_parm_nums(net)
     print_model_parm_flops(net)
 

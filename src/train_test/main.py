@@ -217,4 +217,5 @@ if __name__ == "__main__":
 
     # Print configuration
     print(args)
+    # Run main function with arguments
     main(args)

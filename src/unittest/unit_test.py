@@ -8,7 +8,6 @@ import sys
 sys.path.append('../models/')
 from falcon import *
 
-
 # Fix random seed for reproducibility
 random_seed = 1997
 torch.manual_seed(random_seed)
@@ -16,7 +15,6 @@ torch.backends.cudnn.deterministic=True
 torch.backends.cudnn.benchmark = False
 np.random.seed(random_seed)
 random.seed(random_seed)
-
 
 # Problem Setting
 input_x = 5

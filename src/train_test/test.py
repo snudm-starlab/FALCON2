@@ -33,7 +33,6 @@ import torch.nn.functional as F
 
 from utils.load_data import load_cifar100, load_svhn
 
-
 def test(net, log=None, batch_size=128, data='cifar100'):
     """
     Test on trained model.

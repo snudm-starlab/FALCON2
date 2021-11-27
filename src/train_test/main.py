@@ -189,6 +189,7 @@ def main(args):
         if not args.not_save:
             save_specific_model(best, args)
         test(net, batch_size=args.batch_size, data=args.datasets)
+        
     else:
         # Testing
         load_specific_model(net, args, input_path=args.restore_path)
@@ -216,5 +217,4 @@ if __name__ == "__main__":
 
     # Print configuration
     print(args)
-
     main(args)

@@ -76,7 +76,8 @@ def train(net,
         valloader = load_svhn(False, batch_size)
     else:
         sys.exit()
-
+    
+    # Cross entropy loss for classification
     criterion = nn.CrossEntropyLoss()
     criterion_mse = nn.MSELoss()
     optimizer = get_optimizer(net, lr, optimizer_option)

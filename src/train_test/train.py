@@ -148,7 +148,7 @@ def train(net,
                 loss_sum = 0
                 last_time = now_time
 
-        # Validation
+        # Validation and save the best model
         net.eval()
         val_acc = validation(net, valloader, log)
         net.train()

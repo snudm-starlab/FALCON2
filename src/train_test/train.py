@@ -33,7 +33,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 
-
 from utils.optimizer_option import get_optimizer
 from utils.load_data import load_cifar100, load_svhn
 from utils.lr_decay import adjust_lr
@@ -51,7 +50,7 @@ def train(net,
           beta=0.0,
           lrd=10):
     """
-    Train the model.
+    Train a model.
     
     :param net: model to be trained
     :param lr: learning rate

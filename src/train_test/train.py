@@ -81,6 +81,7 @@ def train(net,
     criterion = nn.CrossEntropyLoss()
     # MSE loss for approximation
     criterion_mse = nn.MSELoss()
+    # Get optimizer according to your optimizer_option
     optimizer = get_optimizer(net, lr, optimizer_option)
 
     start_time = time.time()

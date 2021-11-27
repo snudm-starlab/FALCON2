@@ -111,6 +111,7 @@ def main(args):
             net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
         else:
             pass
+          
     # Choose model VGG
     elif "VGG" in args.model:
         if args.convolution == "FALCON":

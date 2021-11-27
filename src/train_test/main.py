@@ -41,7 +41,6 @@ from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from train_test.train import train
 from train_test.test import test
 
-
 def main(args):
     '''
     main function of FALCON2
@@ -96,9 +95,11 @@ def main(args):
                                  alpha=args.alpha)
                     net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu,
                                groups=args.groups)
+                    
         elif args.convolution == "StConvBranch":
             net = ResNet_StConv_branch(layer_num=str(args.layer_num), num_classes=num_classes,
                                        alpha=args.alpha)
+            
         elif args.convolution == 'FALCONBranch':
             net = ResNet_StConv_branch(layer_num=str(args.layer_num), num_classes=num_classes,
                                        alpha=args.alpha)
@@ -107,6 +108,7 @@ def main(args):
                                     input_path=args.stconv_path)
             net.falcon(rank=args.rank, init=False, bn=args.bn,
                        relu=args.relu, groups=args.groups)
+            
         elif args.convolution == "StandardConv":
             net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
         else:

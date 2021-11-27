@@ -42,8 +42,6 @@ from train_test.train import train
 from train_test.test import test
 
 
-
-
 def main(args):
     '''
     main function of FALCON2

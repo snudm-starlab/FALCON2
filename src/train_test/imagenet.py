@@ -564,7 +564,7 @@ def validate(val_loader, val_loader_len, model, criterion):
             output, _ = model(input)
             loss = criterion(output, target)
 
-        # measure accuracy and record loss
+        # Measure accuracy and record loss
         prec1, prec5 = accuracy(output, target, topk=(1, 5))
         losses.update(loss.item(), input.size(0))
         top1.update(prec1.item(), input.size(0))

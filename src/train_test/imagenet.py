@@ -570,7 +570,7 @@ def validate(val_loader, val_loader_len, model, criterion):
         top1.update(prec1.item(), input.size(0))
         top5.update(prec5.item(), input.size(0))
 
-        # measure elapsed time
+        # Measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
 

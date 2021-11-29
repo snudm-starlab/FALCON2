@@ -320,7 +320,7 @@ class ResidualLayer(nn.Module):
         self.stacked = BasicBlock(in_channels, out_channels, stride)
         self.layer_num = layer_num
 
-        # shortcut
+        # Shortcut
         self.shortcut = nn.Sequential()
         if stride != 1 or in_channels != out_channels:
             self.shortcut = nn.Sequential(

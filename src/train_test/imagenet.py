@@ -209,7 +209,7 @@ def main_worker(gpu, ngpus_per_node, args):
         print("=> creating model '{}'".format(args.arch))
         model = models.__dict__[args.arch]()
 
-    # re-organize the model and compress
+    # Re-organize the model and compress
     if 'vgg' in args.arch:
         model = VGGModel_imagenet(model)
     elif 'resnet' in args.arch:

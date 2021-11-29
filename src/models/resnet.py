@@ -28,7 +28,7 @@ Version: 1.0
 import torch.nn as nn
 from models.falcon import GEPdecompose
 
-# configurations of ResNet
+# Configurations of ResNet
 bottle_neck_channels = ((64, 256), (128, 512), (256, 1024), (512, 2048))
 basic_channels = (64, 128, 256, 512)
 
@@ -138,7 +138,7 @@ class ResidualLayer(nn.Module):
         else:  # layer_num == "50" or layer_num == "101" or layer_num == "152":
             self.stacked = BottleNeckBlock(in_channels, out_channels, stride)
 
-        # shortcut
+        # Shortcut
         self.shortcut = nn.Sequential()
         if stride != 1 or in_channels != out_channels:
             self.shortcut = nn.Sequential(

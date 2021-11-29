@@ -303,7 +303,7 @@ def main_worker(gpu, ngpus_per_node, args):
     # print('********** model **********')
     # print(list(model.children()))
 
-    # define loss function (criterion) and optimizer
+    # Define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
     if args.opt == 'SGD':

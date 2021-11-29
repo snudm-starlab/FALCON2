@@ -166,7 +166,7 @@ class DALIWrapper:
 
     def __init__(self, dalipipeline):
         """
-        Init function
+        Init function for initialization
         """
         self.dalipipeline = dalipipeline
 

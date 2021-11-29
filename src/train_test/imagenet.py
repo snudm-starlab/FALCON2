@@ -554,7 +554,7 @@ def validate(val_loader, val_loader_len, model, criterion):
 
     end = time.time()
     for i, (input, target) in enumerate(val_loader):
-        # measure data loading time
+        # Measure data loading time
         data_time.update(time.time() - end)
 
         target = target.cuda(non_blocking=True)

@@ -423,7 +423,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
     for epoch in range(args.start_epoch, args.epochs):
 
-        # train for one epoch
+        # Train for one epoch
         train_loss, train_acc = train(train_loader, train_loader_len, model, \
                 criterion, optimizer, epoch, args)
 

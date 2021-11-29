@@ -607,9 +607,6 @@ def save_checkpoint(state, is_best, checkpoint='checkpoint', filename='checkpoin
     if is_best:
         shutil.copyfile(filepath, os.path.join(checkpoint, 'model_best.pth.tar'))
 
-
-#def adjust_learning_rate(optimizer, epoch, args):
-
 def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
     '''
     adjust learning rate over epochs

@@ -432,7 +432,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
         lr = optimizer.param_groups[0]['lr']
 
-        # append logger file
+        # Append logger file
         logger.append([lr, train_loss, val_loss, train_acc, prec1])
 
         # tensorboardX

@@ -318,7 +318,7 @@ def main_worker(gpu, ngpus_per_node, args):
     if not os.path.isdir(args.checkpoint):
         mkdir_p(args.checkpoint)
 
-    # optionally resume from a checkpoint
+    # Optionally resume from a checkpoint
     if args.resume and args.convolution != 'FALCONBranch':
         if os.path.isfile(args.resume):
             print("=> loading checkpoint '{}'".format(args.resume))

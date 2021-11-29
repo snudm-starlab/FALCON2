@@ -560,7 +560,7 @@ def validate(val_loader, val_loader_len, model, criterion):
         target = target.cuda(non_blocking=True)
 
         with torch.no_grad():
-            # compute output
+            # Compute output
             output, _ = model(input)
             loss = criterion(output, target)
 

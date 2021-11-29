@@ -346,7 +346,7 @@ class ResNet_StConv_branch(nn.Module):
     Description: ResNet Model with StConv_branch
     """
 
-    # configurations for ResNet
+    # Configurations for ResNet
     basic_channels = [64, 128, 256, 512]
 
     def __init__(self, layer_num='18', num_classes=10, alpha=1):

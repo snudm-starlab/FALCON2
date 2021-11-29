@@ -184,7 +184,6 @@ class VGG_StConv_branch(nn.Module):
         super(VGG_StConv_branch, self).__init__()
 
         self.alpha = alpha
-
         first_output_channel = 64 if self.alpha == 1 else int(64 * self.alpha)
         self.conv = nn.Sequential(
             nn.Conv2d(3, first_output_channel, kernel_size=3, padding=1),

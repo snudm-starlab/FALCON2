@@ -216,7 +216,6 @@ def get_dali_train_loader(dali_cpu=False):
 
     return gdtl
 
-
 def get_dali_val_loader():
     """
     DALI valid loader

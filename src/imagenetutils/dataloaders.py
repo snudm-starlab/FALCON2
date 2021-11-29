@@ -367,6 +367,7 @@ def get_pytorch_train_loader(data_path, batch_size, workers=5, \
 
     return PrefetchedWrapper(train_loader), len(train_loader)
 
+
 def get_pytorch_val_loader(data_path, batch_size, workers=5, _worker_init_fn=None, input_size=224):
     """
     validation loader function

@@ -549,7 +549,7 @@ def validate(val_loader, val_loader_len, model, criterion):
     top1 = AverageMeter()
     top5 = AverageMeter()
 
-    # switch to evaluate mode
+    # Switch to evaluate mode
     model.eval()
 
     end = time.time()

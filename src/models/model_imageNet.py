@@ -291,6 +291,7 @@ class ResNetModel_imagenet(nn.Module):
                 if isinstance(self.features[i].conv2, StConv_branch):
                     self.features[i].conv2.falcon(init=init)
 
+                    
 class VGGModel_imagenet_inf(nn.Module):
     """
     Description: Re-organize the structure of a given vgg model.

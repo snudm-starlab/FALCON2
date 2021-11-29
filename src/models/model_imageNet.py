@@ -322,8 +322,6 @@ class ResNetModel_imagenet_inf(nn.Module):
     """
     Description: Re-organize the structure of a given resnet model.
     """
-
-
     def __init__(self, model):
         """
         Initialize a given model.

@@ -364,7 +364,7 @@ def main_worker(gpu, ngpus_per_node, args):
         print_model_parm_nums(model)
         print_model_parm_flops(model, imagenet=True)
 
-        # define loss function (criterion) and optimizer
+        # Define loss function (criterion) and optimizer
         criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
         if args.opt == 'SGD':

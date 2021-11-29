@@ -137,10 +137,7 @@ parser.add_argument("-in", "--input_num", type=int, default=100,
 parser.add_argument('--stconv_branch_model', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 
-
-
 best_acc1 = 0
-
 
 def main():
     """

@@ -121,6 +121,7 @@ class VGGModel_imagenet(nn.Module):
         
         :param init: whether initialize falcon
         """
+        
         for i in range(len(self.features.module)):
             if isinstance(self.features.module[i], StConv_branch):
                 self.features.module[i].falcon(init=init)

@@ -150,7 +150,7 @@ class VGG_StConv_branch(nn.Module):
     Description: VGG model with VGG_StConv_branch.
     """
 
-    # configures of different models
+    # Configures of different models
     cfgs_VGG16 = [[64, 64, 2],
                   [64, 128], [128, 128, 2],
                   [128, 256], [256, 256], [256, 256, 2],

@@ -574,7 +574,7 @@ def validate(val_loader, val_loader_len, model, criterion):
         batch_time.update(time.time() - end)
         end = time.time()
 
-        # plot progress
+        # Plot progress
         bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s \
                       | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | \
                       top1: {top1: .4f} | top5: {top5: .4f}'.format(

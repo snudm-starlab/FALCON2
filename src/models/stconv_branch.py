@@ -338,7 +338,6 @@ class ResidualLayer(nn.Module):
         :return: self.relu(stacked_out): output features of residual layer
         """
         stacked_out = self.stacked(x)
-#        shortcut_out = self.shortcut(x)
         return self.relu(stacked_out) # + shortcut_out)
 
 

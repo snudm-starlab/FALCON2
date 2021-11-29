@@ -427,7 +427,7 @@ def main_worker(gpu, ngpus_per_node, args):
         train_loss, train_acc = train(train_loader, train_loader_len, model, \
                 criterion, optimizer, epoch, args)
 
-        # evaluate on validation set
+        # Evaluate on validation set
         val_loss, prec1 = validate(val_loader, val_loader_len, model, criterion)
 
         lr = optimizer.param_groups[0]['lr']

@@ -132,7 +132,6 @@ class VGG(nn.Module):
         """
         for i in range(len(self.layers)):
             if isinstance(self.layers[i], nn.Conv2d):
-#                shape = self.layers[i].weight.shape
                 compress = GEPdecompose(self.layers[i], rank, init, \
                         alpha=alpha, bn=bn, relu=relu, groups=groups)
                 self.layers[i] = compress

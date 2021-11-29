@@ -251,7 +251,7 @@ def main_worker(gpu, ngpus_per_node, args):
         print_model_parm_nums(model)
         print_model_parm_flops(model, imagenet=True)
 
-    # time of forwarding 100 data sample (ms)
+    # Time of forwarding 100 data sample (ms)
     if args.inference_time:
         x = torch.rand(args.input_num, 3, args.input_size, args.input_size)
         x = Variable(x.cuda())

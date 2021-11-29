@@ -303,7 +303,6 @@ class VGGModel_imagenet_inf(nn.Module):
         
         :param model: the given model
         """
-
         super(VGGModel_imagenet_inf, self).__init__()
 
         self.features = model.features
@@ -328,9 +327,7 @@ class ResNetModel_imagenet_inf(nn.Module):
         
         :param model: the given model
         """
-
         super(ResNetModel_imagenet_inf, self).__init__()
-
         self.features = nn.Sequential(*list(model.features.children())[:-1])
 
     def forward(self, x):

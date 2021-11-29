@@ -123,7 +123,6 @@ class GEPdecompose(nn.Module):
         if self.rank == 1:
             out = self.dw(self.pw(x))
         else:
-#            names = locals()
             for i in range(self.rank):
                 if i == 0:
                     out = getattr(self, 'pw' + str(i))(x)

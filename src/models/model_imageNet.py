@@ -120,8 +120,7 @@ class VGGModel_imagenet(nn.Module):
         Replace standard convolution in stconv_branch by falcon
         
         :param init: whether initialize falcon
-        """
-        
+        """        
         for i in range(len(self.features.module)):
             if isinstance(self.features.module[i], StConv_branch):
                 self.features.module[i].falcon(init=init)
@@ -131,6 +130,7 @@ class BasicBlock_StConvBranch(nn.Module):
     """
     Description: BasicBlock of ResNet with StConvBranch
     """
+    
     def __init__(self, conv1, conv2, downsample=None):
         """
         Initialize BasicBlock_ShuffleUnit
@@ -173,7 +173,6 @@ class ResNetModel_imagenet(nn.Module):
         
         :param model: the given model
         """
-
         super(ResNetModel_imagenet, self).__init__()
 
         self.features = nn.Sequential(

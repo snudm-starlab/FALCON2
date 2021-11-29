@@ -38,7 +38,6 @@ import torch.multiprocessing as mp
 import torch.utils.data
 import torch.utils.data.distributed
 from torch.autograd import Variable
-#import torchvision.transforms as transforms
 #import torchvision.datasets as datasets
 import torchvision.models as models
 from utils.timer import Timer

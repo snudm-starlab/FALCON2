@@ -5,13 +5,13 @@ Some helper functions for PyTorch, including:
     - msr_init: net parameter initialization.
     - progress_bar: progress bar mimic xlua.progress.
 '''
-# pylint: disable=E1101,C0103,W0201
+
 import errno
 import os
 
 import torch
-import torch.nn as nn
-import torch.nn.init as init
+from torch import nn
+from torch.nn import init
 
 __all__ = ['get_mean_and_std', 'init_params', 'mkdir_p', 'AverageMeter']
 
@@ -42,18 +42,18 @@ def init_params(net):
     
     :param net: input network to be initialized
     '''
-    for m in net.modules():
-        if isinstance(m, nn.Conv2d):
-            init.kaiming_normal(m.weight, mode='fan_out')
-            if m.bias:
-                init.constant(m.bias, 0)
-        elif isinstance(m, nn.BatchNorm2d):
-            init.constant(m.weight, 1)
-            init.constant(m.bias, 0)
-        elif isinstance(m, nn.Linear):
-            init.normal(m.weight, std=1e-3)
-            if m.bias:
-                init.constant(m.bias, 0)
+    for module in net.modules():
+        if isinstance(module, nn.Conv2d):
+            init.kaiming_normal(module.weight, mode='fan_out')
+            if module.bias:
+                init.constant(module.bias, 0)
+        elif isinstance(module, nn.BatchNorm2d):
+            init.constant(module.weight, 1)
+            init.constant(module.bias, 0)
+        elif isinstance(module, nn.Linear):
+            init.normal(module.weight, std=1e-3)
+            if module.bias:
+                init.constant(module.bias, 0)
 
 def mkdir_p(path):
     '''
@@ -75,7 +75,10 @@ class AverageMeter:
        Imported from https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262
     """
     def __init__(self):
-        self.reset()
+        self.val = 0
+        self.avg = 0
+        self.sum = 0
+        self.count = 0
 
     def reset(self):
         """ reset function """
@@ -84,7 +87,7 @@ class AverageMeter:
         self.sum = 0
         self.count = 0
 
-    def update(self, val, n=1):
+    def update(self, val, num=1):
         """
         update function
         
@@ -92,6 +95,6 @@ class AverageMeter:
         :param n: number of items for val
         """
         self.val = val
-        self.sum += val * n
-        self.count += n
+        self.sum += val * num
+        self.count += num
         self.avg = self.sum / self.count

@@ -3,4 +3,4 @@ init-hook="import sys; sys.path.append('/home/jener05458/SWStarlab/FALCON2/src')
 # init-hook="import sys; sys.path.append('Your_path/FALCON2/src')"
 
 [REPORTS]
-disable = E1101, R0902, R0912, R0913, R0914, R0915, C0413, W0621, W0603
+disable = E1101, E1102, R0902, R0913, R0914, C0413

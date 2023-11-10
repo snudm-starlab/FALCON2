@@ -23,37 +23,36 @@ File: models/stconv_branch.py
 Version: 1.0
 """
 
-# pylint: disable=E1101,C0103,R0913,R1725,W0223
 import torch
-import torch.nn as nn
+from torch import nn
 
 from models.falcon import GEPdecompose
 
-def channel_shuffle(x, groups):
+def channel_shuffle(feature_map, groups):
     """
     Description: channel shuffle operation
     
-    :param x: output feature maps of last layer
+    :param feature_map: output feature maps of last layer
     :param groups: number of groups for group convolution
-    :return: x: channel shuffled feature maps
+    :return: feature_map: channel shuffled feature maps
     """
-    batchsize, num_channels, height, width = x.data.size()
+    batchsize, num_channels, height, width = feature_map.data.size()
 
     channels_per_group = num_channels // groups
 
     # Reshape
-    x = x.view(batchsize, groups,
+    feature_map = feature_map.view(batchsize, groups,
                channels_per_group, height, width)
 
-    x = torch.transpose(x, 1, 2).contiguous()
+    feature_map = torch.transpose(feature_map, 1, 2).contiguous()
 
     # Flatten
-    x = x.view(batchsize, -1, height, width)
+    feature_map = feature_map.view(batchsize, -1, height, width)
 
-    return x
+    return feature_map
 
 
-class StConv_branch(nn.Module):
+class StConvBranch(nn.Module):
     '''
     Description: Basic unit of ShuffleUnit with standard convolution
     '''
@@ -66,7 +65,7 @@ class StConv_branch(nn.Module):
         :param stride: stride of convolution
         """
 
-        super(StConv_branch, self).__init__()
+        super().__init__()
         self.benchmodel = 1 if inp == oup and stride == 1 else 2
         self.stride = stride
 
@@ -95,18 +94,18 @@ class StConv_branch(nn.Module):
             )
 
     @staticmethod
-    def _concat(x, out):
+    def _concat(feature_map, out):
         """
-        concatenate x and out
+        concatenate feature_map and out
         
-        :param x: input feature maps
+        :param feature_map: input feature maps
         :param out: output feature maps
-        :return: torch.cat((x, out), 1): concatenated feature maps along channel axis
+        :return: torch.cat((feature_map, out), 1): concatenated feature maps along channel axis
         """
         # concatenate along channel axis
-        return torch.cat((x, out), 1)
+        return torch.cat((feature_map, out), 1)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
@@ -114,38 +113,38 @@ class StConv_branch(nn.Module):
         :return: channel_shuffle(out, 2): channel shuffled output feature maps
         """
         if self.benchmodel == 1:
-            x1 = x[:, :(x.shape[1] // 2), :, :]
-            x2 = x[:, (x.shape[1] // 2):, :, :]
-            out = self.branch2(x2)
-            out = self._concat(x1, out)
+            tmp1 = input_[:, :(input_.shape[1] // 2), :, :]
+            tmp2 = input_[:, (input_.shape[1] // 2):, :, :]
+            out = self.branch2(tmp2)
+            out = self._concat(tmp1, out)
         elif self.benchmodel == 2:
-            x1 = self.branch1(x)
-            x2 = self.branch2(x)
-            out = self._concat(x1, x2)
+            tmp1 = self.branch1(input_)
+            tmp2 = self.branch2(input_)
+            out = self._concat(tmp1, tmp2)
 
         return channel_shuffle(out, 2)
 
-    def falcon(self, rank=1, init=True, alpha=1.0, bn=False, relu=False, groups=1):
+    def falcon(self, rank=1, init=True, alpha=1.0, batch_norm=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
         
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param alpha: width multiplier
-        :param bn: whether add batch normalization after FALCON
+        :param batch_norm: whether add batch normalization after FALCON
         :param relu: whether add ReLU function after FALCON
         :param groups: number of groups for pointwise convolution
         """
         if self.benchmodel == 2:
             compress = GEPdecompose(self.branch1[0], rank, init, alpha=alpha,\
-                    bn=bn, relu=relu, groups=groups)
+                    bn=batch_norm, relu=relu, groups=groups)
             self.branch1[0] = compress
         compress = GEPdecompose(self.branch2[0], rank, init, alpha=alpha,\
-                bn=bn, relu=relu, groups=groups)
+                bn=batch_norm, relu=relu, groups=groups)
         self.branch2[0] = compress
 
 
-class VGG_StConv_branch(nn.Module):
+class VGGStConvBranch(nn.Module):
     """
     Description: VGG model with VGG_StConv_branch.
     """
@@ -181,7 +180,7 @@ class VGG_StConv_branch(nn.Module):
         :param alpha: width multiplier
         """
 
-        super(VGG_StConv_branch, self).__init__()
+        super().__init__()
 
         self.alpha = alpha
         first_output_channel = 64 if self.alpha == 1 else int(64 * self.alpha)
@@ -190,13 +189,13 @@ class VGG_StConv_branch(nn.Module):
             nn.BatchNorm2d(first_output_channel),
             nn.ReLU(True))
         self.layers = self._make_layers(which)
-        self.avgPooling = nn.AvgPool2d(2, 2)
+        self.avg_pooling = nn.AvgPool2d(2, 2)
 
         last_output_channel = 512 if self.alpha == 1 else int(512 * self.alpha)
         if which == 'VGG_en':
-            self.fc = nn.Linear(last_output_channel, num_classes)
+            self.fc_layer = nn.Linear(last_output_channel, num_classes)
         else:
-            self.fc = nn.Sequential(
+            self.fc_layer = nn.Sequential(
                 nn.Linear(last_output_channel, 512),
                 nn.Dropout2d(0.3),
                 nn.ReLU(),
@@ -227,49 +226,49 @@ class VGG_StConv_branch(nn.Module):
                 cfg[1] = int(cfg[1] * self.alpha)
 
         for cfg in self.cfgs:
-            layers.append(StConv_branch(cfg[0], cfg[1]))
+            layers.append(StConvBranch(cfg[0], cfg[1]))
             if len(cfg) == 3:
                 layers.append(nn.MaxPool2d(kernel_size=2, stride=2))
         return nn.Sequential(*layers)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input features
-        :return: (out, out_conv): output features, and output features before the fully connected layer
+        :param input_: input features
+        :return: (out, out_conv): output features,
+                                    and output features before the fully connected layer
         """
-        out_conv = self.conv(x)
+        out_conv = self.conv(input_)
         out_conv = self.layers(out_conv)
         if out_conv.size(2) != 1:
-            out_conv = self.avgPooling(out_conv)
+            out_conv = self.avg_pooling(out_conv)
         out = out_conv.view(out_conv.size(0), -1)
-        out = self.fc(out)
+        out = self.fc_layer(out)
         return out, out_conv
 
-    def falcon(self, rank, init=True, alpha=1.0, bn=False, relu=False, groups=1):
+    def falcon(self, rank, init=True, alpha=1.0, batch_norm=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
         
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
         :param alpha: width multiplier
-        :param bn: whether add batch normalization after FALCON
+        :param batch_norm: whether add batch normalization after FALCON
         :param relu: whether add ReLU function after FALCON
         :param groups: number of groups for pointwise convolution
         """
-        for i in range(len(self.layers)):
-            if isinstance(self.layers[i], StConv_branch):
+        for idx, module in enumerate(self.layers):
+            if isinstance(module, StConvBranch):
+                if module.benchmodel == 2:
+                    compress = GEPdecompose(module.branch1[0], rank, init,\
+                            alpha=alpha, bn=batch_norm, relu=relu, groups=groups)
+                    self.layers[idx].branch1 = compress
 
-                if self.layers[i].benchmodel == 2:
-                    compress = GEPdecompose(self.layers[i].branch1[0], rank, init,\
-                            alpha=alpha, bn=bn, relu=relu, groups=groups)
-                    self.layers[i].branch1 = compress
-
-                compress = GEPdecompose(self.layers[i].branch2[0], rank, init,\
-                        alpha=alpha, bn=bn, relu=relu,
+                compress = GEPdecompose(module.branch2[0], rank, init,\
+                        alpha=alpha, bn=batch_norm, relu=relu,
                                         groups=groups)
-                self.layers[i].branch2[0] = compress
+                self.layers[idx].branch2[0] = compress
 
 
 class BasicBlock(nn.Module):
@@ -284,22 +283,22 @@ class BasicBlock(nn.Module):
         :param out_planes: the number of output channels
         :param stride: stride of depthwise convolution
         """
-        super(BasicBlock, self).__init__()
+        super().__init__()
         self.conv = nn.Sequential(
-            StConv_branch(in_channels, out_channels, stride=stride),
-            StConv_branch(out_channels, out_channels, stride=1)
+            StConvBranch(in_channels, out_channels, stride=stride),
+            StConvBranch(out_channels, out_channels, stride=1)
         )
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input features
-        :return: x: output features
+        :param input_: input features
+        :return: out_: output features
         """
-        x = self.conv[0](x)
-        x = self.conv[1](x)
-        return x
+        out_ = self.conv[0](input_)
+        out_ = self.conv[1](out_)
+        return out_
 
 
 class ResidualLayer(nn.Module):
@@ -315,7 +314,7 @@ class ResidualLayer(nn.Module):
         :param out_planes: the number of output channels
         :param stride: stride of depthwise convolution
         """
-        super(ResidualLayer, self).__init__()
+        super().__init__()
 
         self.stacked = BasicBlock(in_channels, out_channels, stride)
         self.layer_num = layer_num
@@ -330,18 +329,18 @@ class ResidualLayer(nn.Module):
 
         self.relu = nn.ReLU(True)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input features
+        :param input_: input features
         :return: self.relu(stacked_out): output features of residual layer
         """
-        stacked_out = self.stacked(x)
+        stacked_out = self.stacked(input_)
         return self.relu(stacked_out) # + shortcut_out)
 
 
-class ResNet_StConv_branch(nn.Module):
+class ResNetStConvBranch(nn.Module):
     """
     Description: ResNet Model with StConv_branch
     """
@@ -358,13 +357,13 @@ class ResNet_StConv_branch(nn.Module):
         :param alpha: width multiplier
         """
 
-        super(ResNet_StConv_branch, self).__init__()
+        super().__init__()
 
         self.alpha = alpha
 
         if self.alpha != 1:
-            for i in range(len(self.basic_channels)):
-                self.basic_channels[i] = int(self.basic_channels[i] * self.alpha)
+            for i, module in enumerate(self.basic_channels):
+                self.basic_channels[i] = int(module * self.alpha)
 
         first_output_channel = 64 if self.alpha == 1 else int(64 * self.alpha)
         self.first = nn.Sequential(
@@ -379,7 +378,7 @@ class ResNet_StConv_branch(nn.Module):
         self.avgpool_2 = nn.AvgPool2d(kernel_size=2)
 
         last_channels = self.basic_channels[-1]
-        self.fc = nn.Linear(last_channels, num_classes)
+        self.fc_layer = nn.Linear(last_channels, num_classes)
 
     def _make_layers(self, layer_num):
         """
@@ -405,14 +404,15 @@ class ResNet_StConv_branch(nn.Module):
                                 self.basic_channels[i], layer_num=layer_num, stride=1))
         return nn.Sequential(*layers)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input features
-        :return: (out, out_conv): output features, and output features before the fully connected layer
+        :param input_: input features
+        :return: (out, out_conv): output features,
+                                    and output features before the fully connected layer
         """
-        out_conv = self.first(x)
+        out_conv = self.first(input_)
         out_conv = self.residuals(out_conv)
 
         if out_conv.size(3) == 2:
@@ -420,33 +420,33 @@ class ResNet_StConv_branch(nn.Module):
         else:
             out_conv = self.avgpool_4(out_conv)
         out = out_conv.reshape(out_conv.shape[0], -1)
-        out = self.fc(out)
+        out = self.fc_layer(out)
         return out, out_conv
 
-    def falcon(self, rank, init=True, alpha=1.0, bn=False, relu=False, groups=1):
+    def falcon(self, rank, init=True, alpha=1.0, batch_norm=False, relu=False, groups=1):
         """
         Replace standard convolution by FALCON
         
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
-        :param bn: whether add batch normalization after FALCON
+        :param batch_norm: whether add batch normalization after FALCON
         :param relu: whether add ReLU function after FALCON
         :param groups: number of groups for pointwise convolution
         """
-        for i in range(len(self.residuals)):
-            if isinstance(self.residuals[i].stacked.conv[0], StConv_branch):
-                if self.residuals[i].stacked.conv[0].benchmodel == 2:
-                    compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch1[0], \
-                            rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
-                    self.residuals[i].stacked.conv[0].branch1[0] = compress
-                compress = GEPdecompose(self.residuals[i].stacked.conv[0].branch2[0], \
-                        rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
-                self.residuals[i].stacked.conv[0].branch2[0] = compress
-            if isinstance(self.residuals[i].stacked.conv[1], StConv_branch):
-                if self.residuals[i].stacked.conv[1].benchmodel == 2:
-                    compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch1[0],\
-                            rank, init, alpha=alpha, bn=bn, relu=relu, groups=groups)
-                    self.residuals[i].stacked.conv[1].branch1[0] = compress
-                compress = GEPdecompose(self.residuals[i].stacked.conv[1].branch2[0], rank,\
-                        init, alpha=alpha, bn=bn, relu=relu, groups=groups)
-                self.residuals[i].stacked.conv[1].branch2[0] = compress
+        for idx, module in enumerate(self.residuals):
+            if isinstance(module.stacked.conv[0], StConvBranch):
+                if module.stacked.conv[0].benchmodel == 2:
+                    compress = GEPdecompose(module.stacked.conv[0].branch1[0], \
+                            rank, init, alpha=alpha, bn=batch_norm, relu=relu, groups=groups)
+                    self.residuals[idx].stacked.conv[0].branch1[0] = compress
+                compress = GEPdecompose(module.stacked.conv[0].branch2[0], \
+                        rank, init, alpha=alpha, bn=batch_norm, relu=relu, groups=groups)
+                module.stacked.conv[0].branch2[0] = compress
+            if isinstance(module.stacked.conv[1], StConvBranch):
+                if module.stacked.conv[1].benchmodel == 2:
+                    compress = GEPdecompose(module.stacked.conv[1].branch1[0],\
+                            rank, init, alpha=alpha, bn=batch_norm, relu=relu, groups=groups)
+                    self.residuals[idx].stacked.conv[1].branch1[0] = compress
+                compress = GEPdecompose(module.stacked.conv[1].branch2[0], rank,\
+                        init, alpha=alpha, bn=batch_norm, relu=relu, groups=groups)
+                self.residuals[idx].stacked.conv[1].branch2[0] = compress

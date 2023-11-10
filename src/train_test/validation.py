@@ -23,7 +23,7 @@ File: train_test/validation.py
 
 Version: 1.0
 """
-# pylint: disable=E1101,R0914
+# pylint: disable=E1101, R0902, R0913, R0914
 import time
 import torch
 import torch.nn.functional as F
@@ -56,13 +56,13 @@ def validation(net, val_loader, log=None):
     inference_time = time.time() - inference_start
     accuracy = float(100) * float(correct) / float(total)
 
-    print("*"*15, Validation","*"*15)
-    print('Accuracy of the network validation images: %f %%' % accuracy)
-    print('Validation time is: %fs' % inference_time)
+    print(f"{'*'*15} Validation {'*'*15}")
+    print(f"Accuracy of the network validation images: {accuracy} %")
+    print(f"Validation time is: {inference_time:.3f}s")
 
     if log is not None:
-        log.write("*"*15, "Validation", "*"*15,"\n")
-        log.write('Accuracy of the network validation images: %f %%\n' % accuracy)
-        log.write('Validation time is: %fs\n' % inference_time)
+        log.write(f"{'*'*15} Validation {'*'*15}")
+        log.write(f"Accuracy of the network validation images: {accuracy} %")
+        log.write(f"Validation time is: {inference_time:.2f}s\n")
 
     return accuracy

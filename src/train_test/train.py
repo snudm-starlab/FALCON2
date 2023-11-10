@@ -24,12 +24,11 @@ File: train_test/train.py
 Version: 1.0
 """
 
-# pylint: disable=C0103,R0912,R0913,R0914,R0915,R1704,C0200,W0621,E1101
 import time
 import sys
 import copy
 import torch
-import torch.nn as nn
+from torch import nn
 import torch.nn.functional as F
 from torch.autograd import Variable
 
@@ -39,7 +38,7 @@ from utils.lr_decay import adjust_lr
 from train_test.validation import validation
 
 def train(net,
-          lr,
+          learning_rate,
           log=None,
           optimizer_option='SGD',
           data='cifar100',
@@ -53,7 +52,7 @@ def train(net,
     Train a model.
     
     :param net: model to be trained
-    :param lr: learning rate
+    :param learning_rate: learning rate
     :param optimizer_option: type of optimizer
     :param data: datasets used to train
     :param epochs: number of training epochs
@@ -76,13 +75,13 @@ def train(net,
         valloader = load_svhn(False, batch_size)
     else:
         sys.exit()
-    
+
     # Cross entropy loss for classification
     criterion = nn.CrossEntropyLoss()
     # MSE loss for approximation
     criterion_mse = nn.MSELoss()
     # Get optimizer according to your optimizer_option
-    optimizer = get_optimizer(net, lr, optimizer_option)
+    optimizer = get_optimizer(net, learning_rate, optimizer_option)
 
     start_time = time.time()
     last_time = 0
@@ -92,9 +91,9 @@ def train(net,
 
     iteration = 0
     for epoch in range(epochs):
-        print("*"*18, "EPOCH = %d", "*"*18 % epoch)
+        print(f"{'*'*18} EPOCH = {epoch} {'*'*18}")
         if log is not None:
-            log.write("*"*18, "EPOCH = %d", "*"*18 % epoch)
+            log.write(f"{'*'*18} EPOCH = {epoch} {'*'*18}")
 
         total = 0
         correct = 0
@@ -102,26 +101,24 @@ def train(net,
 
         # Change learning rate
         if epoch in (150, 250):
-            lr = adjust_lr(lr, lrd=lrd, log=log)
-            optimizer = get_optimizer(net, lr, optimizer_option)
+            learning_rate = adjust_lr(learning_rate, lrd=lrd, log=log)
+            optimizer = get_optimizer(net, learning_rate, optimizer_option)
 
-        for i, data in enumerate(trainloader, 0):
+        for _, batch in enumerate(trainloader, 0):
             iteration += 1
 
             # Foward
-            inputs, labels = data
+            inputs, labels = batch
             inputs_var, labels_var = Variable(inputs.cuda()), Variable(labels.cuda())
             outputs, outputs_conv = net(inputs_var)
             loss = criterion(outputs, labels_var)
             if net_st is not None:
                 _, outputs_st_conv = net_st(inputs_var)
-                for i in range(len(outputs_st_conv)):
-                    if i != (len(outputs_st_conv)-1):
-                        loss += beta / 50 * criterion_mse(outputs_conv[i], \
-                                outputs_st_conv[i].detach())
+                for idx, module in enumerate(outputs_st_conv):
+                    if idx != (len(outputs_st_conv)-1):
+                        loss += beta / 50 * criterion_mse(outputs_conv[idx], module.detach())
                     else:
-                        loss += beta * criterion_mse(outputs_conv[i], \
-                                outputs_st_conv[i].detach())
+                        loss += beta * criterion_mse(outputs_conv[idx], module.detach())
 
             # Backward
             optimizer.zero_grad()
@@ -135,13 +132,11 @@ def train(net,
 
             if iteration % 100 == 99:
                 now_time = time.time()
-                print('accuracy: %f %%; loss: %f; time: %ds'
-                      % ((float(100) * float(correct) / float(total)), loss, \
-                          (now_time - last_time)))
-                if log is not None:
-                    log.write('accuracy: %f %%; loss: %f; time: %ds\n'
-                              % ((float(100) * float(correct) / float(total)), loss, \
-                                  (now_time - last_time)))
+                print(f"accuracy: {float(100) * float(correct) / float(total):.3f}%; \
+                    loss: {loss:.3f}; time: {now_time - last_time:.3f}s")
+                # if log is not None:
+                #     log.write(f"accuracy: {float(100) * float(correct) / float(total):.3f} %; \
+                #         loss: {loss:.3f}; time: {now_time - last_time:.3f}s\n")
 
                 total = 0
                 correct = 0
@@ -157,8 +152,8 @@ def train(net,
             # Store the current parameters in the parameters of the best model
             best_param = copy.deepcopy(net.state_dict())
 
-    print('Training finished. It took %ds in total' % (time.time() - start_time))
+    print(f"Training finished. It took {time.time() - start_time}s in total")
     if log is not None:
-        log.write('Training finished. It took %ds in total\n' % (time.time() - start_time))
+        log.write(f"Training finished. It took {time.time() - start_time}s in total\n")
 
     return best_param

@@ -23,16 +23,15 @@ File: train_test/main.py
 
 Version: 1.0
 """
-# pylint: disable=redefined-outer-name,C0103,R0912,R0915,E1101
-# pylint: disable=wrong-import-position
 
 import sys
-sys.path.append('../')
 import torch
 from torch.autograd import Variable
+
+sys.path.append("../")
 from models.vgg import VGG
 from models.resnet import ResNet
-from models.stconv_branch import VGG_StConv_branch, ResNet_StConv_branch
+from models.stconv_branch import VGGStConvBranch, ResNetStConvBranch
 from utils.timer import Timer
 from utils.default_param import get_default_param
 from utils.save_restore import save_specific_model, load_specific_model, \
@@ -40,6 +39,7 @@ from utils.save_restore import save_specific_model, load_specific_model, \
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
 from train_test.train import train
 from train_test.test import test
+
 
 def main(args):
     '''
@@ -64,11 +64,9 @@ def main(args):
                     if args.init:
                         load_specific_model(net, args, convolution='StandardConv',
                                             input_path=args.stconv_path)
-                        net.falcon(rank=args.rank, init=args.init, bn=args.bn,
-                                   relu=args.relu, groups=args.groups)
+                        net.falcon(rank=args.rank, init=args.init, groups=args.groups)
                     else:
-                        net.falcon(rank=args.rank, init=False, bn=args.bn,
-                                   relu=args.relu, groups=args.groups)
+                        net.falcon(rank=args.rank, init=False, groups=args.groups)
                 else:
                     if args.init:
                         net2 = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
@@ -77,43 +75,39 @@ def main(args):
                         load_specific_model(net2, args, convolution='StandardConv',
                                             input_path=args.stconv_path)
                         net = init_with_alpha_resnet(net2, net, args.alpha)
-                        net.falcon(rank=args.rank, init=args.init, bn=args.bn,
-                                   relu=args.relu, groups=args.groups)
+                        net.falcon(rank=args.rank, init=args.init, groups=args.groups)
                     else:
                         net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes,
                                      alpha=args.alpha)
-                        net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu,
-                                   groups=args.groups)
+                        net.falcon(rank=args.rank, init=False, groups=args.groups)
             else:
                 if args.alpha == 1:
                     net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes,
                                  alpha=args.alpha)
-                    net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu,
-                               groups=args.groups)
+                    net.falcon(rank=args.rank, init=False, groups=args.groups)
                 else:
                     net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes,
                                  alpha=args.alpha)
-                    net.falcon(rank=args.rank, init=False, bn=args.bn, relu=args.relu,
-                               groups=args.groups)
-                    
+                    net.falcon(rank=args.rank, init=False, groups=args.groups)
+
         elif args.convolution == "StConvBranch":
-            net = ResNet_StConv_branch(layer_num=str(args.layer_num), num_classes=num_classes,
+            net = ResNetStConvBranch(layer_num=str(args.layer_num), num_classes=num_classes,
                                        alpha=args.alpha)
-            
+
         elif args.convolution == 'FALCONBranch':
-            net = ResNet_StConv_branch(layer_num=str(args.layer_num), num_classes=num_classes,
+            net = ResNetStConvBranch(layer_num=str(args.layer_num), num_classes=num_classes,
                                        alpha=args.alpha)
             if args.init:
                 load_specific_model(net, args, convolution='StConvBranch',
                                     input_path=args.stconv_path)
-            net.falcon(rank=args.rank, init=False, bn=args.bn,
+            net.falcon(rank=args.rank, init=False, batch_norm=args.bn,
                        relu=args.relu, groups=args.groups)
-            
+
         elif args.convolution == "StandardConv":
             net = ResNet(layer_num=str(args.layer_num), num_classes=num_classes)
         else:
             pass
-          
+
     # Choose model VGG
     elif "VGG" in args.model:
         if args.convolution == "FALCON":
@@ -123,10 +117,10 @@ def main(args):
                     if args.init:
                         load_specific_model(net, args, convolution='StandardConv',
                                             input_path=args.stconv_path)
-                        net.falcon(rank=args.rank, init=args.init, bn=args.bn,
+                        net.falcon(rank=args.rank, init=args.init, batch_norm=args.bn,
                                    relu=args.relu, groups=args.groups)
                     else:
-                        net.falcon(rank=args.rank, init=False, bn=args.bn,
+                        net.falcon(rank=args.rank, init=False, batch_norm=args.bn,
                                    relu=args.relu, groups=args.groups)
                 else:
                     if args.init:
@@ -136,35 +130,35 @@ def main(args):
                         load_specific_model(net2, args, convolution='StandardConv',
                                             input_path=args.stconv_path)
                         net = init_with_alpha_vgg(net2, net, args.alpha)
-                        net.falcon(rank=args.rank, init=args.init, bn=args.bn,
+                        net.falcon(rank=args.rank, init=args.init, batch_norm=args.bn,
                                    relu=args.relu, groups=args.groups)
                     else:
                         net = VGG(num_classes=num_classes, which=args.model,
                                   alpha=args.alpha)
-                        net.falcon(rank=args.rank, init=False, bn=args.bn,
+                        net.falcon(rank=args.rank, init=False, batch_norm=args.bn,
                                    relu=args.relu, groups=args.groups)
             else:
                 if args.alpha == 1:
                     net = VGG(num_classes=num_classes, which=args.model,
                               alpha=args.alpha)
-                    net.falcon(rank=args.rank, init=False, bn=args.bn,
+                    net.falcon(rank=args.rank, init=False, batch_norm=args.bn,
                                relu=args.relu, groups=args.groups)
                 else:
                     net = VGG(num_classes=num_classes, which=args.model,
                               alpha=args.alpha)
-                    net.falcon(rank=args.rank, init=False, bn=args.bn,
+                    net.falcon(rank=args.rank, init=False, batch_norm=args.bn,
                                relu=args.relu, groups=args.groups)
 
         elif args.convolution == 'StConvBranch':
-            net = VGG_StConv_branch(num_classes=num_classes, which=args.model,
+            net = VGGStConvBranch(num_classes=num_classes, which=args.model,
                                     alpha=args.alpha)
         elif args.convolution == 'FALCONBranch':
-            net = VGG_StConv_branch(num_classes=num_classes, which=args.model,
+            net = VGGStConvBranch(num_classes=num_classes, which=args.model,
                                     alpha=args.alpha)
             if args.init:
                 load_specific_model(net, args, convolution='StConvBranch',
                                     input_path=args.stconv_path)
-            net.falcon(rank=args.rank, init=args.is_train, bn=args.bn,
+            net.falcon(rank=args.rank, init=args.is_train, batch_norm=args.bn,
                        relu=args.relu, groups=args.groups)
         elif args.convolution == "StandardConv":
             net = VGG(num_classes=num_classes, which=args.model)
@@ -181,7 +175,7 @@ def main(args):
     if args.is_train:
         # Training
         best = train(net,
-                     lr=args.learning_rate,
+                     learning_rate=args.learning_rate,
                      optimizer_option=args.optimizer,
                      epochs=args.epochs,
                      batch_size=args.batch_size,
@@ -191,7 +185,7 @@ def main(args):
         if not args.not_save:
             save_specific_model(best, args)
         test(net, batch_size=args.batch_size, data=args.datasets)
-        
+
     else:
         # Testing
         load_specific_model(net, args, input_path=args.restore_path)
@@ -204,13 +198,13 @@ def main(args):
     print_model_parm_flops(net)
 
     # Time of forwarding 100 data samples (ms)
-    x = torch.rand(100, 3, 32, 32)
-    x = Variable(x.cuda())
-    net(x)
+    dummy_x = torch.rand(100, 3, 32, 32)
+    dummy_x = Variable(dummy_x.cuda())
+    net(dummy_x)
     timer = Timer()
     timer.tic()
     for _ in range(100):
-        net(x)
+        net(dummy_x)
     timer.toc()
 
 if __name__ == "__main__":

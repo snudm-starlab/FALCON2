@@ -24,39 +24,39 @@ File: utils/optimizer_option.py
 Version: 1.0
 """
 
-# pylint: disable=C0103,R1705
+
 import sys
-import torch.optim as optim
+from torch import optim
 
 
-def get_optimizer(net, lr, optimizer='SGD',  weight_decay=1e-4, momentum=0.9):
+def get_optimizer(net, learning_rate, optimizer='SGD',  weight_decay=1e-4, momentum=0.9):
     """
     Get optimizer accroding to arguments.
     
     There are four optimizers, SGD, Adagrad, Adam, and RMSprop.
     :param net: the model
-    :param lr: learing rate
+    :param learning_rate: learing rate
     :param optimizer: choose an optimizer - SGD/Adagrad/Adam/RMSprop
     :param weight_decay: weight decay rate
     :param momentum: momentum of the optimizer
     """
     if optimizer == 'SGD':
         return optim.SGD(filter(lambda p: p.requires_grad, net.parameters()),
-                         lr=lr,
+                         lr=learning_rate,
                          weight_decay=weight_decay,
                          momentum=momentum)
     elif optimizer == 'Adagrad':
         return optim.Adagrad(filter(lambda p: p.requires_grad, net.parameters()),
-                             lr=lr,
+                             lr=learning_rate,
                              weight_decay=weight_decay)
     elif optimizer == 'Adam':
         return optim.Adam(filter(lambda p: p.requires_grad, net.parameters()),
-                          lr=lr,
+                          lr=learning_rate,
                           weight_decay=weight_decay,
                           )
     elif optimizer == 'RMSprop':
         return optim.RMSprop(filter(lambda p: p.requires_grad, net.parameters()),
-                             lr=lr,
+                             lr=learning_rate,
                              weight_decay=weight_decay,
                              momentum=momentum)
     else:

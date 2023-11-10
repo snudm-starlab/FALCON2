@@ -25,7 +25,6 @@ File: train_test/test.py
 Version: 1.0
 """
 
-# pylint: disable=E1101,R0914,R1704
 import sys
 import time
 import torch
@@ -59,18 +58,17 @@ def test(net, log=None, batch_size=128, data='cifar100'):
     total = 0
     inference_start = time.time()
     with torch.no_grad():
-        for _, data in enumerate(test_loader, 0):
-            inputs, labels = data
+        for _, batch in enumerate(test_loader, 0):
+            inputs, labels = batch
             outputs, _ = net(inputs.cuda())
             _, predicted = torch.max(F.softmax(outputs, -1), 1)
             total += labels.size(0)
             correct += (predicted == labels.cuda()).sum()
     inference_time = time.time() - inference_start
-    print('Accuracy: %f %%' % (float(100) * float(correct) /\
-                float(total)))
+    print(f'Accuracy: {float(100) * float(correct) / float(total):.3f} %')
 
     if log is not None:
-        log.write('Accuracy of the network on the 10000 test images: %f %%\n' %\
-                (float(100) * float(correct) / float(total)))
+        log.write(f'Accuracy of the network on the 10000 test images: \
+                    {float(100) * float(correct) / float(total):.3f} %\n')
 
     return inference_time

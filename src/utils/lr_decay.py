@@ -24,19 +24,17 @@ File: utils/lr_decay.py
 Version: 1.0
 """
 
-#pylint: disable=C0103
-
-def adjust_lr(lr, lrd=10, log=None):
+def adjust_lr(learning_rate, lrd=10, log=None):
     """
     Update learning rate.
     
-    :param lr: original learning rate.
+    :param learning_rate: original learning rate.
     :param lrd: decrease ratio of learning rate.
     :param log: if log is not None, print the comments for changing learning rate.
     :return lr: adjusted learning rate.
     """
-    lr = lr / lrd
-    print("learning rate change to %f" % lr)
+    learning_rate = learning_rate / lrd
+    print(f"learning rate change to {learning_rate}")
     if log is not None:
-        log.write(("learning rate change to %f\n" % lr))
-    return lr
+        log.write(f"learning rate change to {learning_rate}\n")
+    return learning_rate

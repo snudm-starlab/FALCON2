@@ -4,23 +4,21 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ImageNetUtils &mdash; FALCON2 1.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>imagenetutils package &mdash; FALCON2 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
-    <script src="../_static/js/html5shiv.min.js"></script>
+    <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script src="../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
-        <script src="../_static/doctools.js?v=888ff710"></script>
-        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Models" href="models.html" />
-    <link rel="prev" title="Welcome to FALCON2’s documentation!" href="../index.html" /> 
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -31,11 +29,11 @@
 
           
           
-          <a href="../index.html" class="icon icon-home">
+          <a href="index.html" class="icon icon-home">
             FALCON2
           </a>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -43,38 +41,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">ImageNetUtils</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.eval.accuracy"><code class="docutils literal notranslate"><span class="pre">accuracy()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.logger.Logger"><code class="docutils literal notranslate"><span class="pre">Logger</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.logger.Logger.append"><code class="docutils literal notranslate"><span class="pre">Logger.append()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.logger.Logger.close"><code class="docutils literal notranslate"><span class="pre">Logger.close()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.logger.Logger.plot"><code class="docutils literal notranslate"><span class="pre">Logger.plot()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.logger.Logger.set_names"><code class="docutils literal notranslate"><span class="pre">Logger.set_names()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.logger.LoggerMonitor"><code class="docutils literal notranslate"><span class="pre">LoggerMonitor</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.logger.LoggerMonitor.plot"><code class="docutils literal notranslate"><span class="pre">LoggerMonitor.plot()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.logger.savefig"><code class="docutils literal notranslate"><span class="pre">savefig()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.misc.AverageMeter"><code class="docutils literal notranslate"><span class="pre">AverageMeter</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.misc.AverageMeter.reset"><code class="docutils literal notranslate"><span class="pre">AverageMeter.reset()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#imagenetutils.misc.AverageMeter.update"><code class="docutils literal notranslate"><span class="pre">AverageMeter.update()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.misc.get_mean_and_std"><code class="docutils literal notranslate"><span class="pre">get_mean_and_std()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.misc.init_params"><code class="docutils literal notranslate"><span class="pre">init_params()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.misc.mkdir_p"><code class="docutils literal notranslate"><span class="pre">mkdir_p()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.visualize.make_image"><code class="docutils literal notranslate"><span class="pre">make_image()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.visualize.show_batch"><code class="docutils literal notranslate"><span class="pre">show_batch()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.visualize.show_mask"><code class="docutils literal notranslate"><span class="pre">show_mask()</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#imagenetutils.visualize.show_mask_single"><code class="docutils literal notranslate"><span class="pre">show_mask_single()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
-<li class="toctree-l1"><a class="reference internal" href="train_test.html">Train and Test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="modules/imagenetutils.html">ImageNetUtils</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/models.html">Models</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/train_test.html">Train and Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules/utils.html">Utils</a></li>
 </ul>
 
         </div>
@@ -83,17 +54,17 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">FALCON2</a>
+          <a href="index.html">FALCON2</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">ImageNetUtils</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">imagenetutils package</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/modules/imagenetutils.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/imagenetutils.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -101,8 +72,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-imagenetutils.eval">
-<span id="imagenetutils"></span><h1>ImageNetUtils<a class="headerlink" href="#module-imagenetutils.eval" title="Link to this heading"></a></h1>
+  <section id="imagenetutils-package">
+<h1>imagenetutils package<a class="headerlink" href="#imagenetutils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="imagenetutils-dataloaders-module">
+<h2>imagenetutils.dataloaders module<a class="headerlink" href="#imagenetutils-dataloaders-module" title="Link to this heading"></a></h2>
+</section>
+<section id="module-imagenetutils.eval">
+<span id="imagenetutils-eval-module"></span><h2>imagenetutils.eval module<a class="headerlink" href="#module-imagenetutils.eval" title="Link to this heading"></a></h2>
 <p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="imagenetutils.eval.accuracy">
@@ -122,11 +101,15 @@
 </dl>
 </dd></dl>
 
-<p id="module-imagenetutils.logger">The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+</section>
+<section id="module-imagenetutils.logger">
+<span id="imagenetutils-logger-module"></span><h2>imagenetutils.logger module<a class="headerlink" href="#module-imagenetutils.logger" title="Link to this heading"></a></h2>
+<p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
 <dl class="py class">
 <dt class="sig sig-object py" id="imagenetutils.logger.Logger">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imagenetutils.logger.</span></span><span class="sig-name descname"><span class="pre">Logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resume</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger" title="Link to this definition"></a></dt>
-<dd><p>Save training process to log file with simple plot function.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Save training process to log file with simple plot function.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imagenetutils.logger.Logger.append">
 <span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numbers</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.Logger.append" title="Link to this definition"></a></dt>
@@ -171,7 +154,8 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="imagenetutils.logger.LoggerMonitor">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imagenetutils.logger.</span></span><span class="sig-name descname"><span class="pre">LoggerMonitor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_paths</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.LoggerMonitor" title="Link to this definition"></a></dt>
-<dd><p>Load and visualize multiple logs.</p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Load and visualize multiple logs.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="imagenetutils.logger.LoggerMonitor.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.logger.LoggerMonitor.plot" title="Link to this definition"></a></dt>
@@ -199,7 +183,10 @@
 </dl>
 </dd></dl>
 
-<p id="module-imagenetutils.misc">The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a>
+</section>
+<section id="module-imagenetutils.misc">
+<span id="imagenetutils-misc-module"></span><h2>imagenetutils.misc module<a class="headerlink" href="#module-imagenetutils.misc" title="Link to this heading"></a></h2>
+<p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a>
 Some helper functions for PyTorch, including:</p>
 <blockquote>
 <div><ul class="simple">
@@ -211,7 +198,8 @@ Some helper functions for PyTorch, including:</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="imagenetutils.misc.AverageMeter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">imagenetutils.misc.</span></span><span class="sig-name descname"><span class="pre">AverageMeter</span></span><a class="headerlink" href="#imagenetutils.misc.AverageMeter" title="Link to this definition"></a></dt>
-<dd><dl class="simple">
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="simple">
 <dt>Computes and stores the average and current value</dt><dd><p>Imported from <a class="reference external" href="https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262">https://github.com/pytorch/examples/blob/master/imagenet/main.py#L247-L262</a></p>
 </dd>
 </dl>
@@ -273,7 +261,10 @@ Some helper functions for PyTorch, including:</p>
 </dl>
 </dd></dl>
 
-<p id="module-imagenetutils.visualize">The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+</section>
+<section id="module-imagenetutils.visualize">
+<span id="imagenetutils-visualize-module"></span><h2>imagenetutils.visualize module<a class="headerlink" href="#module-imagenetutils.visualize" title="Link to this heading"></a></h2>
+<p>The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
 <dl class="py function">
 <dt class="sig sig-object py" id="imagenetutils.visualize.make_image">
 <span class="sig-prename descclassname"><span class="pre">imagenetutils.visualize.</span></span><span class="sig-name descname"><span class="pre">make_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">img</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(1,</span> <span class="pre">1,</span> <span class="pre">1)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#imagenetutils.visualize.make_image" title="Link to this definition"></a></dt>
@@ -340,14 +331,17 @@ Some helper functions for PyTorch, including:</p>
 </dd></dl>
 
 </section>
+<section id="module-imagenetutils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-imagenetutils" title="Link to this heading"></a></h2>
+<p>Useful utils
+The following codes are from <a class="reference external" href="https://github.com/d-li14/mobilenetv2.pytorch">https://github.com/d-li14/mobilenetv2.pytorch</a></p>
+</section>
+</section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to FALCON2’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="models.html" class="btn btn-neutral float-right" title="Models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
+          <footer>
 
   <hr/>
 

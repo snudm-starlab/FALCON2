@@ -24,13 +24,12 @@ File: models/resnet.py
 Version: 1.0
 """
 
-# pylint: disable=E1101,C0103,R0913,R1725,W0223,W0603,C0200,R0912,W0613
-import torch.nn as nn
+from torch import nn
 from models.falcon import GEPdecompose
 
 # Configurations of ResNet
-bottle_neck_channels = ((64, 256), (128, 512), (256, 1024), (512, 2048))
-basic_channels = (64, 128, 256, 512)
+BOTTLE_NECK_CHANNELS = ((64, 256), (128, 512), (256, 1024), (512, 2048))
+BASIC_CHANNELS = (64, 128, 256, 512)
 
 cfgs = {
     '18': (2, 2, 2, 2),
@@ -56,7 +55,7 @@ class BottleNeckBlock(nn.Module):
         :param out_channels: number of output channels
         :param stride: number of stride
         """
-        super(BottleNeckBlock, self).__init__()
+        super().__init__()
 
         self.conv = nn.Sequential(
             nn.Conv2d(in_channels, in_channels, kernel_size=1, stride=1, padding=0),
@@ -74,14 +73,14 @@ class BottleNeckBlock(nn.Module):
             nn.BatchNorm2d(out_channels),
         )
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input feature maps
-        :return: conv(x): features of convolution
+        :param input_: input feature maps
+        :return: conv(input_): features of convolution
         """
-        return self.conv(x)
+        return self.conv(input_)
 
 
 class BasicBlock(nn.Module):
@@ -97,7 +96,7 @@ class BasicBlock(nn.Module):
         :param out_channels: number of output channels
         :param stride: number of stride
         """
-        super(BasicBlock, self).__init__()
+        super().__init__()
 
         self.conv = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1),
@@ -107,14 +106,14 @@ class BasicBlock(nn.Module):
             nn.BatchNorm2d(out_channels),
         )
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input feature maps
-        :return: conv(x): features of convolution
+        :param input_: input feature maps
+        :return: conv(input_): features of convolution
         """
-        return self.conv(x)
+        return self.conv(input_)
 
 
 class ResidualLayer(nn.Module):
@@ -131,7 +130,7 @@ class ResidualLayer(nn.Module):
         :param layer_num: number of layers in ResNet (default ResNet34)
         :param stride: number of stride
         """
-        super(ResidualLayer, self).__init__()
+        super().__init__()
 
         if layer_num in ("18", "32", "34"):
             self.stacked = BasicBlock(in_channels, out_channels, stride)
@@ -148,15 +147,15 @@ class ResidualLayer(nn.Module):
 
         self.relu = nn.ReLU(True)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input feature maps
+        :param input_: input feature maps
         :return: self.relu(stacked_out + shortcut_out): features of residual
         """
-        stacked_out = self.stacked(x)
-        shortcut_out = self.shortcut(x)
+        stacked_out = self.stacked(input_)
+        shortcut_out = self.shortcut(input_)
         return self.relu(stacked_out + shortcut_out)
 
 
@@ -172,7 +171,7 @@ class ResNet(nn.Module):
         :param layer_num: number of layers in ResNet (default ResNet34)
         :param num_classes: number of classes of datasets
         """
-        super(ResNet, self).__init__()
+        super().__init__()
 
         self.alpha = alpha
         self.first = nn.Sequential(
@@ -187,10 +186,10 @@ class ResNet(nn.Module):
         self.avgpool_2 = nn.AvgPool2d(kernel_size=2)
 
         if layer_num in ("18","32","34"):
-            last_channels = basic_channels[-1]
+            last_channels = BASIC_CHANNELS[-1]
         else:
-            last_channels = bottle_neck_channels[-1]
-        self.fc = nn.Linear(last_channels, num_classes)
+            last_channels = BOTTLE_NECK_CHANNELS[-1]
+        self.fc_layer = nn.Linear(last_channels, num_classes)
 
     def _make_layers(self, layer_num):
         """
@@ -202,92 +201,93 @@ class ResNet(nn.Module):
 
         layers = []
         cfg = cfgs[layer_num]
-        global basic_channels
-        global bottle_neck_channels
+        global BASIC_CHANNELS
+        global BOTTLE_NECK_CHANNELS
 
         if self.alpha != 1:
-            tmp_basic = list(basic_channels)
-            for i in range(len(tmp_basic)):
-                tmp_basic[i] = int(tmp_basic[i]*self.alpha)
-            basic_channels = tuple(tmp_basic)
-            tmp_bottle = list(bottle_neck_channels)
-            for i in range(len(tmp_bottle)):
-                tmp = list(tmp_bottle[i])
-                for j in range(len(tmp)):
-                    tmp[j] = int(tmp[j]*self.alpha)
+            tmp_basic = list(BASIC_CHANNELS)
+            tmp_basic = list(BASIC_CHANNELS)
+            for i, module in enumerate(tmp_basic):
+                tmp_basic[i] = int(module*self.alpha)
+            BASIC_CHANNELS = tuple(tmp_basic)
+            tmp_bottle = list(BOTTLE_NECK_CHANNELS)
+
+            for i, module in enumerate(tmp_bottle):
+                tmp = list(module)
+                for j, sub_module in enumerate(tmp):
+                    tmp[j] = int(sub_module*self.alpha)
                 tmp_bottle[i] = tuple(tmp)
-            bottle_neck_channels = tuple(tmp_bottle)
+            BOTTLE_NECK_CHANNELS = tuple(tmp_bottle)
 
         for i in range(4):
             for j in range(cfg[i]):
                 if layer_num in ("18", "32", "34"):
                     if j == 0:
                         if i != 0:
-                            layers.append(ResidualLayer(basic_channels[i] // 2, \
-                                        basic_channels[i], layer_num=layer_num, stride=2))
+                            layers.append(ResidualLayer(BASIC_CHANNELS[i] // 2, \
+                                        BASIC_CHANNELS[i], layer_num=layer_num, stride=2))
                         else:
-                            layers.append(ResidualLayer(basic_channels[i], basic_channels[i],\
+                            layers.append(ResidualLayer(BASIC_CHANNELS[i], BASIC_CHANNELS[i],\
                                         layer_num=layer_num, stride=2))
                     else:
-                        layers.append(ResidualLayer(basic_channels[i], basic_channels[i],\
+                        layers.append(ResidualLayer(BASIC_CHANNELS[i], BASIC_CHANNELS[i],\
                                     layer_num=layer_num, stride=1))
                 else:
                     if j == 0:
                         if i == 0:
-                            layers.append(ResidualLayer(bottle_neck_channels[i], \
-                                        bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
+                            layers.append(ResidualLayer(BOTTLE_NECK_CHANNELS[i], \
+                                        BOTTLE_NECK_CHANNELS[i] * 4, layer_num=layer_num, stride=2))
                         else:
                             layers.append(
-                                ResidualLayer(bottle_neck_channels[i] * 2, \
-                                    bottle_neck_channels[i] * 4, layer_num=layer_num, stride=2))
+                                ResidualLayer(BOTTLE_NECK_CHANNELS[i] * 2, \
+                                    BOTTLE_NECK_CHANNELS[i] * 4, layer_num=layer_num, stride=2))
                     else:
-                        layers.append(ResidualLayer(bottle_neck_channels[i], \
-                                    bottle_neck_channels[i], layer_num=layer_num, stride=1))
+                        layers.append(ResidualLayer(BOTTLE_NECK_CHANNELS[i], \
+                                    BOTTLE_NECK_CHANNELS[i], layer_num=layer_num, stride=1))
         return nn.Sequential(*layers)
 
-    def forward(self, x):
+    def forward(self, input_):
         """
         Run forward propagation
         
-        :param x: input feature maps
-        :return: (out, out_conv): output features after the fully connected layer, and output features of residual layers
+        :param input_: input feature maps
+        :return: (out, out_conv): output features after the fully connected layer,
+                                    and output features of residual layers
         """
-        out_conv = self.first(x)
+        out_conv = self.first(input_)
         out_conv = self.residuals(out_conv)
         if out_conv.size(3) == 2:
             out_conv = self.avgpool_2(out_conv)
         else:
             out_conv = self.avgpool_4(out_conv)
         out = out_conv.reshape(out_conv.shape[0], -1)
-        out = self.fc(out)
+        out = self.fc_layer(out)
         return out, out_conv
 
-    def falcon(self, rank, init=False, bn=False, relu=False, groups=1, alpha=1.0):
+    def falcon(self, rank, init=False, groups=1, alpha=1.0):
         """
         Replace standard convolution by FALCON
         
         :param rank: rank of GEP
         :param init: whether initialize FALCON with GEP decomposition tensors
-        :param bn: whether add batch normalization after FALCON
-        :param relu: whether add ReLU function after FALCON
         :param groups: number of groups for pointwise convolution
         """
-        for i in range(len(self.residuals)):
-            if isinstance(self.residuals[i].stacked.conv[0], nn.Conv2d):
+        for i, module in enumerate(self.residuals):
+            if isinstance(module.stacked.conv[0], nn.Conv2d):
                 # print(self.residuals[i].stacked.conv[0])
-                compress = GEPdecompose(self.residuals[i].stacked.conv[0], rank, \
+                compress = GEPdecompose(module.stacked.conv[0], rank, \
                         init, groups=groups, alpha=alpha)
                 self.residuals[i].stacked.conv[0] = compress
-            if isinstance(self.residuals[i].stacked.conv[3], nn.Conv2d):
+            if isinstance(module.stacked.conv[3], nn.Conv2d):
                 # print(self.residuals[i].stacked.conv[3])
-                compress = GEPdecompose(self.residuals[i].stacked.conv[3], rank, \
+                compress = GEPdecompose(module.stacked.conv[3], rank, \
                         init, groups=groups, alpha=alpha)
                 self.residuals[i].stacked.conv[3] = compress
-            if isinstance(self.residuals[i].stacked.conv[1], nn.BatchNorm2d):
-                device = self.residuals[i].stacked.conv[1].weight.device
+            if isinstance(module.stacked.conv[1], nn.BatchNorm2d):
+                device = module.stacked.conv[1].weight.device
                 self.residuals[i].stacked.conv[1] = nn.BatchNorm2d(\
-                        int(self.residuals[i].stacked.conv[1].num_features*alpha)).to(device)
-            if isinstance(self.residuals[i].stacked.conv[4], nn.BatchNorm2d):
-                device = self.residuals[i].stacked.conv[4].weight.device
+                        int(module.stacked.conv[1].num_features*alpha)).to(device)
+            if isinstance(module.stacked.conv[4], nn.BatchNorm2d):
+                device = module.stacked.conv[4].weight.device
                 self.residuals[i].stacked.conv[4] = nn.BatchNorm2d(\
-                        int(self.residuals[i].stacked.conv[4].num_features*alpha)).to(device)
+                        int(module.stacked.conv[4].num_features*alpha)).to(device)

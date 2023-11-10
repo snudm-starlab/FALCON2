@@ -23,7 +23,8 @@ File: utils/save_restore.py
 
 Version: 1.0
 """
-# pylint: disable=R0912
+
+# pylint: disable=E1101, R0902, R0913, R0914
 import os
 import sys
 import torch
@@ -43,7 +44,7 @@ def create_log(args):
            ',alpha=' + str(args.alpha)
     path = 'training_log/'
     mkdir(path)
-    return open(path + name + '.txt', "w+")
+    return open(path + name + '.txt', "w+", encoding="utf-8")
 
 
 def save_model(best, args, log):
@@ -61,8 +62,8 @@ def save_model(best, args, log):
     path = 'trained_model/'
     mkdir(path)
     torch.save(best, path + name + '.pkl')
-    print("model saved in %s" % (path + name + '.pkl'))
-    log.write("model saved in %s\n" % (path + name + '.pkl'))
+    print(f"model saved in {path + name + '.pkl'}")
+    log.write(f"model saved in {path + name + '.pkl'}\n")
 
 
 def load_model(net, args):
@@ -83,7 +84,7 @@ def load_model(net, args):
     if os.path.exists(file):
         state_dict = torch.load(file)
         net.load_state_dict(state_dict)
-        print("model restored from %s" % (file))
+        print(f"model restored from {file}")
     else:
         print(name + '.pkl does not exist.')
         print('Testing can only be done when the trained model exists.')
@@ -152,7 +153,7 @@ def load_specific_model(net, args, convolution='', input_path=''):
     if os.path.exists(file):
         state_dict = torch.load(file)
         net.load_state_dict(state_dict)
-        print("model restored from %s" % (file))
+        print(f"model restored from {file}")
     else:
         print(file + 'does not exist.')
         sys.exit()
@@ -196,7 +197,7 @@ def save_specific_model(best, args, convolution=''):
     path = 'trained_model/'
     mkdir(path)
     torch.save(best, path + name + '.pkl')
-    print("model saved in %s" % (path + name + '.pkl'))
+    print(f"model saved in {path + name + '.pkl'}")
 
 def init_with_alpha_resnet(source_net, dest_net, alpha):
     """
@@ -210,30 +211,30 @@ def init_with_alpha_resnet(source_net, dest_net, alpha):
                   is used for initializing kernels of FALCON.
     :param dest_net: a model to be compressed
     """
-    for i in range(len(source_net.first)):
-        if isinstance(source_net.first[i], torch.nn.Conv2d):
-            shape = source_net.first[i].weight.shape
+    for i, module in enumerate(source_net.first):
+        if isinstance(module, torch.nn.Conv2d):
+            shape = module.weight.shape
 #            last_conv = i
             if i == 0:
                 dest_net.first[i].weight = torch.nn.Parameter(\
-                        source_net.first[i].weight[:int(shape[0]*alpha), :shape[1], :,:])
+                        module.weight[:int(shape[0]*alpha), :shape[1], :,:])
             else:
                 dest_net.first[i].weight = torch.nn.Parameter(\
-                        source_net.first[i].weight[:int(shape[0]*alpha), :int(shape[1]*alpha), :,:])
+                        module.weight[:int(shape[0]*alpha), :int(shape[1]*alpha), :,:])
 
-    for i in range(len(source_net.residuals)):
-        for j in range(len(source_net.residuals[i].stacked.conv)):
-            if isinstance(source_net.residuals[i].stacked.conv[j], torch.nn.Conv2d):
-                shape = source_net.residuals[i].stacked.conv[j].weight.shape
+    for i, module in enumerate(source_net.residuals):
+        for j, sub_module in enumerate(module.stacked.conv):
+            if isinstance(sub_module, torch.nn.Conv2d):
+                shape = sub_module.weight.shape
                 dest_net.residuals[i].stacked.conv[j].weight = torch.nn.Parameter(\
-                        source_net.residuals[i].stacked.conv[j].weight[:int(shape[0]*alpha),\
+                        sub_module.weight[:int(shape[0]*alpha),\
                         :int(shape[1]*alpha), :,:])
 
-        for j in range(len(source_net.residuals[i].shortcut)):
-            if isinstance(source_net.residuals[i].shortcut[j], torch.nn.Conv2d):
-                shape = source_net.residuals[i].shortcut[j].weight.shape
+        for j, sub_module in enumerate(module.shortcut):
+            if isinstance(sub_module, torch.nn.Conv2d):
+                shape = sub_module.weight.shape
                 dest_net.residuals[i].shortcut[j].weight = torch.nn.Parameter(\
-                        source_net.residuals[i].shortcut[j].weight[:int(shape[0]*alpha),\
+                        sub_module.weight[:int(shape[0]*alpha),\
                         :int(shape[1]*alpha), :,:])
 
     return dest_net
@@ -251,16 +252,16 @@ def init_with_alpha_vgg(source_net, dest_net, alpha):
     :param dest_net: a model to be compressed
     """
 
-    for i in range(len(source_net.layers)):
-        if isinstance(source_net.layers[i], torch.nn.Conv2d):
-            shape = source_net.layers[i].weight.shape
+    for i, module in enumerate(source_net.layers):
+        if isinstance(module, torch.nn.Conv2d):
+            shape = module.weight.shape
             if shape[1] == 3:
                 dest_net.layers[i].weight = torch.nn.Parameter(\
-                        source_net.layers[i].weight[:int(shape[0]*alpha),\
+                        module.weight[:int(shape[0]*alpha),\
                         :int(shape[1]), :,:])
             else:
                 dest_net.layers[i].weight = torch.nn.Parameter(\
-                        source_net.layers[i].weight[:int(shape[0]*alpha),\
+                        module.weight[:int(shape[0]*alpha),\
                         :int(shape[1]*alpha), :,:])
 
 

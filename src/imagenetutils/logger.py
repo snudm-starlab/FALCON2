@@ -3,9 +3,9 @@
 '''
 The following codes are from https://github.com/d-li14/mobilenetv2.pytorch
 '''
-# pylint: disable=C0103,C0200,W0621,R0903
+
 from __future__ import absolute_import
-import matplotlib.pyplot as plt
+from matplotlib import pyplot  as plt
 import numpy as np
 
 __all__ = ['Logger', 'LoggerMonitor', 'savefig']
@@ -31,8 +31,8 @@ def plot_overlap(logger, names=None):
     names = logger.names if names is None else names
     numbers = logger.numbers
     for _, name in enumerate(names):
-        x = np.arange(len(numbers[name]))
-        plt.plot(x, np.asarray(numbers[name]))
+        x_data = np.arange(len(numbers[name]))
+        plt.plot(x_data, np.asarray(numbers[name]))
     return [logger.title + '(' + name + ')' for name in names]
 
 class Logger:
@@ -51,7 +51,7 @@ class Logger:
         self.title = '' if title is None else title
         if fpath is not None:
             if resume:
-                self.file = open(fpath, 'r')
+                self.file = open(fpath, 'r', encoding="utf-8")
                 name = self.file.readline()
                 self.names = name.rstrip().split('\t')
                 print(self.names)
@@ -61,12 +61,12 @@ class Logger:
 
                 for numbers in self.file:
                     numbers = numbers.rstrip().split('\t')
-                    for i in range(0, len(numbers)):
-                        self.numbers[self.names[i]].append(numbers[i])
+                    for i, number in enumerate(numbers):
+                        self.numbers[self.names[i]].append(number)
                 self.file.close()
-                self.file = open(fpath, 'a')
+                self.file = open(fpath, 'a', encoding="utf-8")
             else:
-                self.file = open(fpath, 'w')
+                self.file = open(fpath, 'w', encoding="utf-8")
 
     def set_names(self, names):
         """
@@ -95,7 +95,7 @@ class Logger:
         """
         assert len(self.names) == len(numbers), 'Numbers do not match names'
         for index, num in enumerate(numbers):
-            self.file.write("{0:.6f}".format(num))
+            self.file.write(f"{num:.6f}")
             self.file.write('\t')
             self.numbers[self.names[index]].append(num)
         self.file.write('\n')
@@ -110,8 +110,8 @@ class Logger:
         names = self.names if names is None else names
         numbers = self.numbers
         for _, name in enumerate(names):
-            x = np.arange(len(numbers[name]))
-            plt.plot(x, np.asarray(numbers[name]))
+            x_data = np.arange(len(numbers[name]))
+            plt.plot(x_data, np.asarray(numbers[name]))
         plt.legend([self.title + '(' + name + ')' for name in names])
         plt.grid(True)
 
@@ -124,14 +124,14 @@ class Logger:
 
 class LoggerMonitor:
     '''Load and visualize multiple logs.'''
-    def __init__ (self, paths):
+    def __init__ (self, file_paths):
         '''
         paths is a distionary with {name:filepath} pair
         
         param paths: file paths
         '''
         self.loggers = []
-        for title, path in paths.items():
+        for title, path in file_paths.items():
             logger = Logger(path, title=title, resume=True)
             self.loggers.append(logger)
 

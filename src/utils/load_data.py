@@ -23,13 +23,13 @@ File: utils/load_data.py
 
 Version: 1.0
 """
-# pylint: disable=R1705
+# pylint: disable=E1101, R0902, R0913, R0914
 
 import sys
 import torch
 import torchvision
-import torchvision.transforms as transforms
-import torchvision.datasets as datasets
+from torchvision import transforms
+from torchvision import datasets
 
 sys.path.append('../')
 

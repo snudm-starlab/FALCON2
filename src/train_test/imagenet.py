@@ -16,8 +16,7 @@ This software may be used only for research evaluation purposes.
 For other purposes (e.g., commercial), please contact the authors.
 
 """
-# pylint: disable=wrong-import-position,C0102,C0103,R0912,R0913,R0914,R0915,E1101
-# pylint: disable=W0401,W0614,W0603,W0622,W0632
+
 import argparse
 import os
 import random
@@ -29,27 +28,29 @@ import sys
 sys.path.append('../')
 
 import torch
-import torch.nn as nn
+from torch import nn
 import torch.nn.parallel
-import torch.backends.cudnn as cudnn
-import torch.distributed as dist
+from torch.backends import cudnn
+from torch import distributed as dist
 import torch.optim
-import torch.multiprocessing as mp
-import torch.utils.data
-import torch.utils.data.distributed
+from torch import multiprocessing as mp
 from torch.autograd import Variable
-import torchvision.models as models
+from torchvision import models
 from utils.timer import Timer
 from utils.compression_cal import print_model_parm_nums, print_model_parm_flops
-from models.model_imageNet import VGGModel_imagenet, ResNetModel_imagenet, \
-    VGGModel_imagenet_inf, ResNetModel_imagenet_inf
+from models.model_imagenet import VGGImageNet, ResNetImageNet, \
+    VGGImageNetINF, ResNetImageNetINF
 from imagenetutils import Bar, Logger, AverageMeter, accuracy, mkdir_p, savefig
-from imagenetutils.dataloaders import *
+from imagenetutils.dataloaders import get_dali_train_loader, get_dali_val_loader
 from tensorboardX import SummaryWriter
 
-model_names = sorted(name for name in models.__dict__
+model_names = sorted(name for name, value in models.__dict__.items()
     if name.islower() and not name.startswith("__")
-    and callable(models.__dict__[name]))
+    and callable(value))
+
+# model_names = sorted(name for name in models.__dict__
+#     if name.islower() and not name.startswith("__")
+#     and callable(models.__dict__[name]))
 
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Training')
 parser.add_argument('data', metavar='DIR',
@@ -137,15 +138,14 @@ parser.add_argument("-in", "--input_num", type=int, default=100,
 parser.add_argument('--stconv_branch_model', default='', type=str, metavar='PATH',
                     help='path to latest checkpoint (default: none)')
 
-best_acc1 = 0
+BEST_ACC1 = 0
 
 def main():
     """
     Discription: main
     """
     args = parser.parse_args()
-    print('############################## %d * %d * %d ##############################'
-            % (args.input_num, args.input_size, args.input_size))
+    print(f"{'#' * 30} {args.input_num} * {args.input_size} * {args.input_size} {'#' * 30}")
 
     if args.seed is not None:
         random.seed(args.seed)
@@ -186,11 +186,11 @@ def main_worker(gpu, ngpus_per_node, args):
     :param ngpus_per_node: number of gpus
     :param args: arguments from input
     """
-    global best_acc1
+    global BEST_ACC1
     args.gpu = gpu
 
     if args.gpu is not None:
-        print("Use GPU: {} for training".format(args.gpu))
+        print(f"Use GPU: {args.gpu} for training")
 
     if args.distributed:
         if args.dist_url == "env://" and args.rank == -1:
@@ -203,17 +203,17 @@ def main_worker(gpu, ngpus_per_node, args):
                                 world_size=args.world_size, rank=args.rank)
     # Create a model
     if args.pretrained:
-        print("=> using pre-trained model '{}'".format(args.arch))
+        print(f"=> using pre-trained model '{args.arch}'")
         model = models.__dict__[args.arch](pretrained=True)
     else:
-        print("=> creating model '{}'".format(args.arch))
+        print(f"=> creating model '{args.arch}'")
         model = models.__dict__[args.arch]()
 
     # Re-organize the model and compress
     if 'vgg' in args.arch:
-        model = VGGModel_imagenet(model)
+        model = VGGImageNet(model)
     elif 'resnet' in args.arch:
-        model = ResNetModel_imagenet(model)
+        model = ResNetImageNet(model)
     else:
         print('ONLY VGG like or ResNet like model is accepted!')
         sys.exit(0)
@@ -253,21 +253,21 @@ def main_worker(gpu, ngpus_per_node, args):
 
     # Time of forwarding 100 data sample (ms)
     if args.inference_time:
-        x = torch.rand(args.input_num, 3, args.input_size, args.input_size)
-        x = Variable(x.cuda())
+        dummy_input = torch.rand(args.input_num, 3, args.input_size, args.input_size)
+        dummy_input = Variable(dummy_input.cuda())
         if 'vgg' in args.arch or 'alex' in args.arch:
-            model = VGGModel_imagenet_inf(model).cuda()
+            model = VGGImageNetINF(model).cuda()
         elif 'resnet' in args.arch:
-            model = ResNetModel_imagenet_inf(model).cuda()
+            model = ResNetImageNetINF(model).cuda()
         else:
             pass
         timer = Timer()
         timer.tic()
         model.eval()
         for _ in range(1000):
-            model(x)
+            model(dummy_input)
         timer.toc()
-        print('Do once forward need %.3f ms.' % (timer.total_time * 1000 / 1000.0))
+        print(f'Do once forward need {timer.total_time * 1000 / 1000.0:.3f} ms.')
         sys.exit(0)
 
     if args.distributed:
@@ -321,20 +321,19 @@ def main_worker(gpu, ngpus_per_node, args):
     # Optionally resume from a checkpoint
     if args.resume and args.convolution != 'FALCONBranch':
         if os.path.isfile(args.resume):
-            print("=> loading checkpoint '{}'".format(args.resume))
+            print(f"=> loading checkpoint '{args.resume}'")
             checkpoint = torch.load(args.resume)
             args.start_epoch = checkpoint['epoch']
-            best_acc1 = checkpoint['best_acc1']
+            BEST_ACC1 = checkpoint['best_acc1']
             if args.gpu is not None:
                 # best_acc1 may be from a checkpoint from a different GPU
-                best_acc1 = best_acc1.to(args.gpu)
+                BEST_ACC1 = BEST_ACC1.to(args.gpu)
             model.load_state_dict(checkpoint['state_dict'])
             optimizer.load_state_dict(checkpoint['optimizer'])
-            print("=> loaded checkpoint '{}' (epoch {})"
-                  .format(args.resume, checkpoint['epoch']))
+            print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
             logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title, resume=True)
         else:
-            print("=> no checkpoint found at '{}'".format(args.resume))
+            print(f"=> no checkpoint found at '{args.resume}'")
     else:
         logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
         logger.set_names(['Learning Rate', 'Train Loss', 'Valid Loss', 'Train Acc.', 'Valid Acc.'])
@@ -344,13 +343,13 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.convolution == 'FALCONBranch':
         if args.stconv_branch_model:
             if os.path.isfile(args.stconv_branch_model):
-                print("=> loading checkpoint '{}'".format(args.stconv_branch_model))
+                print(f"=> loading checkpoint '{args.stconv_branch_model}'")
                 checkpoint = torch.load(args.stconv_branch_model)
                 model.load_state_dict(checkpoint['state_dict'])
-                print("=> loaded checkpoint '{}' (epoch {})"
-                      .format(args.stconv_branch_model, checkpoint['epoch']))
+                print("=> loaded checkpoint '{args.stconv_branch_model}' \
+                    (epoch {checkpoint['epoch']})")
             else:
-                print("=> no checkpoint found at '{}'".format(args.stconv_branch_model))
+                print(f"=> no checkpoint found at '{args.stconv_branch_model}'")
         if isinstance(model, torch.nn.DataParallel):
             model.module.falcon_branch(init=args.init)
         else:
@@ -376,20 +375,19 @@ def main_worker(gpu, ngpus_per_node, args):
                                          weight_decay=args.weight_decay)
         if args.resume:
             if os.path.isfile(args.resume):
-                print("=> loading checkpoint '{}'".format(args.resume))
+                print(f"=> loading checkpoint '{args.resume}'")
                 checkpoint = torch.load(args.resume)
                 args.start_epoch = checkpoint['epoch']
-                best_acc1 = checkpoint['best_acc1']
+                BEST_ACC1 = checkpoint['best_acc1']
                 if args.gpu is not None:
                     # best_acc1 may be from a checkpoint from a different GPU
-                    best_acc1 = best_acc1.to(args.gpu)
+                    BEST_ACC1 = BEST_ACC1.to(args.gpu)
                 model.load_state_dict(checkpoint['state_dict'])
                 optimizer.load_state_dict(checkpoint['optimizer'])
-                print("=> loaded checkpoint '{}' (epoch {})"
-                      .format(args.resume, checkpoint['epoch']))
+                print(f"=> loaded checkpoint '{args.resume}' (epoch {checkpoint['epoch']})")
                 logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title, resume=True)
             else:
-                print("=> no checkpoint found at '{}'".format(args.resume))
+                print(f"=> no checkpoint found at '{args.resume}'")
         else:
             logger = Logger(os.path.join(args.checkpoint, 'log.txt'), title=title)
             logger.set_names(['Learning Rate', 'Train Loss',\
@@ -416,7 +414,7 @@ def main_worker(gpu, ngpus_per_node, args):
         for _ in range(1):
             _, inf_time = validate(val_loader, val_loader_len, model, criterion)
             inf_times += inf_time
-        print("\nAverage Inference Time: %f" % (float(inf_times) / 1.0))
+        print(f"\nAverage Inference Time: {float(inf_times) / 1.0}")
         return
 
     writer = SummaryWriter(os.path.join(args.checkpoint, 'logs'))
@@ -430,25 +428,25 @@ def main_worker(gpu, ngpus_per_node, args):
         # Evaluate on validation set
         val_loss, prec1 = validate(val_loader, val_loader_len, model, criterion)
 
-        lr = optimizer.param_groups[0]['lr']
+        learning_rate = optimizer.param_groups[0]['lr']
 
         # Append logger file
-        logger.append([lr, train_loss, val_loss, train_acc, prec1])
+        logger.append([learning_rate, train_loss, val_loss, train_acc, prec1])
 
         # tensorboardX
-        writer.add_scalar('learning rate', lr, epoch + 1)
+        writer.add_scalar('learning rate', learning_rate, epoch + 1)
         writer.add_scalars('loss', {'train loss': train_loss, \
                 'validation loss': val_loss}, epoch + 1)
         writer.add_scalars('accuracy', {'train accuracy': train_acc, \
                 'validation accuracy': prec1}, epoch + 1)
 
-        is_best = prec1 > best_acc1
-        best_acc1 = max(prec1, best_acc1)
+        is_best = prec1 > BEST_ACC1
+        BEST_ACC1 = max(prec1, BEST_ACC1)
         save_checkpoint({
             'epoch': epoch + 1,
             'arch': args.arch,
             'state_dict': model.state_dict(),
-            'best_acc1': best_acc1,
+            'best_acc1': BEST_ACC1,
             'optimizer' : optimizer.state_dict(),
         }, is_best, checkpoint=args.checkpoint)
 
@@ -458,7 +456,7 @@ def main_worker(gpu, ngpus_per_node, args):
     writer.close()
 
     print('Best accuracy:')
-    print(best_acc1)
+    print(BEST_ACC1)
 
 def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, args):
     '''
@@ -473,7 +471,7 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
     :param args: arguments for training
     :return: (losses.avg, top1.avg): average loss of training, and average top1 accuracy of training
     '''
-    bar = Bar('Processing', max=train_loader_len)
+    pbar = Bar('Processing', max=train_loader_len)
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
@@ -485,23 +483,25 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
     model.train()
 
     end = time.time()
-    for i, (input, target) in enumerate(train_loader):
+    for i, (inputs, targets) in enumerate(train_loader):
         adjust_learning_rate(optimizer, epoch, i, train_loader_len, args)
 
         # measure data loading time
         data_time.update(time.time() - end)
 
-        target = target.cuda(non_blocking=True)
+        targets = targets.cuda(non_blocking=True)
 
         # compute output
-        output, _ = model(input)
-        loss = criterion(output, target)
+        output, _ = model(inputs)
+        loss = criterion(output, targets)
 
         # measure accuracy and record loss
-        prec1, prec5 = accuracy(output, target, topk=(1, 5))
-        losses.update(loss.item(), input.size(0))
-        top1.update(prec1.item(), input.size(0))
-        top5.update(prec5.item(), input.size(0))
+        results = accuracy(output, targets, topk=(1, 5))
+        prec1 = results[0]
+        prec5 = results[1]
+        losses.update(loss.item(), inputs.size(0))
+        top1.update(prec1.item(), inputs.size(0))
+        top5.update(prec5.item(), inputs.size(0))
 
         # compute gradient and do SGD step
         optimizer.zero_grad()
@@ -513,21 +513,12 @@ def train(train_loader, train_loader_len, model, criterion, optimizer, epoch, ar
         end = time.time()
 
         # plot progress
-        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s \
-                      | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | \
-                      top1: {top1: .4f} | top5: {top5: .4f}'.format(
-                    batch=i + 1,
-                    size=train_loader_len,
-                    data=data_time.avg,
-                    bt=batch_time.avg,
-                    total=bar.elapsed_td,
-                    eta=bar.eta_td,
-                    loss=losses.avg,
-                    top1=top1.avg,
-                    top5=top5.avg,
-                    )
-        bar.next()
-    bar.finish()
+        pbar.suffix  = f'({i + 1}/{train_loader_len}) Data: {data_time.avg:.3f}s | \
+                        Batch: {batch_time.avg:.3f}s | Total: {pbar.elapsed_td} | \
+                        ETA: {pbar.eta_td:} | Loss: {losses.avg:.4f} | \
+                        top1: {top1.avg: .4f} | top5: {top5.avg: .4f}'
+        pbar.next()
+    pbar.finish()
     return (losses.avg, top1.avg)
 
 
@@ -539,9 +530,10 @@ def validate(val_loader, val_loader_len, model, criterion):
     :param val_loader_len: length of validation data
     :param model: our model to be validated
     :param criterion: loss function
-    :return: (losses.avg, top1.avg): average loss of validation, and average top1 accuracy of validation
+    :return: (losses.avg, top1.avg): average loss of validation,
+                                        and average top1 accuracy of validation
     '''
-    bar = Bar('Processing', max=val_loader_len)
+    pbar = Bar('Processing', max=val_loader_len)
 
     batch_time = AverageMeter()
     data_time = AverageMeter()
@@ -553,43 +545,36 @@ def validate(val_loader, val_loader_len, model, criterion):
     model.eval()
 
     end = time.time()
-    for i, (input, target) in enumerate(val_loader):
+    for i, (inputs, targets) in enumerate(val_loader):
         # Measure data loading time
         data_time.update(time.time() - end)
 
-        target = target.cuda(non_blocking=True)
+        targets = targets.cuda(non_blocking=True)
 
         with torch.no_grad():
             # Compute output
-            output, _ = model(input)
-            loss = criterion(output, target)
+            output, _ = model(inputs)
+            loss = criterion(output, targets)
 
         # Measure accuracy and record loss
-        prec1, prec5 = accuracy(output, target, topk=(1, 5))
-        losses.update(loss.item(), input.size(0))
-        top1.update(prec1.item(), input.size(0))
-        top5.update(prec5.item(), input.size(0))
+        results = accuracy(output, targets, topk=(1, 5))
+        prec1 = results[0]
+        prec5 = results[1]
+        losses.update(loss.item(), inputs.size(0))
+        top1.update(prec1.item(), inputs.size(0))
+        top5.update(prec5.item(), inputs.size(0))
 
         # Measure elapsed time
         batch_time.update(time.time() - end)
         end = time.time()
 
         # Plot progress
-        bar.suffix  = '({batch}/{size}) Data: {data:.3f}s | Batch: {bt:.3f}s \
-                      | Total: {total:} | ETA: {eta:} | Loss: {loss:.4f} | \
-                      top1: {top1: .4f} | top5: {top5: .4f}'.format(
-                    batch=i + 1,
-                    size=val_loader_len,
-                    data=data_time.avg,
-                    bt=batch_time.avg,
-                    total=bar.elapsed_td,
-                    eta=bar.eta_td,
-                    loss=losses.avg,
-                    top1=top1.avg,
-                    top5=top5.avg,
-                    )
-        bar.next()
-    bar.finish()
+        pbar.suffix  = f'({i + 1}/{val_loader_len}) Data: {data_time.avg:.3f}s | \
+                        Batch: {batch_time.avg:.3f}s | Total: {pbar.elapsed_td:} | \
+                        ETA: {pbar.eta_td:} | Loss: {losses.avg:.4f} | \
+                        top1: {top1.avg: .4f} | top5: {top5.avg: .4f}'
+        pbar.next()
+    pbar.finish()
     return (losses.avg, top1.avg)
 
 
@@ -617,7 +602,7 @@ def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
     :param num_iter: number of iterations in an epoch
     :param args: arguments
     '''
-    lr = optimizer.param_groups[0]['lr']
+    learning_rate = optimizer.param_groups[0]['lr']
 
     warmup_epoch = 0
     warmup_iter = warmup_epoch * num_iter
@@ -625,23 +610,25 @@ def adjust_learning_rate(optimizer, epoch, iteration, num_iter, args):
     max_iter = args.epochs * num_iter
 
     if args.lr_decay == 'step':
-        lr = args.lr * (args.gamma ** ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
+        learning_rate = args.lr * (args.gamma ** \
+            ((current_iter - warmup_iter) // (max_iter - warmup_iter)))
     elif args.lr_decay == 'cos':
-        lr = args.lr * (1 + cos(pi * (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
+        learning_rate = args.lr * (1 + cos(pi * \
+            (current_iter - warmup_iter) / (max_iter - warmup_iter))) / 2
     elif args.lr_decay == 'linear':
-        lr = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
+        learning_rate = args.lr * (1 - (current_iter - warmup_iter) / (max_iter - warmup_iter))
     elif args.lr_decay == 'schedule':
-        count = sum([1 for s in args.schedule if s <= epoch])
-        lr = args.lr * pow(args.gamma, count)
+        count = sum(1 for s in args.schedule if s <= epoch)
+        learning_rate = args.lr * pow(args.gamma, count)
     else:
-        raise ValueError('Unknown lr mode {}'.format(args.lr_decay))
+        raise ValueError(f'Unknown lr mode {args.lr_decay}')
 
     if epoch < warmup_epoch:
-        lr = args.lr * current_iter / warmup_iter
+        learning_rate = args.lr * current_iter / warmup_iter
 
 
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr
+        param_group['lr'] = learning_rate
 
 if __name__ == '__main__':
     main()

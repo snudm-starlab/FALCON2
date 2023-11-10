@@ -1,160 +1,136 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Models &mdash; FALCON2 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Train and Test" href="train_test.html" />
     <link rel="prev" title="ImageNetUtils" href="imagenetutils.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FALCON2
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            FALCON2
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="imagenetutils.html">ImageNetUtils</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#models.falcon.GEPdecompose"><code class="docutils literal notranslate"><span class="pre">GEPdecompose</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.falcon.GEPdecompose.decompose"><code class="docutils literal notranslate"><span class="pre">GEPdecompose.decompose()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.falcon.GEPdecompose.decompose_rank"><code class="docutils literal notranslate"><span class="pre">GEPdecompose.decompose_rank()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.falcon.GEPdecompose.forward"><code class="docutils literal notranslate"><span class="pre">GEPdecompose.forward()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.falcon.GEPdecompose.group1x1"><code class="docutils literal notranslate"><span class="pre">GEPdecompose.group1x1()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.resnet.BasicBlock"><code class="docutils literal notranslate"><span class="pre">BasicBlock</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.resnet.BasicBlock.forward"><code class="docutils literal notranslate"><span class="pre">BasicBlock.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.resnet.BottleNeckBlock"><code class="docutils literal notranslate"><span class="pre">BottleNeckBlock</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.resnet.BottleNeckBlock.forward"><code class="docutils literal notranslate"><span class="pre">BottleNeckBlock.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.resnet.ResNet"><code class="docutils literal notranslate"><span class="pre">ResNet</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.resnet.ResNet.falcon"><code class="docutils literal notranslate"><span class="pre">ResNet.falcon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.resnet.ResNet.forward"><code class="docutils literal notranslate"><span class="pre">ResNet.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.resnet.ResidualLayer"><code class="docutils literal notranslate"><span class="pre">ResidualLayer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.resnet.ResidualLayer.forward"><code class="docutils literal notranslate"><span class="pre">ResidualLayer.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.BasicBlock"><code class="docutils literal notranslate"><span class="pre">BasicBlock</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.BasicBlock.forward"><code class="docutils literal notranslate"><span class="pre">BasicBlock.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.ResNetStConvBranch"><code class="docutils literal notranslate"><span class="pre">ResNetStConvBranch</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.ResNetStConvBranch.falcon"><code class="docutils literal notranslate"><span class="pre">ResNetStConvBranch.falcon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.ResNetStConvBranch.forward"><code class="docutils literal notranslate"><span class="pre">ResNetStConvBranch.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.ResidualLayer"><code class="docutils literal notranslate"><span class="pre">ResidualLayer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.ResidualLayer.forward"><code class="docutils literal notranslate"><span class="pre">ResidualLayer.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.StConvBranch"><code class="docutils literal notranslate"><span class="pre">StConvBranch</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.StConvBranch.falcon"><code class="docutils literal notranslate"><span class="pre">StConvBranch.falcon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.StConvBranch.forward"><code class="docutils literal notranslate"><span class="pre">StConvBranch.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.VGGStConvBranch"><code class="docutils literal notranslate"><span class="pre">VGGStConvBranch</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.VGGStConvBranch.falcon"><code class="docutils literal notranslate"><span class="pre">VGGStConvBranch.falcon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.stconv_branch.VGGStConvBranch.forward"><code class="docutils literal notranslate"><span class="pre">VGGStConvBranch.forward()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models.stconv_branch.channel_shuffle"><code class="docutils literal notranslate"><span class="pre">channel_shuffle()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#models.vgg.VGG"><code class="docutils literal notranslate"><span class="pre">VGG</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#models.vgg.VGG.falcon"><code class="docutils literal notranslate"><span class="pre">VGG.falcon()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#models.vgg.VGG.forward"><code class="docutils literal notranslate"><span class="pre">VGG.forward()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="train_test.html">Train and Test</a></li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">Utils</a></li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FALCON2</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Models</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Models</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/modules/models.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-models.falcon">
-<span id="models"></span><h1>Models<a class="headerlink" href="#module-models.falcon" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-models.falcon">
+<span id="models"></span><h1>Models<a class="headerlink" href="#module-models.falcon" title="Link to this heading"></a></h1>
 <p>Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
@@ -175,62 +151,62 @@ under the License.</p>
 <p>File: models/falcon.py
 - Contain source code for decomposing standard convolution kernel to FALCON kernels.</p>
 <p>Version: 1.0</p>
-<dl class="class">
-<dt id="models.falcon.GEPdecompose">
-<em class="property">class </em><code class="sig-prename descclassname">models.falcon.</code><code class="sig-name descname">GEPdecompose</code><span class="sig-paren">(</span><em class="sig-param">conv_layer</em>, <em class="sig-param">rank=1</em>, <em class="sig-param">init=True</em>, <em class="sig-param">alpha=1.0</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.falcon.GEPdecompose">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.falcon.</span></span><span class="sig-name descname"><span class="pre">GEPdecompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conv_layer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose" title="Link to this definition"></a></dt>
 <dd><p>GEP decomposition class</p>
-<dl class="method">
-<dt id="models.falcon.GEPdecompose.decompose">
-<code class="sig-name descname">decompose</code><span class="sig-paren">(</span><em class="sig-param">conv</em>, <em class="sig-param">pw</em>, <em class="sig-param">dw</em>, <em class="sig-param">lr=0.001</em>, <em class="sig-param">steps=600</em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.decompose" title="Permalink to this definition">¶</a></dt>
-<dd><p>GEP decompose standard convolution kernel</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.falcon.GEPdecompose.decompose">
+<span class="sig-name descname"><span class="pre">decompose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">point_wise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth_wise</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.decompose" title="Link to this definition"></a></dt>
+<dd><p>GEP decomposes standard convolution kernel</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>conv</strong> – standard convolution kernel</p></li>
-<li><p><strong>pw</strong> – decomposed pointwise convolution kernel</p></li>
-<li><p><strong>dw</strong> – decomposed depthwise convolution kernel</p></li>
-<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>point_wise</strong> – decomposed pointwise convolution kernel</p></li>
+<li><p><strong>depth_wise</strong> – decomposed depthwise convolution kernel</p></li>
+<li><p><strong>learning_rate</strong> – learning rate</p></li>
 <li><p><strong>steps</strong> – training steps for decomposing</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.falcon.GEPdecompose.decompose_rank">
-<code class="sig-name descname">decompose_rank</code><span class="sig-paren">(</span><em class="sig-param">kernel</em>, <em class="sig-param">lr=0.005</em>, <em class="sig-param">steps=600</em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.decompose_rank" title="Permalink to this definition">¶</a></dt>
-<dd><p>GEP decompose standard convolution kernel with different rank</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.falcon.GEPdecompose.decompose_rank">
+<span class="sig-name descname"><span class="pre">decompose_rank</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kernel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.005</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.decompose_rank" title="Link to this definition"></a></dt>
+<dd><p>GEP decomposes standard convolution kernel with different rank</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>conv</strong> – standard convolution kernel</p></li>
-<li><p><strong>lr</strong> – learning rate</p></li>
+<li><p><strong>learning_rate</strong> – learning rate</p></li>
 <li><p><strong>steps</strong> – training steps for decomposing</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.falcon.GEPdecompose.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.falcon.GEPdecompose.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>out: output tensor of forward propagation</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.falcon.GEPdecompose.group1x1">
-<code class="sig-name descname">group1x1</code><span class="sig-paren">(</span><em class="sig-param">group_num</em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.group1x1" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.falcon.GEPdecompose.group1x1">
+<span class="sig-name descname"><span class="pre">group1x1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.falcon.GEPdecompose.group1x1" title="Link to this definition"></a></dt>
 <dd><p>Replace 1x1 pointwise convolution in FALCON with 1x1 group convolution</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>group_num</strong> – number of groups for 1x1 group</p>
 </dd>
 </dl>
@@ -238,208 +214,7 @@ under the License.</p>
 
 </dd></dl>
 
-<span class="target" id="module-models.model_imageNet"></span><p>Licensed to the Apache Software Foundation (ASF) under one
-or more contributor license agreements.  See the NOTICE file
-distributed with this work for additional information
-regarding copyright ownership.  The ASF licenses this file
-to you under the Apache License, Version 2.0 (the
-“License”); you may not use this file except in compliance
-with the License.  You may obtain a copy of the License at</p>
-<blockquote>
-<div><p><a class="reference external" href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
-</div></blockquote>
-<p>Unless required by applicable law or agreed to in writing,
-software distributed under the License is distributed on an
-“AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, either express or implied.  See the License for the
-specific language governing permissions and limitations
-under the License
-.
-FALCON: Lightweight and Accurate Convolution</p>
-<dl class="simple">
-<dt>File: models/model_imageNet.py</dt><dd><ul class="simple">
-<li><p>Contain source code for re-organize the structure of pre-trained model.</p></li>
-</ul>
-</dd>
-</dl>
-<p>Version: 1.0</p>
-<dl class="class">
-<dt id="models.model_imageNet.BasicBlock_StConvBranch">
-<em class="property">class </em><code class="sig-prename descclassname">models.model_imageNet.</code><code class="sig-name descname">BasicBlock_StConvBranch</code><span class="sig-paren">(</span><em class="sig-param">conv1</em>, <em class="sig-param">conv2</em>, <em class="sig-param">downsample=None</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.BasicBlock_StConvBranch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description: BasicBlock of ResNet with StConvBranch</p>
-<dl class="method">
-<dt id="models.model_imageNet.BasicBlock_StConvBranch.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.BasicBlock_StConvBranch.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run forward propagation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>out: output tensor of forward propagation</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="models.model_imageNet.ResNetModel_imagenet">
-<em class="property">class </em><code class="sig-prename descclassname">models.model_imageNet.</code><code class="sig-name descname">ResNetModel_imagenet</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description: Re-organize the structure of a given resnet model.</p>
-<dl class="method">
-<dt id="models.model_imageNet.ResNetModel_imagenet.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em>, <em class="sig-param">init=True</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet.falcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution by FALCON</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rank</strong> – rank of GEP</p></li>
-<li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
-<li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.ResNetModel_imagenet.falcon_branch">
-<code class="sig-name descname">falcon_branch</code><span class="sig-paren">(</span><em class="sig-param">init=True</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet.falcon_branch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution in stconv_branch by falcon</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>init</strong> – whether initialize falcon</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.ResNetModel_imagenet.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run forward propagation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(x2, x1): output of forward propagation, and intermediate tensor after convolutions</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.ResNetModel_imagenet.stconv_branch">
-<code class="sig-name descname">stconv_branch</code><span class="sig-paren">(</span><em class="sig-param">alpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet.stconv_branch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution by StConvBranch</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>alpha</strong> – width multiplier</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="models.model_imageNet.ResNetModel_imagenet_inf">
-<em class="property">class </em><code class="sig-prename descclassname">models.model_imageNet.</code><code class="sig-name descname">ResNetModel_imagenet_inf</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet_inf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description: Re-organize the structure of a given resnet model.</p>
-<dl class="method">
-<dt id="models.model_imageNet.ResNetModel_imagenet_inf.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.ResNetModel_imagenet_inf.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run forward propagation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>features(x): output features of forward propagation</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="models.model_imageNet.VGGModel_imagenet">
-<em class="property">class </em><code class="sig-prename descclassname">models.model_imageNet.</code><code class="sig-name descname">VGGModel_imagenet</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description: Re-organize the structure of a given vgg model.</p>
-<dl class="method">
-<dt id="models.model_imageNet.VGGModel_imagenet.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">init=True</em>, <em class="sig-param">rank=1</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet.falcon" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution by FALCON</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rank</strong> – rank of GEP</p></li>
-<li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
-<li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.VGGModel_imagenet.falcon_branch">
-<code class="sig-name descname">falcon_branch</code><span class="sig-paren">(</span><em class="sig-param">init=True</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet.falcon_branch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution in stconv_branch by falcon</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>init</strong> – whether initialize falcon</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.VGGModel_imagenet.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run forward propagation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(x2, x1): output of forward propagation, and intermediate tensor after convolutions</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="models.model_imageNet.VGGModel_imagenet.stconv_branch">
-<code class="sig-name descname">stconv_branch</code><span class="sig-paren">(</span><em class="sig-param">alpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet.stconv_branch" title="Permalink to this definition">¶</a></dt>
-<dd><p>Replace standard convolution by stconv_branch (vs shuffleunitv2)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>alpha</strong> – width multiplier</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="models.model_imageNet.VGGModel_imagenet_inf">
-<em class="property">class </em><code class="sig-prename descclassname">models.model_imageNet.</code><code class="sig-name descname">VGGModel_imagenet_inf</code><span class="sig-paren">(</span><em class="sig-param">model</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet_inf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Description: Re-organize the structure of a given vgg model.</p>
-<dl class="method">
-<dt id="models.model_imageNet.VGGModel_imagenet_inf.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.model_imageNet.VGGModel_imagenet_inf.forward" title="Permalink to this definition">¶</a></dt>
-<dd><p>Run forward propagation</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>features(x): output features of forward propagation</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<span class="target" id="module-models.resnet"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-models.resnet">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -463,96 +238,95 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="class">
-<dt id="models.resnet.BasicBlock">
-<em class="property">class </em><code class="sig-prename descclassname">models.resnet.</code><code class="sig-name descname">BasicBlock</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BasicBlock" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.resnet.BasicBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.resnet.</span></span><span class="sig-name descname"><span class="pre">BasicBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BasicBlock" title="Link to this definition"></a></dt>
 <dd><p>go through 3x3, 3x3</p>
-<dl class="method">
-<dt id="models.resnet.BasicBlock.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BasicBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.resnet.BasicBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BasicBlock.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>conv(x): features of convolution</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>conv(<a href="#id1"><span class="problematic" id="id2">input_</span></a>): features of convolution</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.resnet.BottleNeckBlock">
-<em class="property">class </em><code class="sig-prename descclassname">models.resnet.</code><code class="sig-name descname">BottleNeckBlock</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BottleNeckBlock" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.resnet.BottleNeckBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.resnet.</span></span><span class="sig-name descname"><span class="pre">BottleNeckBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BottleNeckBlock" title="Link to this definition"></a></dt>
 <dd><p>go through 1x1, 3x3, 1x1</p>
-<dl class="method">
-<dt id="models.resnet.BottleNeckBlock.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BottleNeckBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.resnet.BottleNeckBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.BottleNeckBlock.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>conv(x): features of convolution</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>conv(<a href="#id3"><span class="problematic" id="id4">input_</span></a>): features of convolution</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.resnet.ResNet">
-<em class="property">class </em><code class="sig-prename descclassname">models.resnet.</code><code class="sig-name descname">ResNet</code><span class="sig-paren">(</span><em class="sig-param">layer_num='18'</em>, <em class="sig-param">num_classes=10</em>, <em class="sig-param">alpha=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.resnet.ResNet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.resnet.</span></span><span class="sig-name descname"><span class="pre">ResNet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'18'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet" title="Link to this definition"></a></dt>
 <dd><p>ResNet model</p>
-<dl class="method">
-<dt id="models.resnet.ResNet.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank</em>, <em class="sig-param">init=False</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em>, <em class="sig-param">alpha=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet.falcon" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.resnet.ResNet.falcon">
+<span class="sig-name descname"><span class="pre">falcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet.falcon" title="Link to this definition"></a></dt>
 <dd><p>Replace standard convolution by FALCON</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rank</strong> – rank of GEP</p></li>
 <li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
-<li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
 <li><p><strong>groups</strong> – number of groups for pointwise convolution</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.resnet.ResNet.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.resnet.ResNet.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResNet.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(out, out_conv): output features after the fully connected layer, and output features of residual layers</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(out, out_conv): output features after the fully connected layer,
+and output features of residual layers</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.resnet.ResidualLayer">
-<em class="property">class </em><code class="sig-prename descclassname">models.resnet.</code><code class="sig-name descname">ResidualLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">layer_num='34'</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResidualLayer" title="Permalink to this definition">¶</a></dt>
-<dd><p>add shortcut</p>
-<dl class="method">
-<dt id="models.resnet.ResidualLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResidualLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.resnet.ResidualLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.resnet.</span></span><span class="sig-name descname"><span class="pre">ResidualLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'34'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResidualLayer" title="Link to this definition"></a></dt>
+<dd><p>Add shortcut</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.resnet.ResidualLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.resnet.ResidualLayer.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self.relu(stacked_out + shortcut_out): features of residual</p>
 </dd>
 </dl>
@@ -560,7 +334,7 @@ under the License.</p>
 
 </dd></dl>
 
-<span class="target" id="module-models.stconv_branch"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-models.stconv_branch">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -584,40 +358,40 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="class">
-<dt id="models.stconv_branch.BasicBlock">
-<em class="property">class </em><code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">BasicBlock</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.BasicBlock" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.stconv_branch.BasicBlock">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">BasicBlock</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.BasicBlock" title="Link to this definition"></a></dt>
 <dd><p>Description: BasicBlock of ResNet with StConv_branch</p>
-<dl class="method">
-<dt id="models.stconv_branch.BasicBlock.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.BasicBlock.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.BasicBlock.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.BasicBlock.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input features</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input features</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>x: output features</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><a href="#id5"><span class="problematic" id="id6">out_</span></a>: output features</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.stconv_branch.ResNet_StConv_branch">
-<em class="property">class </em><code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">ResNet_StConv_branch</code><span class="sig-paren">(</span><em class="sig-param">layer_num='18'</em>, <em class="sig-param">num_classes=10</em>, <em class="sig-param">alpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNet_StConv_branch" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.stconv_branch.ResNetStConvBranch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">ResNetStConvBranch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'18'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNetStConvBranch" title="Link to this definition"></a></dt>
 <dd><p>Description: ResNet Model with StConv_branch</p>
-<dl class="method">
-<dt id="models.stconv_branch.ResNet_StConv_branch.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank</em>, <em class="sig-param">init=True</em>, <em class="sig-param">alpha=1.0</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNet_StConv_branch.falcon" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.ResNetStConvBranch.falcon">
+<span class="sig-name descname"><span class="pre">falcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNetStConvBranch.falcon" title="Link to this definition"></a></dt>
 <dd><p>Replace standard convolution by FALCON</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rank</strong> – rank of GEP</p></li>
 <li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
+<li><p><strong>batch_norm</strong> – whether add batch normalization after FALCON</p></li>
 <li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
 <li><p><strong>groups</strong> – number of groups for pointwise convolution</p></li>
 </ul>
@@ -625,35 +399,36 @@ under the License.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.stconv_branch.ResNet_StConv_branch.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNet_StConv_branch.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.ResNetStConvBranch.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResNetStConvBranch.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input features</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input features</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(out, out_conv): output features, and output features before the fully connected layer</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(out, out_conv): output features,
+and output features before the fully connected layer</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.stconv_branch.ResidualLayer">
-<em class="property">class </em><code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">ResidualLayer</code><span class="sig-paren">(</span><em class="sig-param">in_channels</em>, <em class="sig-param">out_channels</em>, <em class="sig-param">layer_num='34'</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResidualLayer" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.stconv_branch.ResidualLayer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">ResidualLayer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_channels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'34'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResidualLayer" title="Link to this definition"></a></dt>
 <dd><p>Description: add shortcut to BasicBlock</p>
-<dl class="method">
-<dt id="models.stconv_branch.ResidualLayer.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResidualLayer.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.ResidualLayer.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.ResidualLayer.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input features</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input features</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>self.relu(stacked_out): output features of residual layer</p>
 </dd>
 </dl>
@@ -661,21 +436,21 @@ under the License.</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.stconv_branch.StConv_branch">
-<em class="property">class </em><code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">StConv_branch</code><span class="sig-paren">(</span><em class="sig-param">inp</em>, <em class="sig-param">oup</em>, <em class="sig-param">stride=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConv_branch" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.stconv_branch.StConvBranch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">StConvBranch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">oup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stride</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConvBranch" title="Link to this definition"></a></dt>
 <dd><p>Description: Basic unit of ShuffleUnit with standard convolution</p>
-<dl class="method">
-<dt id="models.stconv_branch.StConv_branch.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank=1</em>, <em class="sig-param">init=True</em>, <em class="sig-param">alpha=1.0</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConv_branch.falcon" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.StConvBranch.falcon">
+<span class="sig-name descname"><span class="pre">falcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConvBranch.falcon" title="Link to this definition"></a></dt>
 <dd><p>Replace standard convolution by FALCON</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rank</strong> – rank of GEP</p></li>
 <li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
 <li><p><strong>alpha</strong> – width multiplier</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
+<li><p><strong>batch_norm</strong> – whether add batch normalization after FALCON</p></li>
 <li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
 <li><p><strong>groups</strong> – number of groups for pointwise convolution</p></li>
 </ul>
@@ -683,15 +458,15 @@ under the License.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.stconv_branch.StConv_branch.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConv_branch.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.StConvBranch.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.StConvBranch.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>channel_shuffle(out, 2): channel shuffled output feature maps</p>
 </dd>
 </dl>
@@ -699,21 +474,21 @@ under the License.</p>
 
 </dd></dl>
 
-<dl class="class">
-<dt id="models.stconv_branch.VGG_StConv_branch">
-<em class="property">class </em><code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">VGG_StConv_branch</code><span class="sig-paren">(</span><em class="sig-param">num_classes=10</em>, <em class="sig-param">which='VGG16'</em>, <em class="sig-param">alpha=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGG_StConv_branch" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.stconv_branch.VGGStConvBranch">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">VGGStConvBranch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VGG16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGGStConvBranch" title="Link to this definition"></a></dt>
 <dd><p>Description: VGG model with VGG_StConv_branch.</p>
-<dl class="method">
-<dt id="models.stconv_branch.VGG_StConv_branch.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank</em>, <em class="sig-param">init=True</em>, <em class="sig-param">alpha=1.0</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGG_StConv_branch.falcon" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.VGGStConvBranch.falcon">
+<span class="sig-name descname"><span class="pre">falcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGGStConvBranch.falcon" title="Link to this definition"></a></dt>
 <dd><p>Replace standard convolution by FALCON</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rank</strong> – rank of GEP</p></li>
 <li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
 <li><p><strong>alpha</strong> – width multiplier</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
+<li><p><strong>batch_norm</strong> – whether add batch normalization after FALCON</p></li>
 <li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
 <li><p><strong>groups</strong> – number of groups for pointwise convolution</p></li>
 </ul>
@@ -721,40 +496,41 @@ under the License.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.stconv_branch.VGG_StConv_branch.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGG_StConv_branch.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.stconv_branch.VGGStConvBranch.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.VGGStConvBranch.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input features</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input features</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(out, out_conv): output features, and output features before the fully connected layer</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(out, out_conv): output features,
+and output features before the fully connected layer</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<dl class="function">
-<dt id="models.stconv_branch.channel_shuffle">
-<code class="sig-prename descclassname">models.stconv_branch.</code><code class="sig-name descname">channel_shuffle</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">groups</em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.channel_shuffle" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="models.stconv_branch.channel_shuffle">
+<span class="sig-prename descclassname"><span class="pre">models.stconv_branch.</span></span><span class="sig-name descname"><span class="pre">channel_shuffle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.stconv_branch.channel_shuffle" title="Link to this definition"></a></dt>
 <dd><p>Description: channel shuffle operation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – output feature maps of last layer</p></li>
+<li><p><strong>feature_map</strong> – output feature maps of last layer</p></li>
 <li><p><strong>groups</strong> – number of groups for group convolution</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>x: channel shuffled feature maps</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>feature_map: channel shuffled feature maps</p>
 </dd>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-models.vgg"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-models.vgg">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -778,20 +554,20 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="class">
-<dt id="models.vgg.VGG">
-<em class="property">class </em><code class="sig-prename descclassname">models.vgg.</code><code class="sig-name descname">VGG</code><span class="sig-paren">(</span><em class="sig-param">num_classes=10</em>, <em class="sig-param">which='VGG16'</em>, <em class="sig-param">alpha=1.0</em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="models.vgg.VGG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">models.vgg.</span></span><span class="sig-name descname"><span class="pre">VGG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num_classes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'VGG16'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG" title="Link to this definition"></a></dt>
 <dd><p>Description: VGG class.</p>
-<dl class="method">
-<dt id="models.vgg.VGG.falcon">
-<code class="sig-name descname">falcon</code><span class="sig-paren">(</span><em class="sig-param">rank</em>, <em class="sig-param">init=True</em>, <em class="sig-param">alpha=1.0</em>, <em class="sig-param">bn=False</em>, <em class="sig-param">relu=False</em>, <em class="sig-param">groups=1</em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG.falcon" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.vgg.VGG.falcon">
+<span class="sig-name descname"><span class="pre">falcon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rank</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_norm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG.falcon" title="Link to this definition"></a></dt>
 <dd><p>Replace standard convolution by FALCON</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>rank</strong> – rank of GEP</p></li>
 <li><p><strong>init</strong> – whether initialize FALCON with GEP decomposition tensors</p></li>
-<li><p><strong>bn</strong> – whether add batch normalization after FALCON</p></li>
+<li><p><strong>batch_norm</strong> – whether add batch normalization after FALCON</p></li>
 <li><p><strong>relu</strong> – whether add ReLU function after FALCON</p></li>
 <li><p><strong>groups</strong> – number of groups for pointwise convolution</p></li>
 </ul>
@@ -799,78 +575,54 @@ under the License.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="models.vgg.VGG.forward">
-<code class="sig-name descname">forward</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG.forward" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="models.vgg.VGG.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#models.vgg.VGG.forward" title="Link to this definition"></a></dt>
 <dd><p>Run forward propagation</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> – input feature maps</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input</strong> – input feature maps</p>
 </dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>(out, out_conv): output features, and output features before the fully connected layer</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(out, out_conv): output features,
+and output features before the fully connected layer</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-        <a href="train_test.html" class="btn btn-neutral float-right" title="Train and Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
-      
-      
-        <a href="imagenetutils.html" class="btn btn-neutral float-left" title="ImageNetUtils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="imagenetutils.html" class="btn btn-neutral float-left" title="ImageNetUtils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="train_test.html" class="btn btn-neutral float-right" title="Train and Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, dmlab
-
-    </p>
+    <p>&#169; Copyright 2020, dmlab.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

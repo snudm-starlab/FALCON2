@@ -1,159 +1,103 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8">
-  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Utils &mdash; FALCON2 1.0 documentation</title>
-  
-
-  
-  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-
-  
-  
-  
-  
-
-  
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../_static/jquery.js"></script>
-        <script type="text/javascript" src="../_static/underscore.js"></script>
-        <script type="text/javascript" src="../_static/doctools.js"></script>
-        <script type="text/javascript" src="../_static/language_data.js"></script>
-    
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-
-    
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=f2a433a1"></script>
+        <script src="../_static/doctools.js?v=888ff710"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Train and Test" href="train_test.html" /> 
 </head>
 
-<body class="wy-body-for-nav">
-
-   
+<body class="wy-body-for-nav"> 
   <div class="wy-grid-for-nav">
-    
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-          
 
           
-            <a href="../index.html" class="icon icon-home" alt="Documentation Home"> FALCON2
           
-
-          
+          <a href="../index.html" class="icon icon-home">
+            FALCON2
           </a>
-
-          
-            
-            
-          
-
-          
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
 </div>
-
-          
-        </div>
-
-        
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-          
-            
-            
-              
-            
-            
-              <p class="caption"><span class="caption-text">Contents:</span></p>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="imagenetutils.html">ImageNetUtils</a></li>
 <li class="toctree-l1"><a class="reference internal" href="models.html">Models</a></li>
 <li class="toctree-l1"><a class="reference internal" href="train_test.html">Train and Test</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#utils.compression_cal.print_model_parm_flops"><code class="docutils literal notranslate"><span class="pre">print_model_parm_flops()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.compression_cal.print_model_parm_nums"><code class="docutils literal notranslate"><span class="pre">print_model_parm_nums()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.default_param.get_default_param"><code class="docutils literal notranslate"><span class="pre">get_default_param()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.load_data.load_cifar100"><code class="docutils literal notranslate"><span class="pre">load_cifar100()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.load_data.load_imagenet"><code class="docutils literal notranslate"><span class="pre">load_imagenet()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.load_data.load_svhn"><code class="docutils literal notranslate"><span class="pre">load_svhn()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.lr_decay.adjust_lr"><code class="docutils literal notranslate"><span class="pre">adjust_lr()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.optimizer_option.get_optimizer"><code class="docutils literal notranslate"><span class="pre">get_optimizer()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.create_log"><code class="docutils literal notranslate"><span class="pre">create_log()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.init_with_alpha_resnet"><code class="docutils literal notranslate"><span class="pre">init_with_alpha_resnet()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.init_with_alpha_vgg"><code class="docutils literal notranslate"><span class="pre">init_with_alpha_vgg()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.load_model"><code class="docutils literal notranslate"><span class="pre">load_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.load_specific_model"><code class="docutils literal notranslate"><span class="pre">load_specific_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.mkdir"><code class="docutils literal notranslate"><span class="pre">mkdir()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.save_model"><code class="docutils literal notranslate"><span class="pre">save_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.save_restore.save_specific_model"><code class="docutils literal notranslate"><span class="pre">save_specific_model()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils.timer.Timer"><code class="docutils literal notranslate"><span class="pre">Timer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#utils.timer.Timer.tic"><code class="docutils literal notranslate"><span class="pre">Timer.tic()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utils.timer.Timer.toc"><code class="docutils literal notranslate"><span class="pre">Timer.toc()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
-            
-          
         </div>
-        
       </div>
     </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-
-      
-      <nav class="wy-nav-top" aria-label="top navigation">
-        
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">FALCON2</a>
-        
       </nav>
 
-
       <div class="wy-nav-content">
-        
         <div class="rst-content">
-        
-          
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div role="navigation" aria-label="breadcrumbs navigation">
-
+          <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-    
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-        
-      <li>Utils</li>
-    
-    
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Utils</li>
       <li class="wy-breadcrumbs-aside">
-        
-            
             <a href="../_sources/modules/utils.rst.txt" rel="nofollow"> View page source</a>
-          
-        
       </li>
-    
   </ul>
-
-  
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
-            
-  <div class="section" id="module-utils.compression_cal">
-<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-utils.compression_cal" title="Permalink to this headline">¶</a></h1>
+             
+  <section id="module-utils.compression_cal">
+<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-utils.compression_cal" title="Link to this heading"></a></h1>
 <p>Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
@@ -179,12 +123,12 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.compression_cal.print_model_parm_flops">
-<code class="sig-prename descclassname">utils.compression_cal.</code><code class="sig-name descname">print_model_parm_flops</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">imagenet=False</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_flops" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.compression_cal.print_model_parm_flops">
+<span class="sig-prename descclassname"><span class="pre">utils.compression_cal.</span></span><span class="sig-name descname"><span class="pre">print_model_parm_flops</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imagenet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_flops" title="Link to this definition"></a></dt>
 <dd><p>Counting number of parameters in the model</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>net</strong> – the model to be calculated for parameters and flops</p></li>
 <li><p><strong>imagenet</strong> – which dataset is used</p></li>
@@ -193,18 +137,18 @@ under the License.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.compression_cal.print_model_parm_nums">
-<code class="sig-prename descclassname">utils.compression_cal.</code><code class="sig-name descname">print_model_parm_nums</code><span class="sig-paren">(</span><em class="sig-param">net</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_nums" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.compression_cal.print_model_parm_nums">
+<span class="sig-prename descclassname"><span class="pre">utils.compression_cal.</span></span><span class="sig-name descname"><span class="pre">print_model_parm_nums</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.compression_cal.print_model_parm_nums" title="Link to this definition"></a></dt>
 <dd><p>Counting number of parameters in the model</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>net</strong> – the model</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>net</strong> – model to print param_num</p>
 </dd>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-utils.default_param"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.default_param">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -228,18 +172,18 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.default_param.get_default_param">
-<code class="sig-prename descclassname">utils.default_param.</code><code class="sig-name descname">get_default_param</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.default_param.get_default_param" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.default_param.get_default_param">
+<span class="sig-prename descclassname"><span class="pre">utils.default_param.</span></span><span class="sig-name descname"><span class="pre">get_default_param</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.default_param.get_default_param" title="Link to this definition"></a></dt>
 <dd><p>Deal with several arguments.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>parser: parser including several arguments</p>
 </dd>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-utils.load_data"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.load_data">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -263,58 +207,58 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.load_data.load_cifar100">
-<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_cifar100</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_cifar100" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.load_data.load_cifar100">
+<span class="sig-prename descclassname"><span class="pre">utils.load_data.</span></span><span class="sig-name descname"><span class="pre">load_cifar100</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_cifar100" title="Link to this definition"></a></dt>
 <dd><p>Load cifar-100 datasets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
 <li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>loader: training loader or test loader</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.load_data.load_imagenet">
-<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_imagenet</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_imagenet" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.load_data.load_imagenet">
+<span class="sig-prename descclassname"><span class="pre">utils.load_data.</span></span><span class="sig-name descname"><span class="pre">load_imagenet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_imagenet" title="Link to this definition"></a></dt>
 <dd><p>Load imagenet datasets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
 <li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>(train_loader, valid_loader): training loader, and validation loader</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.load_data.load_svhn">
-<code class="sig-prename descclassname">utils.load_data.</code><code class="sig-name descname">load_svhn</code><span class="sig-paren">(</span><em class="sig-param">is_train=True</em>, <em class="sig-param">batch_size=128</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_svhn" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.load_data.load_svhn">
+<span class="sig-prename descclassname"><span class="pre">utils.load_data.</span></span><span class="sig-name descname"><span class="pre">load_svhn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_train</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.load_data.load_svhn" title="Link to this definition"></a></dt>
 <dd><p>Load SVHN datasets.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>is_train</strong> – if true, load train_test/val data; else load test data.</p></li>
 <li><p><strong>batch_size</strong> – batch_size of train_test data</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>loader: training loader or test loader</p>
 </dd>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-utils.lr_decay"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.lr_decay">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -338,25 +282,25 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.lr_decay.adjust_lr">
-<code class="sig-prename descclassname">utils.lr_decay.</code><code class="sig-name descname">adjust_lr</code><span class="sig-paren">(</span><em class="sig-param">lr</em>, <em class="sig-param">lrd=10</em>, <em class="sig-param">log=None</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.lr_decay.adjust_lr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update learnign rate.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.lr_decay.adjust_lr">
+<span class="sig-prename descclassname"><span class="pre">utils.lr_decay.</span></span><span class="sig-name descname"><span class="pre">adjust_lr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lrd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.lr_decay.adjust_lr" title="Link to this definition"></a></dt>
+<dd><p>Update learning rate.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>lr</strong> – original learning rate.</p></li>
+<li><p><strong>learning_rate</strong> – original learning rate.</p></li>
 <li><p><strong>lrd</strong> – decrease ratio of learning rate.</p></li>
 <li><p><strong>log</strong> – if log is not None, print the comments for changing learning rate.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return lr</dt>
+<dt class="field-even">Return lr<span class="colon">:</span></dt>
 <dd class="field-even"><p>adjusted learning rate.</p>
 </dd>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-utils.optimizer_option"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.optimizer_option">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -380,19 +324,19 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.optimizer_option.get_optimizer">
-<code class="sig-prename descclassname">utils.optimizer_option.</code><code class="sig-name descname">get_optimizer</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">lr</em>, <em class="sig-param">optimizer='SGD'</em>, <em class="sig-param">weight_decay=0.0001</em>, <em class="sig-param">momentum=0.9</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.optimizer_option.get_optimizer" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.optimizer_option.get_optimizer">
+<span class="sig-prename descclassname"><span class="pre">utils.optimizer_option.</span></span><span class="sig-name descname"><span class="pre">get_optimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'SGD'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weight_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">momentum</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.optimizer_option.get_optimizer" title="Link to this definition"></a></dt>
 <dd><p>Get optimizer accroding to arguments.</p>
 <p>There are four optimizers, SGD, Adagrad, Adam, and RMSprop.
 :param net: the model
-:param lr: learing rate
+:param learning_rate: learing rate
 :param optimizer: choose an optimizer - SGD/Adagrad/Adam/RMSprop
 :param weight_decay: weight decay rate
 :param momentum: momentum of the optimizer</p>
 </dd></dl>
 
-<span class="target" id="module-utils.save_restore"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.save_restore">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -416,26 +360,26 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="function">
-<dt id="utils.save_restore.create_log">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">create_log</code><span class="sig-paren">(</span><em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.create_log" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.create_log">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">create_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.create_log" title="Link to this definition"></a></dt>
 <dd><p>Save the training process.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>args</strong> – arguments of the trained model</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>open: open file</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.init_with_alpha_resnet">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">init_with_alpha_resnet</code><span class="sig-paren">(</span><em class="sig-param">source_net</em>, <em class="sig-param">dest_net</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_resnet" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.init_with_alpha_resnet">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">init_with_alpha_resnet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_resnet" title="Link to this definition"></a></dt>
 <dd><p>Initialize with width multiplier for resnet.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source_net</strong> – a base model</p></li>
 <li><p><strong>dest_net</strong> – a model to be compressed</p></li>
@@ -449,12 +393,12 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.init_with_alpha_vgg">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">init_with_alpha_vgg</code><span class="sig-paren">(</span><em class="sig-param">source_net</em>, <em class="sig-param">dest_net</em>, <em class="sig-param">alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_vgg" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.init_with_alpha_vgg">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">init_with_alpha_vgg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source_net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.init_with_alpha_vgg" title="Link to this definition"></a></dt>
 <dd><p>Initialize with width multiplier for vgg.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>source_net</strong> – a base model</p></li>
 <li><p><strong>dest_net</strong> – a model to be compressed</p></li>
@@ -468,12 +412,12 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.load_model">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">load_model</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">args</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_model" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.load_model">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_model" title="Link to this definition"></a></dt>
 <dd><p>Restore the pre-trained model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>net</strong> – model architecture without parameters</p></li>
 <li><p><strong>args</strong> – arguments of the trained model</p></li>
@@ -482,12 +426,12 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.load_specific_model">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">load_specific_model</code><span class="sig-paren">(</span><em class="sig-param">net</em>, <em class="sig-param">args</em>, <em class="sig-param">convolution=''</em>, <em class="sig-param">input_path=''</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_specific_model" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.load_specific_model">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">load_specific_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">net</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.load_specific_model" title="Link to this definition"></a></dt>
 <dd><p>Restore the pre-trained model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>net</strong> – model architecture without parameters</p></li>
 <li><p><strong>args</strong> – arguments for a current model</p></li>
@@ -498,23 +442,23 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.mkdir">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">mkdir</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.mkdir" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.mkdir">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">mkdir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.mkdir" title="Link to this definition"></a></dt>
 <dd><p>Make a directory if it doesn’t exist.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>path</strong> – directory path</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.save_model">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">save_model</code><span class="sig-paren">(</span><em class="sig-param">best</em>, <em class="sig-param">args</em>, <em class="sig-param">log</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_model" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.save_model">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_model" title="Link to this definition"></a></dt>
 <dd><p>Save the trained model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>best</strong> – best trained model (to be saved)</p></li>
 <li><p><strong>args</strong> – arguments of the trained model</p></li>
@@ -523,12 +467,12 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="function">
-<dt id="utils.save_restore.save_specific_model">
-<code class="sig-prename descclassname">utils.save_restore.</code><code class="sig-name descname">save_specific_model</code><span class="sig-paren">(</span><em class="sig-param">best</em>, <em class="sig-param">args</em>, <em class="sig-param">convolution=''</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_specific_model" title="Permalink to this definition">¶</a></dt>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.save_restore.save_specific_model">
+<span class="sig-prename descclassname"><span class="pre">utils.save_restore.</span></span><span class="sig-name descname"><span class="pre">save_specific_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">best</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convolution</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.save_restore.save_specific_model" title="Link to this definition"></a></dt>
 <dd><p>Save the trained model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>best</strong> – best trained model (to be saved)</p></li>
 <li><p><strong>args</strong> – arguments for the trained model</p></li>
@@ -537,7 +481,7 @@ is used for initializing kernels of FALCON.</p></li>
 </dl>
 </dd></dl>
 
-<span class="target" id="module-utils.timer"></span><p>Licensed to the Apache Software Foundation (ASF) under one
+<p id="module-utils.timer">Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
 distributed with this work for additional information
 regarding copyright ownership.  The ASF licenses this file
@@ -564,25 +508,25 @@ under the License.</p>
 </dd>
 </dl>
 <p>Version: 1.0</p>
-<dl class="class">
-<dt id="utils.timer.Timer">
-<em class="property">class </em><code class="sig-prename descclassname">utils.timer.</code><code class="sig-name descname">Timer</code><a class="headerlink" href="#utils.timer.Timer" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.timer.Timer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.timer.</span></span><span class="sig-name descname"><span class="pre">Timer</span></span><a class="headerlink" href="#utils.timer.Timer" title="Link to this definition"></a></dt>
 <dd><p>A simple timer.</p>
-<dl class="method">
-<dt id="utils.timer.Timer.tic">
-<code class="sig-name descname">tic</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.tic" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.timer.Timer.tic">
+<span class="sig-name descname"><span class="pre">tic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.tic" title="Link to this definition"></a></dt>
 <dd><p>Start timer.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="utils.timer.Timer.toc">
-<code class="sig-name descname">toc</code><span class="sig-paren">(</span><em class="sig-param">average=True</em><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.toc" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.timer.Timer.toc">
+<span class="sig-name descname"><span class="pre">toc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">average</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.timer.Timer.toc" title="Link to this definition"></a></dt>
 <dd><p>Stop timer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>average</strong> – whether to calculate the average time</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>average</strong> – whether to calculate the average time or not</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>average_time: average time</p>
 </dd>
 </dl>
@@ -590,60 +534,36 @@ under the License.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>
-           
           </div>
-          <footer>
-  
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-      
-      
-        <a href="train_test.html" class="btn btn-neutral float-left" title="Train and Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
-      
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="train_test.html" class="btn btn-neutral float-left" title="Train and Test" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
-  
 
   <hr/>
 
   <div role="contentinfo">
-    <p>
-        
-        &copy; Copyright 2020, dmlab
-
-    </p>
+    <p>&#169; Copyright 2020, dmlab.</p>
   </div>
-    
-    
-    
-    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
-    
-    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
-    
-    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
 
 </footer>
-
         </div>
       </div>
-
     </section>
-
   </div>
-  
-
-  <script type="text/javascript">
+  <script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-
-  
-  
-    
-   
+  </script> 
 
 </body>
 </html>

@@ -155,3 +155,21 @@ FALCON2
 
 ## License
 Licensed under the Apache License, Version 2.0
+
+## Citation
+Please cite the following paper if you use our code:
+```
+@article{JangQLK23,
+  author       = {Jun{-}Gi Jang and
+                  Chun Quan and
+                  Hyun Dong Lee and
+                  U Kang},
+  title        = {Falcon: lightweight and accurate convolution based on depthwise separable
+                  convolution},
+  journal      = {Knowl. Inf. Syst.},
+  volume       = {65},
+  number       = {5},
+  pages        = {2225--2249},
+  year         = {2023},
+}
+```
